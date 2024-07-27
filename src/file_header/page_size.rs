@@ -55,6 +55,8 @@ impl From<&PageSize> for u32 {
     }
   }
 }
+
+
 impl PartialEq<usize> for PageSize {
   fn eq(&self, other: &usize) -> bool {
     match self {

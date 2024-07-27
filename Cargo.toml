@@ -1,6 +1,44 @@
 [package]
-name = "sq3-rs"
-version = "0.0.20"
 edition = "2021"
+rust-version = "1.79.0"
+name = "sq3-rs"
+version = "0.1.4"
+description = "SQLite reader with no dependencies"
+readme = "README.md"
+keywords = ["sqlite", "database"]
+license = "MIT"
+repository = "https://github.com/ancos2505/sq3-rs"
+
+[profile.bench]
+opt-level = 3
+lto = true
+debug = 0
+debug-assertions = false
+
+[profile.dev]
+opt-level = 0
+lto = false
+debug = 2
+debug-assertions = true
+
+[profile.release]
+opt-level = 3
+lto = true
+debug = 0
+debug-assertions = false
+strip = true
+
+[profile.test]
+opt-level = 0
+lto = false
+debug = 2
+debug-assertions = true
 
 [dependencies]
+
+[features]
+default = ["log"]
+# default = ["log","show-ct-checks"]
+
+log = []
+show-ct-checks = []

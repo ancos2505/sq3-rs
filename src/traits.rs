@@ -8,8 +8,7 @@ pub trait Name {
   const NAME: &'static str;
 }
 
-// TODO
-trait ParseBytes
+pub(super) trait ParseBytes
 where
   Self: Sized + Name,
 {

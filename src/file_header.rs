@@ -222,7 +222,7 @@ impl ParseBytes for SqliteHeader {
   const LENGTH_BYTES: usize = Self::LENGTH_BYTES;
 
   fn parsing_handler(bytes: &[u8]) -> crate::result::SqliteResult<Self> {
-    let magic_header_string = MagicHeaderString::parse_bytes(bytes[0..=15])?;
+    let magic_header_string = MagicHeaderString::parse_bytes(&bytes[0..=15])?;
     let page_size = PageSize::parse_bytes(&bytes[16..=17])?;
     let file_format_version_numbers = FileFormatVersionNumbers::parse_bytes(&bytes[18..=19])?;
     let reserved_bytes_per_page = ReservedBytesPerPage::parse_bytes(&[bytes[20]])?;
