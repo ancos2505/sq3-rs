@@ -1,6 +1,7 @@
 use core::array::TryFromSliceError;
 use core::fmt::Display;
 use std::error::Error as StdError;
+use std::fmt::Debug;
 use std::io::Error as StdioError;
 
 pub type SqliteResult<T> = Result<T, SqliteError>;
@@ -15,7 +16,11 @@ pub enum SqliteError {
     Custom(String),
     ParsingField(FieldParsingError),
     InvalidPayloadSize(InvalidPayloadSizeError),
+    SqlParser(SqlParserError),
 }
+
+#[derive(Debug)]
+pub struct SqlParserError(pub Box<dyn Debug>);
 
 #[derive(Debug)]
 pub struct FieldParsingError {

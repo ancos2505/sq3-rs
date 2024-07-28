@@ -11,7 +11,6 @@ use self::pager::Pager;
 
 #[derive(Debug)]
 pub(crate) struct SqliteRuntime {
-    query: Option<SqliteQuery>,
     pager: Pager,
 }
 
@@ -21,24 +20,27 @@ impl SqliteRuntime {
 
         println!("{pager:X?}");
 
-        Ok(Self {
-            query: Default::default(),
-            pager,
-        })
+        Ok(Self { pager })
     }
-    pub fn run_query(&mut self, mut query: SqliteQuery) -> SqliteResult<SqliteRecord> {
+    pub fn run_mockup(&mut self) -> SqliteResult<SqliteRecord> {
         let p1 = self.pager.get_page(NonZeroU32::new(1).unwrap())?;
-        println!("{p1:X?}");
+        // println!("{p1:X?}");
 
         let p2 = self.pager.get_page(NonZeroU32::new(2).unwrap())?;
-        println!("{p2:X?}");
+        // println!("{p2:X?}");
 
         let p3 = self.pager.get_page(NonZeroU32::new(3).unwrap())?;
-        println!("{p3:X?}");
+        // println!("{p3:X?}");
 
         let p4 = self.pager.get_page(NonZeroU32::new(4).unwrap())?;
-        println!("{p4:X?}");
-        query.set_outcome(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo));
+        // println!("{p4:X?}");
+        // query.set_outcome(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo));
+
+        Ok(Default::default())
+    }
+    pub fn run_query(&mut self, query_str: &str) -> SqliteResult<SqliteRecord> {
+        SqliteQuery::run(query_str)?;
+        // query.set_outcome(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo));
 
         Ok(Default::default())
     }

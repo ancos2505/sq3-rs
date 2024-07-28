@@ -2,6 +2,7 @@ use std::{num::NonZeroU32, ops::Deref};
 
 #[derive(Debug)]
 pub(super) struct Page<const N: usize> {
+    size: usize,
     pos: PagePosition,
     data: [u8; N],
     next: Option<PagePosition>,
@@ -71,10 +72,13 @@ impl ValidPage for Page<65536> {
 
 impl<const N: usize> Page<N> {
     pub fn parse(pos: PagePosition, data: [u8; N]) -> Self {
-        Self {
+        let page = Self {
+            size: N,
             pos,
             data,
             next: None,
-        }
+        };
+        println!("{page:X?}");
+        page
     }
 }

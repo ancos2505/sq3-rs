@@ -25,17 +25,38 @@ fn main() -> SqliteResult<()> {
         (10_000 * release) + (100 * major) + minor
     });
 
-    const SMALL_FILE_PATH: &str = "./data/small.sqlite3";
+    // const SMALL_FILE_PATH: &str = "./data/small.sqlite3";
+    const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
+    let mut runtime = SqliteRuntime::start(FLIGHTS_FILE_PATH)?;
 
-    let mut runtime = SqliteRuntime::start(SMALL_FILE_PATH)?;
+    // let query = "SELECT * from t1;".parse()?;
 
-    let query = "SELECT * from t1;".parse()?;
+    // dbg!(&runtime);
+    // let record = runtime.run_query(query)?;
+    let record = runtime.run_mockup()?;
 
-    dbg!(&runtime);
-    let record = runtime.run_query(query)?;
     dbg!(record);
     // const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
     // let pager2 = Pager::start(FLIGHTS_FILE_PATH);
     // println!("{pager2:X?}");
     Ok(())
 }
+
+// fn main() {
+//     let queries = vec![
+//         "SELECT id, name FROM users WHERE age > 18",
+//         "UPDATE users SET name = 'John' WHERE id = 1",
+//         "INSERT INTO users (name, age) VALUES ('Alice', 30)",
+//         "DELETE FROM users WHERE id = 5",
+//         "TRUNCATE TABLE users",
+//     ];
+
+//     for query in queries {
+//         println!("Query: {}", query);
+//         match parse_select_query(query) {
+//             Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
+//             Err(e) => println!("Error: {}", e),
+//         }
+//         println!();
+//     }
+// }
