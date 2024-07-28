@@ -18,21 +18,21 @@ use core::ops::Deref;
 #[derive(Debug, Default)]
 pub struct FileChangeCounter(u32);
 impl Deref for FileChangeCounter {
-  type Target = u32;
+    type Target = u32;
 
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 impl_name! {FileChangeCounter}
 
 impl ParseBytes for FileChangeCounter {
-  const LENGTH_BYTES: usize = 4;
+    const LENGTH_BYTES: usize = 4;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    Ok(Self(u32::from_be_bytes(buf)))
-  }
+        Ok(Self(u32::from_be_bytes(buf)))
+    }
 }

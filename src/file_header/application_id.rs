@@ -16,21 +16,21 @@ use core::ops::Deref;
 pub struct ApplicationId(u32);
 
 impl Deref for ApplicationId {
-  type Target = u32;
+    type Target = u32;
 
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 impl_name! {ApplicationId}
 
 impl ParseBytes for ApplicationId {
-  const LENGTH_BYTES: usize = 4;
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    const LENGTH_BYTES: usize = 4;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let value = u32::from_be_bytes(buf);
+        let value = u32::from_be_bytes(buf);
 
-    Ok(Self(value))
-  }
+        Ok(Self(value))
+    }
 }

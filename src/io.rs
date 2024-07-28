@@ -36,7 +36,7 @@ impl SqliteIo {
     pub(super) fn file_metadata(&self) -> Option<&Metadata> {
         self.file_metadata.as_ref()
     }
-    
+
     pub fn connect<S: AsRef<str>>(conn_str: S) -> SqliteResult<Self> {
         let s = conn_str.as_ref();
         let uri_str = if !s.contains("://") {

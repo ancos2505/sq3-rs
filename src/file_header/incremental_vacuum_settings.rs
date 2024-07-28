@@ -16,8 +16,8 @@ use core::ops::Deref;
 /// offset 64 must also be zero.
 #[derive(Debug, Default)]
 pub struct IncrementalVacuumSettings {
-  pub largest_root_btree_page: LargestRootBtreePage,
-  pub incremental_vacuum_mode: IncrementalVacuumMode,
+    pub largest_root_btree_page: LargestRootBtreePage,
+    pub incremental_vacuum_mode: IncrementalVacuumMode,
 }
 
 // TODO:  If the integer at offset 52 is non-zero then it is the page number of
@@ -26,13 +26,13 @@ pub struct IncrementalVacuumSettings {
 // TODO: incremental_vacuum.
 
 impl IncrementalVacuumSettings {
-  pub fn largest_root_btree_page(&self) -> &LargestRootBtreePage {
-    &self.largest_root_btree_page
-  }
+    pub fn largest_root_btree_page(&self) -> &LargestRootBtreePage {
+        &self.largest_root_btree_page
+    }
 
-  pub fn incremental_vacuum_mode(&self) -> &IncrementalVacuumMode {
-    &self.incremental_vacuum_mode
-  }
+    pub fn incremental_vacuum_mode(&self) -> &IncrementalVacuumMode {
+        &self.incremental_vacuum_mode
+    }
 }
 
 ///  #  Largest root b-tree page (4 Bytes)
@@ -42,63 +42,63 @@ impl IncrementalVacuumSettings {
 pub struct LargestRootBtreePage(u32);
 
 impl Deref for LargestRootBtreePage {
-  type Target = u32;
+    type Target = u32;
 
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 impl_name! {LargestRootBtreePage}
 
 impl ParseBytes for LargestRootBtreePage {
-  const LENGTH_BYTES: usize = 4;
+    const LENGTH_BYTES: usize = 4;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let value = u32::from_be_bytes(buf);
+        let value = u32::from_be_bytes(buf);
 
-    Ok(Self(value))
-  }
+        Ok(Self(value))
+    }
 }
 
 /// # Incremental-vacuum mode (4 Bytes)
 /// True (non-zero) for incremental-vacuum mode. False (zero) otherwise.
 #[derive(Debug, Default)]
 pub enum IncrementalVacuumMode {
-  #[default]
-  False,
-  True,
+    #[default]
+    False,
+    True,
 }
 impl From<&IncrementalVacuumMode> for bool {
-  fn from(value: &IncrementalVacuumMode) -> Self {
-    match value {
-      IncrementalVacuumMode::True => true,
-      IncrementalVacuumMode::False => false,
+    fn from(value: &IncrementalVacuumMode) -> Self {
+        match value {
+            IncrementalVacuumMode::True => true,
+            IncrementalVacuumMode::False => false,
+        }
     }
-  }
 }
 impl From<&IncrementalVacuumMode> for u32 {
-  fn from(value: &IncrementalVacuumMode) -> Self {
-    match value {
-      IncrementalVacuumMode::True => 1,
-      IncrementalVacuumMode::False => 0,
+    fn from(value: &IncrementalVacuumMode) -> Self {
+        match value {
+            IncrementalVacuumMode::True => 1,
+            IncrementalVacuumMode::False => 0,
+        }
     }
-  }
 }
 
 impl_name! {IncrementalVacuumMode}
 
 impl ParseBytes for IncrementalVacuumMode {
-  const LENGTH_BYTES: usize = 4;
+    const LENGTH_BYTES: usize = 4;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let number = u32::from_be_bytes(buf);
-    let value = if number > 0 { Self::True } else { Self::False };
+        let number = u32::from_be_bytes(buf);
+        let value = if number > 0 { Self::True } else { Self::False };
 
-    Ok(value)
-  }
+        Ok(value)
+    }
 }

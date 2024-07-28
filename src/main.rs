@@ -1,13 +1,17 @@
 mod file_header;
 mod io;
 mod macros;
-mod pager;
+
+mod query;
 mod result;
+mod runtime;
 mod traits;
 
-use std::{num::NonZeroU32, sync::OnceLock};
+use std::sync::OnceLock;
 
-use crate::{pager::Pager, result::SqliteResult};
+use runtime::SqliteRuntime;
+
+use crate::result::SqliteResult;
 
 static VERSION_NUMBER: OnceLock<u32> = OnceLock::new();
 
@@ -22,22 +26,14 @@ fn main() -> SqliteResult<()> {
     });
 
     const SMALL_FILE_PATH: &str = "./data/small.sqlite3";
-    let mut pager1 = Pager::start(SMALL_FILE_PATH)?;
 
-    println!("{pager1:X?}");
+    let mut runtime = SqliteRuntime::start(SMALL_FILE_PATH)?;
 
-    let p1 = pager1.get_page(NonZeroU32::new(1).unwrap())?;
-    println!("{p1:X?}");
+    let query = "SELECT * from t1;".parse()?;
 
-    let p2 = pager1.get_page(NonZeroU32::new(2).unwrap())?;
-    println!("{p2:X?}");
-
-    let p3 = pager1.get_page(NonZeroU32::new(3).unwrap())?;
-    println!("{p3:X?}");
-
-    let p4 = pager1.get_page(NonZeroU32::new(4).unwrap())?;
-    println!("{p4:X?}");
-
+    dbg!(&runtime);
+    let record = runtime.run_query(query)?;
+    dbg!(record);
     // const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
     // let pager2 = Pager::start(FLIGHTS_FILE_PATH);
     // println!("{pager2:X?}");

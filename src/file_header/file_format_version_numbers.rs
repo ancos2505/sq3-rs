@@ -18,115 +18,115 @@ use core::fmt::Display;
 /// encountered, then that database cannot be read or written.
 #[derive(Debug, Default)]
 pub struct FileFormatVersionNumbers {
-  /// File format write version. 1 for legacy; 2 for WAL.
-  write_version: FileFormatWriteVersion,
-  /// File format read version. 1 for legacy; 2 for WAL.
-  read_version: FileFormatReadVersion,
+    /// File format write version. 1 for legacy; 2 for WAL.
+    write_version: FileFormatWriteVersion,
+    /// File format read version. 1 for legacy; 2 for WAL.
+    read_version: FileFormatReadVersion,
 }
 
 impl FileFormatVersionNumbers {
-  pub fn write_version(&self) -> &FileFormatWriteVersion {
-    &self.write_version
-  }
+    pub fn write_version(&self) -> &FileFormatWriteVersion {
+        &self.write_version
+    }
 
-  pub fn read_version(&self) -> &FileFormatReadVersion {
-    &self.read_version
-  }
+    pub fn read_version(&self) -> &FileFormatReadVersion {
+        &self.read_version
+    }
 }
 impl_name! {FileFormatVersionNumbers}
 impl ParseBytes for FileFormatVersionNumbers {
-  const LENGTH_BYTES: usize = 2;
+    const LENGTH_BYTES: usize = 2;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let write_version = FileFormatWriteVersion::parsing_handler(&[bytes[0]])?;
-    let read_version = FileFormatReadVersion::parsing_handler(&[bytes[1]])?;
-    Ok(Self {
-      write_version,
-      read_version,
-    })
-  }
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let write_version = FileFormatWriteVersion::parsing_handler(&[bytes[0]])?;
+        let read_version = FileFormatReadVersion::parsing_handler(&[bytes[1]])?;
+        Ok(Self {
+            write_version,
+            read_version,
+        })
+    }
 }
 
 #[derive(Debug, Default)]
 pub enum FileFormatWriteVersion {
-  #[default]
-  Legacy,
-  /// Write-Ahead Log
-  ///
-  /// Reference: https://www.sqlite.org/wal.html
-  WAL,
+    #[default]
+    Legacy,
+    /// Write-Ahead Log
+    ///
+    /// Reference: https://www.sqlite.org/wal.html
+    WAL,
 }
 
 impl From<&FileFormatWriteVersion> for u8 {
-  fn from(value: &FileFormatWriteVersion) -> Self {
-    match value {
-      FileFormatWriteVersion::Legacy => 1,
-      FileFormatWriteVersion::WAL => 2,
+    fn from(value: &FileFormatWriteVersion) -> Self {
+        match value {
+            FileFormatWriteVersion::Legacy => 1,
+            FileFormatWriteVersion::WAL => 2,
+        }
     }
-  }
 }
 
 impl_name! {FileFormatWriteVersion}
 
 impl ParseBytes for FileFormatWriteVersion {
-  const LENGTH_BYTES: usize = 1;
+    const LENGTH_BYTES: usize = 1;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let one_byte = *bytes
-      .first()
-      .ok_or(field_parsing_error! {Self::NAME.into()})?;
-    match one_byte {
-      1 => Ok(Self::Legacy),
-      2 => Ok(Self::WAL),
-      _ => Err(field_parsing_error! {Self::NAME.into()}),
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let one_byte = *bytes
+            .first()
+            .ok_or(field_parsing_error! {Self::NAME.into()})?;
+        match one_byte {
+            1 => Ok(Self::Legacy),
+            2 => Ok(Self::WAL),
+            _ => Err(field_parsing_error! {Self::NAME.into()}),
+        }
     }
-  }
 }
 
 impl Display for FileFormatWriteVersion {
-  fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-    write!(f, "{}", u8::from(self))
-  }
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{}", u8::from(self))
+    }
 }
 
 #[derive(Debug, Default)]
 pub enum FileFormatReadVersion {
-  #[default]
-  Legacy,
-  /// Write-Ahead Log
-  ///
-  /// Reference: https://www.sqlite.org/wal.html
-  WAL,
+    #[default]
+    Legacy,
+    /// Write-Ahead Log
+    ///
+    /// Reference: https://www.sqlite.org/wal.html
+    WAL,
 }
 
 impl From<&FileFormatReadVersion> for u8 {
-  fn from(value: &FileFormatReadVersion) -> Self {
-    match value {
-      FileFormatReadVersion::Legacy => 1,
-      FileFormatReadVersion::WAL => 2,
+    fn from(value: &FileFormatReadVersion) -> Self {
+        match value {
+            FileFormatReadVersion::Legacy => 1,
+            FileFormatReadVersion::WAL => 2,
+        }
     }
-  }
 }
 
 impl_name! {FileFormatReadVersion}
 
 impl ParseBytes for FileFormatReadVersion {
-  const LENGTH_BYTES: usize = 1;
+    const LENGTH_BYTES: usize = 1;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let one_byte = *bytes
-      .first()
-      .ok_or(field_parsing_error! {Self::NAME.into()})?;
-    match one_byte {
-      1 => Ok(Self::Legacy),
-      2 => Ok(Self::WAL),
-      _ => Err(field_parsing_error! {Self::NAME.into()}),
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let one_byte = *bytes
+            .first()
+            .ok_or(field_parsing_error! {Self::NAME.into()})?;
+        match one_byte {
+            1 => Ok(Self::Legacy),
+            2 => Ok(Self::WAL),
+            _ => Err(field_parsing_error! {Self::NAME.into()}),
+        }
     }
-  }
 }
 
 impl Display for FileFormatReadVersion {
-  fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-    write!(f, "{}", u8::from(self))
-  }
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        write!(f, "{}", u8::from(self))
+    }
 }

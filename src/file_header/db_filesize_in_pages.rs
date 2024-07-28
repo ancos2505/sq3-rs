@@ -30,29 +30,29 @@ use std::num::NonZeroU32;
 pub struct DatabaseFileSizeInPages(u32);
 
 impl Default for DatabaseFileSizeInPages {
-  fn default() -> Self {
-    Self(1)
-  }
+    fn default() -> Self {
+        Self(1)
+    }
 }
 impl Deref for DatabaseFileSizeInPages {
-  type Target = u32;
+    type Target = u32;
 
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 impl_name! {DatabaseFileSizeInPages}
 
 impl ParseBytes for DatabaseFileSizeInPages {
-  const LENGTH_BYTES: usize = 4;
+    const LENGTH_BYTES: usize = 4;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let database_size = NonZeroU32::new(u32::from_be_bytes(buf)).ok_or(SqliteError::Custom(
-      "DatabaseFileSizeInPages can't be `0`".into(),
-    ))?;
+        let database_size = NonZeroU32::new(u32::from_be_bytes(buf)).ok_or(SqliteError::Custom(
+            "DatabaseFileSizeInPages can't be `0`".into(),
+        ))?;
 
-    Ok(Self(database_size.get()))
-  }
+        Ok(Self(database_size.get()))
+    }
 }

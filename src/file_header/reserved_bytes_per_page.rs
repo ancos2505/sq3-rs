@@ -27,23 +27,23 @@ use core::ops::Deref;
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct ReservedBytesPerPage(u8);
 impl Deref for ReservedBytesPerPage {
-  type Target = u8;
+    type Target = u8;
 
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 
 impl_name! {ReservedBytesPerPage}
 
 impl ParseBytes for ReservedBytesPerPage {
-  const LENGTH_BYTES: usize = 1;
+    const LENGTH_BYTES: usize = 1;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let reserved_bytes_per_page = *bytes
-      .first()
-      .ok_or(field_parsing_error! {Self::NAME.into()})?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let reserved_bytes_per_page = *bytes
+            .first()
+            .ok_or(field_parsing_error! {Self::NAME.into()})?;
 
-    Ok(Self(reserved_bytes_per_page))
-  }
+        Ok(Self(reserved_bytes_per_page))
+    }
 }

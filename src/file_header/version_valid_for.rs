@@ -26,26 +26,26 @@ use core::ops::Deref;
 #[derive(Debug)]
 pub struct VersionValidFor(u32);
 impl Default for VersionValidFor {
-  fn default() -> Self {
-    Self(*VERSION_NUMBER.get().unwrap_or(&0))
-  }
+    fn default() -> Self {
+        Self(*VERSION_NUMBER.get().unwrap_or(&0))
+    }
 }
 impl Deref for VersionValidFor {
-  type Target = u32;
+    type Target = u32;
 
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
 }
 impl_name! {VersionValidFor}
 impl ParseBytes for VersionValidFor {
-  const LENGTH_BYTES: usize = 4;
+    const LENGTH_BYTES: usize = 4;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let database_size = u32::from_be_bytes(buf);
+        let database_size = u32::from_be_bytes(buf);
 
-    Ok(Self(database_size))
-  }
+        Ok(Self(database_size))
+    }
 }

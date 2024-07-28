@@ -1,7 +1,7 @@
 use crate::traits::{Name, ParseBytes};
 use crate::{
-  field_parsing_error, impl_name,
-  result::{SqliteError, SqliteResult},
+    field_parsing_error, impl_name,
+    result::{SqliteError, SqliteResult},
 };
 use core::fmt::Display;
 
@@ -15,57 +15,57 @@ use core::fmt::Display;
 /// place of the numeric codes for the text encoding.
 #[derive(Debug, Default)]
 pub enum DatabaseTextEncoding {
-  #[default]
-  Utf8,
-  Utf16Le,
-  Utf16Be,
+    #[default]
+    Utf8,
+    Utf16Le,
+    Utf16Be,
 }
 
 impl From<&DatabaseTextEncoding> for u32 {
-  fn from(value: &DatabaseTextEncoding) -> Self {
-    match value {
-      DatabaseTextEncoding::Utf8 => 1,
-      DatabaseTextEncoding::Utf16Le => 2,
-      DatabaseTextEncoding::Utf16Be => 3,
+    fn from(value: &DatabaseTextEncoding) -> Self {
+        match value {
+            DatabaseTextEncoding::Utf8 => 1,
+            DatabaseTextEncoding::Utf16Le => 2,
+            DatabaseTextEncoding::Utf16Be => 3,
+        }
     }
-  }
 }
 
 impl TryFrom<u32> for DatabaseTextEncoding {
-  type Error = SqliteError;
+    type Error = SqliteError;
 
-  fn try_from(value: u32) -> Result<Self, Self::Error> {
-    match value {
-      1 => Ok(Self::Utf8),
-      2 => Ok(Self::Utf16Le),
-      3 => Ok(Self::Utf16Be),
-      _ => Err(field_parsing_error! {Self::NAME.into()}),
+    fn try_from(value: u32) -> Result<Self, Self::Error> {
+        match value {
+            1 => Ok(Self::Utf8),
+            2 => Ok(Self::Utf16Le),
+            3 => Ok(Self::Utf16Be),
+            _ => Err(field_parsing_error! {Self::NAME.into()}),
+        }
     }
-  }
 }
 
 impl Display for DatabaseTextEncoding {
-  fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-    let number = u32::from(self);
-    let name = match self {
-      DatabaseTextEncoding::Utf8 => "utf8",
-      DatabaseTextEncoding::Utf16Le => "utf16le",
-      DatabaseTextEncoding::Utf16Be => "utf16le",
-    };
-    write!(f, "{number} ({name})")
-  }
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        let number = u32::from(self);
+        let name = match self {
+            DatabaseTextEncoding::Utf8 => "utf8",
+            DatabaseTextEncoding::Utf16Le => "utf16le",
+            DatabaseTextEncoding::Utf16Be => "utf16le",
+        };
+        write!(f, "{number} ({name})")
+    }
 }
 
 impl_name! {DatabaseTextEncoding}
 
 impl ParseBytes for DatabaseTextEncoding {
-  const LENGTH_BYTES: usize = 4;
+    const LENGTH_BYTES: usize = 4;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let value = u32::from_be_bytes(buf);
+        let value = u32::from_be_bytes(buf);
 
-    value.try_into()
-  }
+        value.try_into()
+    }
 }

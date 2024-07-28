@@ -1,7 +1,7 @@
 use crate::traits::ParseBytes;
 use crate::{
-  impl_name,
-  result::{SqliteError, SqliteResult},
+    impl_name,
+    result::{SqliteError, SqliteResult},
 };
 
 /// # Page Size (2 Bytes)
@@ -19,140 +19,139 @@ use crate::{
 /// page-size field are equivalent.
 #[derive(Debug, Default, PartialEq, Eq, Clone)]
 pub enum PageSize {
-  L512,
-  L1024,
-  L2048,
-  /// Reference: https://www.sqlite.org/pragma.html#pragma_page_size
-  #[default]
-  L4096,
-  L8192,
-  L16384,
-  L32768,
-  L65536,
+    L512,
+    L1024,
+    L2048,
+    /// Reference: https://www.sqlite.org/pragma.html#pragma_page_size
+    #[default]
+    L4096,
+    L8192,
+    L16384,
+    L32768,
+    L65536,
 }
 
 impl PageSize {
-  pub const MAX: Self = Self::L65536;
+    pub const MAX: Self = Self::L65536;
 
-  pub fn iter() -> PageSizeIterator {
-    PageSizeIterator {
-      current: Some(PageSize::L512),
+    pub fn iter() -> PageSizeIterator {
+        PageSizeIterator {
+            current: Some(PageSize::L512),
+        }
     }
-  }
 }
 
 impl From<&PageSize> for u32 {
-  fn from(value: &PageSize) -> Self {
-    match *value {
-      PageSize::L512 => 512,
-      PageSize::L1024 => 1024,
-      PageSize::L2048 => 2048,
-      PageSize::L4096 => 4096,
-      PageSize::L8192 => 8192,
-      PageSize::L16384 => 16384,
-      PageSize::L32768 => 32768,
-      PageSize::L65536 => 65536,
+    fn from(value: &PageSize) -> Self {
+        match *value {
+            PageSize::L512 => 512,
+            PageSize::L1024 => 1024,
+            PageSize::L2048 => 2048,
+            PageSize::L4096 => 4096,
+            PageSize::L8192 => 8192,
+            PageSize::L16384 => 16384,
+            PageSize::L32768 => 32768,
+            PageSize::L65536 => 65536,
+        }
     }
-  }
 }
 
-
 impl PartialEq<usize> for PageSize {
-  fn eq(&self, other: &usize) -> bool {
-    match self {
-      PageSize::L512 => *other == 512,
-      PageSize::L1024 => *other == 1024,
-      PageSize::L2048 => *other == 2048,
-      PageSize::L4096 => *other == 4096,
-      PageSize::L8192 => *other == 8192,
-      PageSize::L16384 => *other == 16384,
-      PageSize::L32768 => *other == 32768,
-      PageSize::L65536 => *other == 655536,
+    fn eq(&self, other: &usize) -> bool {
+        match self {
+            PageSize::L512 => *other == 512,
+            PageSize::L1024 => *other == 1024,
+            PageSize::L2048 => *other == 2048,
+            PageSize::L4096 => *other == 4096,
+            PageSize::L8192 => *other == 8192,
+            PageSize::L16384 => *other == 16384,
+            PageSize::L32768 => *other == 32768,
+            PageSize::L65536 => *other == 655536,
+        }
     }
-  }
 }
 
 impl PartialEq<PageSize> for usize {
-  fn eq(&self, other: &PageSize) -> bool {
-    match other {
-      PageSize::L512 => *self == 512,
-      PageSize::L1024 => *self == 1024,
-      PageSize::L2048 => *self == 2048,
-      PageSize::L4096 => *self == 4096,
-      PageSize::L8192 => *self == 8192,
-      PageSize::L16384 => *self == 16384,
-      PageSize::L32768 => *self == 32768,
-      PageSize::L65536 => *self == 655536,
+    fn eq(&self, other: &PageSize) -> bool {
+        match other {
+            PageSize::L512 => *self == 512,
+            PageSize::L1024 => *self == 1024,
+            PageSize::L2048 => *self == 2048,
+            PageSize::L4096 => *self == 4096,
+            PageSize::L8192 => *self == 8192,
+            PageSize::L16384 => *self == 16384,
+            PageSize::L32768 => *self == 32768,
+            PageSize::L65536 => *self == 655536,
+        }
     }
-  }
 }
 
 impl_name! {PageSize}
 
 impl ParseBytes for PageSize {
-  const LENGTH_BYTES: usize = 2;
+    const LENGTH_BYTES: usize = 2;
 
-  fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
-    let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
+        let buf: [u8; Self::LENGTH_BYTES] = bytes.try_into()?;
 
-    let page_size = u16::from_be_bytes(buf);
+        let page_size = u16::from_be_bytes(buf);
 
-    match page_size {
-      0 | 2..=511 => Err(SqliteError::Custom(
-        "PageSize can't be less than 512".into(),
-      )),
-      512 => Ok(Self::L512),
-      1024 => Ok(Self::L1024),
-      2048 => Ok(Self::L2048),
-      4096 => Ok(Self::L4096),
-      8192 => Ok(Self::L8192),
-      16384 => Ok(Self::L16384),
-      32768 => Ok(Self::L32768),
-      1 => Ok(Self::L65536),
-      _ => Err(SqliteError::Custom("PageSize must be power of two".into())),
+        match page_size {
+            0 | 2..=511 => Err(SqliteError::Custom(
+                "PageSize can't be less than 512".into(),
+            )),
+            512 => Ok(Self::L512),
+            1024 => Ok(Self::L1024),
+            2048 => Ok(Self::L2048),
+            4096 => Ok(Self::L4096),
+            8192 => Ok(Self::L8192),
+            16384 => Ok(Self::L16384),
+            32768 => Ok(Self::L32768),
+            1 => Ok(Self::L65536),
+            _ => Err(SqliteError::Custom("PageSize must be power of two".into())),
+        }
     }
-  }
 }
 
 pub struct PageSizeIterator {
-  current: Option<PageSize>,
+    current: Option<PageSize>,
 }
 
 impl Iterator for PageSizeIterator {
-  type Item = PageSize;
+    type Item = PageSize;
 
-  fn next(&mut self) -> Option<Self::Item> {
-    let current = self.current.take()?;
+    fn next(&mut self) -> Option<Self::Item> {
+        let current = self.current.take()?;
 
-    let new_current = match current {
-      PageSize::L512 => Some(PageSize::L1024),
-      PageSize::L1024 => Some(PageSize::L2048),
-      PageSize::L2048 => Some(PageSize::L4096),
-      PageSize::L4096 => Some(PageSize::L8192),
-      PageSize::L8192 => Some(PageSize::L16384),
-      PageSize::L16384 => Some(PageSize::L32768),
-      PageSize::L32768 => Some(PageSize::L65536),
-      PageSize::L65536 => None,
-    };
+        let new_current = match current {
+            PageSize::L512 => Some(PageSize::L1024),
+            PageSize::L1024 => Some(PageSize::L2048),
+            PageSize::L2048 => Some(PageSize::L4096),
+            PageSize::L4096 => Some(PageSize::L8192),
+            PageSize::L8192 => Some(PageSize::L16384),
+            PageSize::L16384 => Some(PageSize::L32768),
+            PageSize::L32768 => Some(PageSize::L65536),
+            PageSize::L65536 => None,
+        };
 
-    let value = current;
+        let value = current;
 
-    self.current = new_current;
+        self.current = new_current;
 
-    Some(value)
-  }
+        Some(value)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-  use super::*;
+    use super::*;
 
-  #[test]
-  fn ok_on_convert_pagesize_into_iterator() {
-    let vec = PageSize::iter().map(|i| (&i).into()).collect::<Vec<u32>>();
+    #[test]
+    fn ok_on_convert_pagesize_into_iterator() {
+        let vec = PageSize::iter().map(|i| (&i).into()).collect::<Vec<u32>>();
 
-    let expected = vec![512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
+        let expected = vec![512, 1024, 2048, 4096, 8192, 16384, 32768, 65536];
 
-    assert_eq!(vec, expected);
-  }
+        assert_eq!(vec, expected);
+    }
 }
