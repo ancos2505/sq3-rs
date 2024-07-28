@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Ignore;
+pub(crate) struct Ignore;
 
 impl FromStr for Ignore {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Ignore {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "IGNORE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword IGNORE not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Ignore {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "IGNORE")
     }
 }
 

@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Unbounded;
+pub(crate) struct Unbounded;
 
 impl FromStr for Unbounded {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Unbounded {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "UNBOUNDED" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword UNBOUNDED not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Unbounded {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "UNBOUNDED")
     }
 }
 

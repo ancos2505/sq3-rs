@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Materialized;
+pub(crate) struct Materialized;
 
 impl FromStr for Materialized {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Materialized {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "MATERIALIZED" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword MATERIALIZED not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Materialized {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "MATERIALIZED")
     }
 }
 

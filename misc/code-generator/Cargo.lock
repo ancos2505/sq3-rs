@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "sq3-rs"
-version = "0.1.7"
+name = "code-generator"
+version = "0.1.0"

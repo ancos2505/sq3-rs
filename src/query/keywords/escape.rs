@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Escape;
+pub(crate) struct Escape;
 
 impl FromStr for Escape {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Escape {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "ESCAPE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword ESCAPE not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Escape {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ESCAPE")
     }
 }
 

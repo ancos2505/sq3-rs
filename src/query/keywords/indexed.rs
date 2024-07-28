@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Indexed;
+pub(crate) struct Indexed;
 
 impl FromStr for Indexed {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Indexed {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "INDEXED" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword INDEXED not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Indexed {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "INDEXED")
     }
 }
 

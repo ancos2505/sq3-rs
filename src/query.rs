@@ -1,16 +1,13 @@
-// mod select;
 mod expression;
 mod keywords;
+mod select;
 mod traits;
 
-use std::{
-    str::FromStr,
-    time::{Duration, Instant},
-};
+use std::time::{Duration, Instant};
 
-use traits::{SqliteExpression, SqliteKeyword};
+use traits::SqliteKeyword;
 
-use crate::result::{SqliteError, SqliteResult};
+use crate::result::SqliteResult;
 
 // use self::select::SelectQuery;
 
@@ -20,8 +17,11 @@ pub(super) struct SqliteQuery {
 }
 
 impl SqliteQuery {
-    pub fn run(query_str: &str) -> SqliteResult<SqliteQueryOutcome> {
+    pub fn run(sql: &str) -> SqliteResult<SqliteQueryOutcome> {
+        use self::select::SelectStmt;
         let timer = Self::timer_start();
+        let res = SelectStmt::run(sql)?;
+        dbg!(res);
         let elapsed = timer.elapsed().as_millis();
         println!("Query elapsed: {elapsed} ms");
         todo!()

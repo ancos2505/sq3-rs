@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Always;
+pub(crate) struct Always;
 
 impl FromStr for Always {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Always {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "ALWAYS" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword ALWAYS not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Always {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ALWAYS")
     }
 }
 

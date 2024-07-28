@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Natural;
+pub(crate) struct Natural;
 
 impl FromStr for Natural {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Natural {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "NATURAL" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword NATURAL not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Natural {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "NATURAL")
     }
 }
 

@@ -20,7 +20,7 @@ pub enum SqliteError {
 }
 
 #[derive(Debug)]
-pub struct SqlParserError(pub Box<dyn Debug>);
+pub struct SqlParserError(pub String);
 
 #[derive(Debug)]
 pub struct FieldParsingError {

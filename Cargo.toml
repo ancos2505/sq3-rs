@@ -1,8 +1,8 @@
 [package]
 edition = "2021"
-rust-version = "1.79.0"
+rust-version = "1.80.0"
 name = "sq3-rs"
-version = "0.1.6"
+version = "0.1.7"
 description = "SQLite reader with no dependencies"
 readme = "README.md"
 keywords = ["sqlite", "database"]

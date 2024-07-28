@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Begin;
+pub(crate) struct Begin;
 
 impl FromStr for Begin {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Begin {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "BEGIN" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword BEGIN not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Begin {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "BEGIN")
     }
 }
 

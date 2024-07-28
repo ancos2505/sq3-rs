@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Temporary;
+pub(crate) struct Temporary;
 
 impl FromStr for Temporary {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Temporary {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "TEMPORARY" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword TEMPORARY not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Temporary {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "TEMPORARY")
     }
 }
 

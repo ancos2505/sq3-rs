@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Current_timestamp;
+pub(crate) struct Current_timestamp;
 
 impl FromStr for Current_timestamp {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Current_timestamp {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "CURRENT_TIMESTAMP" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword CURRENT_TIMESTAMP not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Current_timestamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "CURRENT_TIMESTAMP")
     }
 }
 

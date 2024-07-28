@@ -1,12 +1,12 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
-    query::traits::SqliteKeyword,
+    query::traits::{DistinctProcessing, SqliteKeyword},
     result::{SqlParserError, SqliteError},
 };
 
 #[derive(Debug)]
-pub(super) struct All;
+pub(crate) struct All;
 
 impl FromStr for All {
     type Err = SqliteError;
@@ -14,9 +14,18 @@ impl FromStr for All {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "ALL" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword ALL not found.".into(),
+            ))),
         }
     }
 }
 
+impl Display for All {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "ALL")
+    }
+}
+
 impl SqliteKeyword for All {}
+impl DistinctProcessing for All {}

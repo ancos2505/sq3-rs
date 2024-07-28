@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::Display, str::FromStr};
 
 use crate::{
     query::traits::SqliteKeyword,
@@ -6,7 +6,7 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(super) struct Group;
+pub(crate) struct Group;
 
 impl FromStr for Group {
     type Err = SqliteError;
@@ -14,8 +14,16 @@ impl FromStr for Group {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "GROUP" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(Box::new(Self)))),
+            _ => Err(SqliteError::SqlParser(SqlParserError(
+                "Keyword GROUP not found.".into(),
+            ))),
         }
+    }
+}
+
+impl Display for Group {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "GROUP")
     }
 }
 

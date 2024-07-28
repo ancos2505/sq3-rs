@@ -29,11 +29,13 @@ fn main() -> SqliteResult<()> {
     const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
     let mut runtime = SqliteRuntime::start(FLIGHTS_FILE_PATH)?;
 
-    // let query = "SELECT * from t1;".parse()?;
-
     // dbg!(&runtime);
-    // let record = runtime.run_query(query)?;
-    let record = runtime.run_mockup()?;
+    // let query = "SELECT * from t1;";
+    let query = "SELECT DISTINCT * from t1;";
+    // let query = "SELECT (1)";
+
+    let record = runtime.run_query(query)?;
+    // let record = runtime.run_mockup()?;
 
     dbg!(record);
     // const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
