@@ -21,35 +21,44 @@ use std::str::FromStr;
 
 use super::traits::DistinctProcessing;
 use super::{expression::SqliteExpression, traits::SqliteKeyword};
-use crate::query::keywords::{self, All, Distinct, Keyword};
+use crate::query::keywords::{self, All, Distinct, From as KeywordFrom, Keyword};
 use crate::result::{SqlParserError, SqliteError, SqliteResult};
 
 #[derive(Debug, Default)]
-pub(super) struct SelectStmt {
+pub(super) struct SelectStmt<'a> {
     distinct: Option<Box<dyn DistinctProcessing>>,
-    result_columns: Option<ResultColumns>,
+    result_columns: Option<ResultColumns<'a>>,
+    from: Option<KeywordFrom>,
+    // TODO
+    origin: Option<TableName<'a>>,
     // distinct: Option<Keyword>,
     // expr: Option<SqliteExpression>,
 }
 
-impl SelectStmt {
-    pub fn run(sql: &str) -> SqliteResult<Self> {
+impl<'a> SelectStmt<'a> {
+    pub fn run(sql: &'a str) -> SqliteResult<Self> {
         let mut iter = sql.trim().split_whitespace();
         let preamble = iter.next();
+        // TODO
         assert_eq!(Some("SELECT"), preamble);
+
         let mut stmt = Self::default();
+
         while let Some(looking_ahead) = iter.next() {
-            dbg!(&looking_ahead);
+            dbg!(looking_ahead);
             if stmt.distinct.is_none() {
                 if let Some(keyword) = looking_ahead.parse::<Keyword>().ok() {
-                    if let Some(_) = keyword.0.downcast_ref::<All>() {
+                    if let Some(k) = keyword.0.downcast_ref::<All>() {
+                        dbg!(k);
                         let all = keyword
                             .0
                             .downcast::<All>()
                             .ok()
                             .map(|all| all as Box<dyn DistinctProcessing>);
                         stmt.distinct = all;
-                    } else if let Some(_) = keyword.0.downcast_ref::<Distinct>() {
+                        continue;
+                    } else if let Some(k) = keyword.0.downcast_ref::<Distinct>() {
+                        dbg!(k);
                         let distinct = keyword
                             .0
                             .downcast::<Distinct>()
@@ -57,11 +66,38 @@ impl SelectStmt {
                             .map(|distinct| distinct as Box<dyn DistinctProcessing>);
                         stmt.distinct = distinct;
                     }
+                    continue;
                 }
             }
-            if let Some(result_columns) = looking_ahead.parse::<ResultColumns>().ok() {
-                stmt.result_columns = Some(result_columns);
+
+            if stmt.result_columns.is_none() {
+                if let Some(result_columns) = ResultColumns::parse(looking_ahead).ok() {
+                    stmt.result_columns = Some(result_columns);
+                    continue;
+                }
             }
+
+            if stmt.from.is_none() {
+                dbg!(&looking_ahead);
+                if let Some(keyword) = looking_ahead.parse::<Keyword>().ok() {
+                    if let Some(k) = keyword.0.downcast_ref::<KeywordFrom>() {
+                        dbg!(k);
+                        let from = keyword.0.downcast::<KeywordFrom>().ok();
+                        stmt.from = from.map(|boxed| *boxed);
+                        continue;
+                    }
+                }
+            }
+
+            if stmt.from.is_some() && stmt.origin.is_none() {
+                if let Some(s) = looking_ahead.split(';').next() {
+                    if let Some(table_name) = TableName::parse(s).ok() {
+                        stmt.origin = Some(table_name);
+                        continue;
+                    }
+                }
+            }
+
             // let expr = looking_ahead.parse::<SqliteExpression>().ok();
         }
 
@@ -70,38 +106,24 @@ impl SelectStmt {
 }
 
 #[derive(Debug)]
-enum ResultColumns {
-    All,
-    Filter(Vec<ColumnName>),
+enum ResultColumns<'a> {
+    Asterisk,
+    Filter(Vec<ColumnName<'a>>),
 }
-impl FromStr for ResultColumns {
-    type Err = SqliteError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+impl<'a> ResultColumns<'a> {
+    pub fn parse(s: &'a str) -> SqliteResult<Self> {
         if s.len() == 0 {
             return Err(SqliteError::SqlParser(SqlParserError(
                 "ResultColumns not found.".into(),
             )));
         }
         match s.trim() {
-            "*" => Ok(Self::All),
+            "*" => Ok(Self::Asterisk),
             cols_str => {
-                let error = Err(SqliteError::SqlParser(SqlParserError(
-                    "Invalid ColumnName".into(),
-                )));
                 let mut columns_name = vec![];
                 let mut iter = cols_str.split(',');
-                while let Some(col_name) = iter.next() {
-                    for (idx, c) in col_name.chars().enumerate() {
-                        if (idx == 0) && !c.is_ascii_alphabetic() {
-                            return error;
-                        }
-                        if !c.is_ascii() {
-                            return error;
-                        }
-
-                        columns_name.push(ColumnName(col_name.into()))
-                    }
+                while let Some(col_name) = iter.next().map(|s| s.trim()) {
+                    columns_name.push(ColumnName::parse(col_name)?);
                 }
                 Ok(Self::Filter(columns_name))
             }
@@ -110,7 +132,42 @@ impl FromStr for ResultColumns {
 }
 
 #[derive(Debug)]
-struct ColumnName(String);
+struct ColumnName<'a>(&'a str);
+impl<'a> ColumnName<'a> {
+    pub fn parse(s: &'a str) -> SqliteResult<Self> {
+        let error = Err(SqliteError::SqlParser(SqlParserError(
+            "Invalid ColumnName".into(),
+        )));
+        for (idx, c) in s.trim().chars().enumerate() {
+            if (idx == 0) && !c.is_ascii_lowercase() {
+                return error;
+            }
+            if c.is_ascii_digit() || c.is_ascii_lowercase() || c == '_' {
+                return Ok(Self(s));
+            }
+        }
+        error
+    }
+}
+
+#[derive(Debug)]
+struct TableName<'a>(&'a str);
+impl<'a> TableName<'a> {
+    pub fn parse(s: &'a str) -> SqliteResult<Self> {
+        let error = Err(SqliteError::SqlParser(SqlParserError(
+            "Invalid TableName".into(),
+        )));
+        for (idx, c) in s.trim().chars().enumerate() {
+            if (idx == 0) && !c.is_ascii_lowercase() {
+                return error;
+            }
+            if c.is_ascii_digit() || c.is_ascii_lowercase() || c == '_' {
+                return Ok(Self(s));
+            }
+        }
+        error
+    }
+}
 
 #[derive(Debug)]
 struct SelectExpr {

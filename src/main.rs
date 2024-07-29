@@ -31,7 +31,7 @@ fn main() -> SqliteResult<()> {
 
     // dbg!(&runtime);
     // let query = "SELECT * from t1;";
-    let query = "SELECT DISTINCT * from t1;";
+    let query = "SELECT DISTINCT * FROM t1;";
     // let query = "SELECT (1)";
 
     let record = runtime.run_query(query)?;
