@@ -2,7 +2,7 @@
 edition = "2021"
 rust-version = "1.80.0"
 name = "sq3-rs"
-version = "0.1.9"
+version = "0.2.0"
 description = "SQLite reader with no dependencies"
 readme = "README.md"
 keywords = ["sqlite", "database"]
@@ -40,4 +40,3 @@ debug-assertions = true
 default = ["log"]
 
 log = []
-show-ct-checks = []

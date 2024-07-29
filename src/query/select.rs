@@ -9,13 +9,14 @@
 //! SELECT statements are simple SELECT statements.
 //!
 //! **References:** - https://www.sqlite.org/lang_select.html#simpleselect
-
 //!                 - https://www.sqlite.org/syntaxdiagrams.html#select-core
 //!                 - https://www.sqlite.org/syntax/select-core.html
-//!
 //!                 - https://www.sqlite.org/syntaxdiagrams.html#select-stmt
 //!                 - https://www.sqlite.org/syntax/simple-select-stmt.html
 //!
+
+#[cfg(test)]
+mod tests;
 
 use std::iter;
 use std::str::FromStr;
@@ -43,7 +44,7 @@ impl<'a> SelectStmt<'a> {
             .split(';')
             .next()
             .ok_or(SqliteError::SqlParser(SqlParserError(
-                "Invalid SQL. Missing `;`".into(),
+                "Invalid SQL. Can't start a query with `;`".into(),
             )))?;
 
         let mut iter = cleaned_sql.split_whitespace();
