@@ -6,9 +6,9 @@ use crate::{
 };
 
 #[derive(Debug)]
-pub(crate) struct From;
+pub(crate) struct KeywordFrom;
 
-impl FromStr for From {
+impl FromStr for KeywordFrom {
     type Err = SqliteError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -21,10 +21,10 @@ impl FromStr for From {
     }
 }
 
-impl Display for From {
+impl Display for KeywordFrom {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "FROM")
     }
 }
 
-impl SqliteKeyword for From {}
+impl SqliteKeyword for KeywordFrom {}

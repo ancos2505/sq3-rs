@@ -17,11 +17,12 @@
 //!                 - https://www.sqlite.org/syntax/simple-select-stmt.html
 //!
 
+use std::iter;
 use std::str::FromStr;
 
 use super::traits::DistinctProcessing;
 use super::{expression::SqliteExpression, traits::SqliteKeyword};
-use crate::query::keywords::{self, All, Distinct, From as KeywordFrom, Keyword};
+use crate::query::keywords::{All, Distinct, Keyword, KeywordFrom};
 use crate::result::{SqlParserError, SqliteError, SqliteResult};
 
 #[derive(Debug, Default)]
@@ -36,20 +37,37 @@ pub(super) struct SelectStmt<'a> {
 }
 
 impl<'a> SelectStmt<'a> {
-    pub fn run(sql: &'a str) -> SqliteResult<Self> {
-        let mut iter = sql.trim().split_whitespace();
-        let preamble = iter.next();
-        // TODO
-        assert_eq!(Some("SELECT"), preamble);
+    pub fn run(input: &'a str) -> SqliteResult<Self> {
+        let cleaned_sql = input
+            .trim()
+            .split(';')
+            .next()
+            .ok_or(SqliteError::SqlParser(SqlParserError(
+                "Invalid SQL. Missing `;`".into(),
+            )))?;
+
+        let mut iter = cleaned_sql.split_whitespace();
+
+        if let Some(select) = iter.next() {
+            if select != "SELECT" {
+                return Err(SqliteError::SqlParser(SqlParserError(
+                    "Invalid SQL. Missing SELECT keyword".into(),
+                )));
+            }
+        }
 
         let mut stmt = Self::default();
-
+        // let mut round: usize = 0;
         while let Some(looking_ahead) = iter.next() {
-            dbg!(looking_ahead);
+            // round += 1;
+            // dbg!(&round);
+            // dbg!(&looking_ahead, &stmt);
+            // dbg!(&looking_ahead, &stmt);
             if stmt.distinct.is_none() {
                 if let Some(keyword) = looking_ahead.parse::<Keyword>().ok() {
+                    // dbg!(round, &keyword);
                     if let Some(k) = keyword.0.downcast_ref::<All>() {
-                        dbg!(k);
+                        // dbg!(k);
                         let all = keyword
                             .0
                             .downcast::<All>()
@@ -58,18 +76,20 @@ impl<'a> SelectStmt<'a> {
                         stmt.distinct = all;
                         continue;
                     } else if let Some(k) = keyword.0.downcast_ref::<Distinct>() {
-                        dbg!(k);
+                        // dbg!(k);
                         let distinct = keyword
                             .0
                             .downcast::<Distinct>()
                             .ok()
                             .map(|distinct| distinct as Box<dyn DistinctProcessing>);
                         stmt.distinct = distinct;
+                        continue;
                     }
-                    continue;
                 }
+                stmt.distinct = Some(Box::new(All) as Box<dyn DistinctProcessing>);
             }
 
+            // dbg!(round, &looking_ahead, &stmt);
             if stmt.result_columns.is_none() {
                 if let Some(result_columns) = ResultColumns::parse(looking_ahead).ok() {
                     stmt.result_columns = Some(result_columns);
@@ -78,10 +98,13 @@ impl<'a> SelectStmt<'a> {
             }
 
             if stmt.from.is_none() {
-                dbg!(&looking_ahead);
-                if let Some(keyword) = looking_ahead.parse::<Keyword>().ok() {
+                // dbg!(&looking_ahead, &stmt);
+                let some_keyword = looking_ahead.parse::<Keyword>();
+                // dbg!(&some_keyword);
+                if let Some(keyword) = some_keyword.ok() {
+                    // dbg!(&keyword);
                     if let Some(k) = keyword.0.downcast_ref::<KeywordFrom>() {
-                        dbg!(k);
+                        // dbg!(k);
                         let from = keyword.0.downcast::<KeywordFrom>().ok();
                         stmt.from = from.map(|boxed| *boxed);
                         continue;
@@ -90,15 +113,11 @@ impl<'a> SelectStmt<'a> {
             }
 
             if stmt.from.is_some() && stmt.origin.is_none() {
-                if let Some(s) = looking_ahead.split(';').next() {
-                    if let Some(table_name) = TableName::parse(s).ok() {
-                        stmt.origin = Some(table_name);
-                        continue;
-                    }
+                if let Some(table_name) = TableName::parse(looking_ahead).ok() {
+                    stmt.origin = Some(table_name);
+                    continue;
                 }
             }
-
-            // let expr = looking_ahead.parse::<SqliteExpression>().ok();
         }
 
         Ok(stmt)

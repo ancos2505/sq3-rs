@@ -29,36 +29,26 @@ fn main() -> SqliteResult<()> {
     const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
     let mut runtime = SqliteRuntime::start(FLIGHTS_FILE_PATH)?;
 
-    // dbg!(&runtime);
-    // let query = "SELECT * from t1;";
-    let query = "SELECT DISTINCT * FROM t1;";
-    // let query = "SELECT (1)";
-
-    let record = runtime.run_query(query)?;
-    // let record = runtime.run_mockup()?;
-
-    dbg!(record);
-    // const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
-    // let pager2 = Pager::start(FLIGHTS_FILE_PATH);
-    // println!("{pager2:X?}");
+    run_queries(&mut runtime)?;
     Ok(())
 }
 
-// fn main() {
-//     let queries = vec![
-//         "SELECT id, name FROM users WHERE age > 18",
-//         "UPDATE users SET name = 'John' WHERE id = 1",
-//         "INSERT INTO users (name, age) VALUES ('Alice', 30)",
-//         "DELETE FROM users WHERE id = 5",
-//         "TRUNCATE TABLE users",
-//     ];
+fn run_queries(runtime: &mut SqliteRuntime) -> SqliteResult<()> {
+    let queries = vec![
+        "SELECT id,name FROM users WHERE age > 18",
+        "UPDATE users SET name = 'John' WHERE id = 1",
+        "INSERT INTO users (name, age) VALUES ('Alice', 30)",
+        "DELETE FROM users WHERE id = 5",
+        "TRUNCATE TABLE users",
+    ];
 
-//     for query in queries {
-//         println!("Query: {}", query);
-//         match parse_select_query(query) {
-//             Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
-//             Err(e) => println!("Error: {}", e),
-//         }
-//         println!();
-//     }
-// }
+    for query in queries {
+        println!("Query: {}", query);
+
+        match runtime.run_query(query) {
+            Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
+            Err(e) => println!("Error: {}", e),
+        }
+    }
+    Ok(())
+}
