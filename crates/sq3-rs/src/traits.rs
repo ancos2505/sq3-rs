@@ -18,10 +18,9 @@ where
 
     fn check_payload_size(bytes: &[u8]) -> SqliteResult<()> {
         if bytes.len() < Self::LENGTH_BYTES {
-            Err(SqliteError::InvalidPayloadSize(InvalidPayloadSizeError {
-                error: "Invalid input size".into(),
-                ty: Self::NAME.into(),
-            }))
+            Err(SqliteError::InvalidPayloadSize(InvalidPayloadSizeError(
+                format!("Invalid input size for {}", Self::NAME),
+            )))
         } else {
             Ok(())
         }

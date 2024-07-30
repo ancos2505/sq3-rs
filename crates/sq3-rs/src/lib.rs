@@ -1,17 +1,6 @@
-// fn main() -> SqliteResult<()> {
-
-//     // const SMALL_FILE_PATH: &str = "./data/small.sqlite3";
-//     const FLIGHTS_FILE_PATH: &str = "./data/flights-initial.db";
-//     let mut runtime = SqliteRuntime::start(FLIGHTS_FILE_PATH)?;
-
-//     run_queries(&mut runtime)?;
-//     Ok(())
-// }
-
 mod file_header;
 mod io;
 mod macros;
-
 mod query;
 mod result;
 mod runtime;

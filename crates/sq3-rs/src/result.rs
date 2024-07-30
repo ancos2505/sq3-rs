@@ -23,16 +23,10 @@ pub enum SqliteError {
 pub struct SqlParserError(pub String);
 
 #[derive(Debug)]
-pub struct FieldParsingError {
-    pub error: String,
-    pub ty: String,
-}
+pub struct FieldParsingError(pub String);
 
 #[derive(Debug)]
-pub struct InvalidPayloadSizeError {
-    pub error: String,
-    pub ty: String,
-}
+pub struct InvalidPayloadSizeError(pub String);
 
 impl Display for SqliteError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
