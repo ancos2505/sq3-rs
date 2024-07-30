@@ -8,6 +8,10 @@ pub trait Name {
     const NAME: &'static str;
 }
 
+pub trait TypeName {
+    const NAME: &'static str;
+}
+
 pub(super) trait ParseBytes
 where
     Self: Sized + Name,

@@ -2,17 +2,30 @@ use proc_macro::TokenStream;
 
 #[proc_macro_derive(Name)]
 pub fn name_derive(input: TokenStream) -> TokenStream {
-    // The implementation from the previous message goes here
     let input = input.to_string();
 
     let struct_name = input
         .lines()
-        .find(|line| line.trim().starts_with("struct") || line.trim().starts_with("enum"))
-        .and_then(|line| line.split_whitespace().nth(1))
-        .expect("Could not find struct or enum name");
+        .find(|line| line.trim().contains("struct") || line.trim().contains("enum"))
+        .and_then(|line| {
+            dbg!(&line);
+            line.split_whitespace().nth(2).map(|s| {
+                if s.contains(';') {
+                    s.split(';').next()
+                } else if s.contains('{') {
+                    s.split('{').next()
+                } else if s.contains('(') {
+                    s.split(')').next()
+                } else {
+                    Some(s)
+                }
+            })
+        })
+        .flatten()
+        .expect(format!("Error on macro parsing input: {input}").as_str());
 
     let output = format!(
-        "impl Name for {0} {{
+        "impl TypeName for {0} {{
             const NAME: &'static str = \"{0}\";
         }}",
         struct_name

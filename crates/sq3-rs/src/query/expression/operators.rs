@@ -1,15 +1,17 @@
-use crate::traits::Name;
 use std::str::FromStr;
 
-use crate::{
-    impl_name,
-    result::{SqlParserError, SqliteError},
-};
+use crate::traits::TypeName;
+use sq3_derive::Name;
 
-#[derive(Debug)]
+use crate::result::{SqlParserError, SqliteError};
+
+#[derive(Debug, Name)]
 pub struct Tilde;
 
-impl_name!(Tilde);
+// impl TypeName for Tilde {
+//     const NAME: &'static str = "Tilde";
+// }
+
 
 impl FromStr for Tilde {
     type Err = SqliteError;
