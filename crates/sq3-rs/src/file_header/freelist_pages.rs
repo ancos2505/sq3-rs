@@ -35,13 +35,18 @@
 //! as a 4-byte big-endian integer at an offset of 32 from the beginning of the
 //! file.
 
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # Free page list (8 Bytes) => First(4 Bytes) + TotalPages (4 Bytes)
 ///  Unused pages in the database file are stored on a freelist.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct FreeListPages {
     /// Page number of the first freelist trunk page. (4 Bytes)
     first: FreeListPagesFirstTrunkPage,
@@ -58,7 +63,6 @@ impl FreeListPages {
         &self.total
     }
 }
-impl_name! {FreeListPages}
 
 impl ParseBytes for FreeListPages {
     const LENGTH_BYTES: usize = 8;
@@ -74,7 +78,7 @@ impl ParseBytes for FreeListPages {
 ///  FreeListPagesFirstTrunkPage: The 4-byte big-endian integer at offset 32
 /// stores the page number of the first page of the freelist, or zero if the
 /// freelist is empty.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct FreeListPagesFirstTrunkPage(u32);
 impl Deref for FreeListPagesFirstTrunkPage {
     type Target = u32;
@@ -83,8 +87,6 @@ impl Deref for FreeListPagesFirstTrunkPage {
         &self.0
     }
 }
-
-impl_name! {FreeListPagesFirstTrunkPage}
 
 impl ParseBytes for FreeListPagesFirstTrunkPage {
     const LENGTH_BYTES: usize = 4;
@@ -98,7 +100,7 @@ impl ParseBytes for FreeListPagesFirstTrunkPage {
 
 ///  FreeListPagesTotalPages: The 4-byte big-endian integer at offset 36
 /// stores the total number of pages on the freelist.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct FreeListPagesTotalPages(u32);
 impl Deref for FreeListPagesTotalPages {
     type Target = u32;
@@ -107,8 +109,6 @@ impl Deref for FreeListPagesTotalPages {
         &self.0
     }
 }
-
-impl_name! {FreeListPagesTotalPages}
 
 impl ParseBytes for FreeListPagesTotalPages {
     const LENGTH_BYTES: usize = 4;

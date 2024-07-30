@@ -1,9 +1,15 @@
-use crate::traits::{Name, ParseBytes};
-use crate::{field_parsing_error, impl_name, result::SqliteResult};
-use core::fmt::Debug;
+use std::fmt::Debug;
+
+use sq3_derive::Name;
+
+use crate::{
+    field_parsing_error,
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// Reserved for expansion. Must be zero. (20 Bytes)
-#[derive(Default)]
+#[derive(Default, Name)]
 pub struct ReservedForExpansion([u8; 20]);
 
 impl Debug for ReservedForExpansion {
@@ -11,8 +17,6 @@ impl Debug for ReservedForExpansion {
         f.debug_tuple(Self::NAME).finish()
     }
 }
-
-impl_name! {ReservedForExpansion}
 
 impl ParseBytes for ReservedForExpansion {
     const LENGTH_BYTES: usize = 20;

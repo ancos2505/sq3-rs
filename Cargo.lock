@@ -4,11 +4,11 @@ version = 3
 
 [[package]]
 name = "sq3-rs"
-version = "0.2.2"
+version = "0.2.3"
 dependencies = [
  "sq3_derive",
 ]
 
 [[package]]
 name = "sq3_derive"
-version = "0.2.2"
+version = "0.2.3"

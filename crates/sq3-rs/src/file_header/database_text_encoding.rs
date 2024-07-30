@@ -1,9 +1,12 @@
-use crate::traits::{Name, ParseBytes};
+use std::fmt::Display;
+
+use sq3_derive::Name;
+
 use crate::{
-    field_parsing_error, impl_name,
+    field_parsing_error,
     result::{SqliteError, SqliteResult},
+    traits::{ParseBytes, TypeName},
 };
-use core::fmt::Display;
 
 /// # Text encoding (4 Bytes)
 ///
@@ -13,7 +16,7 @@ use core::fmt::Display;
 /// allowed. The sqlite3.h header file defines C-preprocessor macros
 /// SQLITE_UTF8 as 1, SQLITE_UTF16LE as 2, and SQLITE_UTF16BE as 3, to use in
 /// place of the numeric codes for the text encoding.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub enum DatabaseTextEncoding {
     #[default]
     Utf8,
@@ -55,8 +58,6 @@ impl Display for DatabaseTextEncoding {
         write!(f, "{number} ({name})")
     }
 }
-
-impl_name! {DatabaseTextEncoding}
 
 impl ParseBytes for DatabaseTextEncoding {
     const LENGTH_BYTES: usize = 4;

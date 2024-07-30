@@ -1,6 +1,11 @@
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # Application ID (4 Bytes)
 ///
@@ -12,7 +17,7 @@ use core::ops::Deref;
 /// determine the specific file type rather than just reporting
 /// "Sqlite3 Database". A list of assigned application IDs can be seen by
 /// consulting the magic.txt file in the Sqlite source repository.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct ApplicationId(u32);
 
 impl Deref for ApplicationId {
@@ -22,7 +27,6 @@ impl Deref for ApplicationId {
         &self.0
     }
 }
-impl_name! {ApplicationId}
 
 impl ParseBytes for ApplicationId {
     const LENGTH_BYTES: usize = 4;

@@ -1,6 +1,11 @@
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # Suggested cache size (4 Bytes)
 ///
@@ -9,7 +14,7 @@ use core::ops::Deref;
 /// Sqlite is under no obligation to honor it. The absolute value of the integer
 /// is used as the suggested size. The suggested cache size can be set using the
 /// default_cache_size pragma.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct SuggestedCacheSize(u32);
 impl Deref for SuggestedCacheSize {
     type Target = u32;
@@ -18,8 +23,6 @@ impl Deref for SuggestedCacheSize {
         &self.0
     }
 }
-
-impl_name! {SuggestedCacheSize}
 
 impl ParseBytes for SuggestedCacheSize {
     const LENGTH_BYTES: usize = 4;

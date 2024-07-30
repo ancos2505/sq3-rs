@@ -1,6 +1,12 @@
-use crate::traits::{Name, ParseBytes};
-use crate::{field_parsing_error, impl_name, result::SqliteResult};
-use core::fmt::Display;
+use std::fmt::Display;
+
+use sq3_derive::Name;
+
+use crate::{
+    field_parsing_error,
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # File format version numbers (2 Bytes)
 ///
@@ -16,7 +22,7 @@ use core::fmt::Display;
 /// version is greater than 2, then the database file must be treated as
 /// read-only. If a database file with a read version greater than 2 is
 /// encountered, then that database cannot be read or written.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct FileFormatVersionNumbers {
     /// File format write version. 1 for legacy; 2 for WAL.
     write_version: FileFormatWriteVersion,
@@ -33,7 +39,7 @@ impl FileFormatVersionNumbers {
         &self.read_version
     }
 }
-impl_name! {FileFormatVersionNumbers}
+
 impl ParseBytes for FileFormatVersionNumbers {
     const LENGTH_BYTES: usize = 2;
 
@@ -47,7 +53,7 @@ impl ParseBytes for FileFormatVersionNumbers {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub enum FileFormatWriteVersion {
     #[default]
     Legacy,
@@ -65,8 +71,6 @@ impl From<&FileFormatWriteVersion> for u8 {
         }
     }
 }
-
-impl_name! {FileFormatWriteVersion}
 
 impl ParseBytes for FileFormatWriteVersion {
     const LENGTH_BYTES: usize = 1;
@@ -89,7 +93,7 @@ impl Display for FileFormatWriteVersion {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub enum FileFormatReadVersion {
     #[default]
     Legacy,
@@ -107,8 +111,6 @@ impl From<&FileFormatReadVersion> for u8 {
         }
     }
 }
-
-impl_name! {FileFormatReadVersion}
 
 impl ParseBytes for FileFormatReadVersion {
     const LENGTH_BYTES: usize = 1;

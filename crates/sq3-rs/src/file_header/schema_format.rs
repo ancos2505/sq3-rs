@@ -1,7 +1,9 @@
-use crate::traits::{Name, ParseBytes};
+use sq3_derive::Name;
+
 use crate::{
-    field_parsing_error, impl_name,
+    field_parsing_error,
     result::{SqliteError, SqliteResult},
+    traits::{ParseBytes, TypeName},
 };
 
 /// # Schema format number (4 Bytes)
@@ -33,7 +35,7 @@ use crate::{
 /// legacy_file_format pragma can be used to cause Sqlite to create new database
 /// files using format 1. The format version number can be made to default to 1
 /// instead of 4 by setting SQLITE_DEFAULT_FILE_FORMAT=1 at compile-time.
-#[derive(Debug, Default, PartialEq, Eq)]
+#[derive(Debug, Default, Name, PartialEq, Eq)]
 pub enum SchemaFormat {
     Format1,
     Format2,
@@ -66,8 +68,6 @@ impl From<&SchemaFormat> for u32 {
         }
     }
 }
-
-impl_name! {SchemaFormat}
 
 impl ParseBytes for SchemaFormat {
     const LENGTH_BYTES: usize = 4;

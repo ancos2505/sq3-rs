@@ -20,10 +20,12 @@ mod user_version;
 mod version_valid_for;
 mod write_library_version;
 
-use crate::traits::{ParseBytes, ValidateParsed};
+use sq3_derive::Name;
+
 use crate::{
-    impl_name,
-    result::{SqliteError, SqliteResult},
+    result::SqliteError,
+    traits::{ParseBytes, TypeName, ValidateParsed},
+    SqliteResult,
 };
 
 pub use self::{
@@ -79,7 +81,7 @@ pub use self::{
 /// | 72    | 20    | Reserved for expansion. Must be zero. |
 /// | 92    |  4    | The version-valid-for number. |
 /// | 96    |  4    | SQLITE_VERSION_NUMBER |
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct SqliteHeader {
     /// The header string: "`Sqlite format 3\000`".
     magic_header_string: MagicHeaderString,
@@ -215,8 +217,6 @@ impl SqliteHeader {
         &self.write_library_version
     }
 }
-
-impl_name! {SqliteHeader}
 
 impl ParseBytes for SqliteHeader {
     const LENGTH_BYTES: usize = Self::LENGTH_BYTES;

@@ -1,13 +1,18 @@
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # User version number (4 Bytes)
 ///
 ///  The 4-byte big-endian integer at offset 60 is the user version which is set
 /// and queried by the user_version pragma. The user version is not used by
 /// Sqlite.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct UserVersion(u32);
 impl Deref for UserVersion {
     type Target = u32;
@@ -16,7 +21,7 @@ impl Deref for UserVersion {
         &self.0
     }
 }
-impl_name! {UserVersion}
+
 impl ParseBytes for UserVersion {
     const LENGTH_BYTES: usize = 4;
 

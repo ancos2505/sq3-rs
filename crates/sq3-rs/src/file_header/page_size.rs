@@ -1,9 +1,9 @@
-use crate::traits::ParseBytes;
-use crate::{
-    impl_name,
-    result::{SqliteError, SqliteResult},
-};
+use sq3_derive::Name;
 
+use crate::{
+    result::{SqliteError, SqliteResult},
+    traits::{ParseBytes, TypeName},
+};
 /// # Page Size (2 Bytes)
 ///
 ///  The two-byte value beginning at offset 16 determines the page size of the
@@ -17,7 +17,7 @@ use crate::{
 /// view the two-byte field as a little endian number and say that it
 /// represents the page size divided by 256. These two interpretations of the
 /// page-size field are equivalent.
-#[derive(Debug, Default, PartialEq, Eq, Clone)]
+#[derive(Debug, Default, Name, PartialEq, Eq, Clone)]
 pub enum PageSize {
     L512,
     L1024,
@@ -85,8 +85,6 @@ impl PartialEq<PageSize> for usize {
         }
     }
 }
-
-impl_name! {PageSize}
 
 impl ParseBytes for PageSize {
     const LENGTH_BYTES: usize = 2;

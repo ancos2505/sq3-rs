@@ -1,6 +1,11 @@
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # File change counter (4 Bytes)
 ///
@@ -15,7 +20,7 @@ use core::ops::Deref;
 /// In WAL mode, changes to the database are detected using the wal-index and so
 /// the change counter is not needed. Hence, the change counter might not be
 /// incremented on each transaction in WAL mode.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct FileChangeCounter(u32);
 impl Deref for FileChangeCounter {
     type Target = u32;
@@ -24,8 +29,6 @@ impl Deref for FileChangeCounter {
         &self.0
     }
 }
-
-impl_name! {FileChangeCounter}
 
 impl ParseBytes for FileChangeCounter {
     const LENGTH_BYTES: usize = 4;

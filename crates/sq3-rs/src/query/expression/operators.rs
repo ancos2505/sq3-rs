@@ -8,11 +8,6 @@ use crate::result::{SqlParserError, SqliteError};
 #[derive(Debug, Name)]
 pub struct Tilde;
 
-// impl TypeName for Tilde {
-//     const NAME: &'static str = "Tilde";
-// }
-
-
 impl FromStr for Tilde {
     type Err = SqliteError;
 

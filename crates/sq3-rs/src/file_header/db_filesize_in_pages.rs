@@ -1,8 +1,12 @@
-use crate::result::SqliteError;
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
 use std::num::NonZeroU32;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::{SqliteError, SqliteResult},
+    traits::{ParseBytes, TypeName},
+};
 
 /// # In-header database size (4 Bytes)
 ///
@@ -26,7 +30,7 @@ use std::num::NonZeroU32;
 /// unchanged so it will not match the change-counter. Hence, invalid in-header
 /// database sizes can be detected (and ignored) by observing when the
 /// change-counter does not match the version-valid-for number.
-#[derive(Debug)]
+#[derive(Debug, Name)]
 pub struct DatabaseFileSizeInPages(u32);
 
 impl Default for DatabaseFileSizeInPages {
@@ -41,7 +45,6 @@ impl Deref for DatabaseFileSizeInPages {
         &self.0
     }
 }
-impl_name! {DatabaseFileSizeInPages}
 
 impl ParseBytes for DatabaseFileSizeInPages {
     const LENGTH_BYTES: usize = 4;

@@ -1,6 +1,11 @@
-use crate::traits::ParseBytes;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+};
 
 /// # Schema cookie (4 Bytes)
 ///
@@ -13,7 +18,7 @@ use core::ops::Deref;
 /// changed, the statement either automatically reprepares and reruns or it
 /// aborts with an [SQLITE_SCHEMA](https://www.sqlite.org/rescode.html#schema)
 /// error.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct SchemaCookie(u32);
 impl Deref for SchemaCookie {
     type Target = u32;
@@ -22,8 +27,6 @@ impl Deref for SchemaCookie {
         &self.0
     }
 }
-
-impl_name! {SchemaCookie}
 
 impl ParseBytes for SchemaCookie {
     const LENGTH_BYTES: usize = 4;

@@ -1,7 +1,10 @@
-use crate::traits::{Name, ParseBytes};
-use crate::{field_parsing_error, impl_name, result::SqliteResult};
+use std::ops::Deref;
 
-use core::ops::Deref;
+use sq3_derive::Name;
+
+use crate::{
+    field_parsing_error, result::SqliteResult, traits::{ParseBytes, TypeName}
+};
 
 /// # Reserved bytes per page (1 Byte)
 ///
@@ -24,7 +27,7 @@ use core::ops::Deref;
 /// "This value is usually 0."
 ///
 /// Reference: https://www.sqlite.org/fileformat2.html#resbyte
-#[derive(Debug, Default, PartialEq, Eq)]
+#[derive(Debug, Default, Name, PartialEq, Eq)]
 pub struct ReservedBytesPerPage(u8);
 impl Deref for ReservedBytesPerPage {
     type Target = u8;
@@ -33,8 +36,6 @@ impl Deref for ReservedBytesPerPage {
         &self.0
     }
 }
-
-impl_name! {ReservedBytesPerPage}
 
 impl ParseBytes for ReservedBytesPerPage {
     const LENGTH_BYTES: usize = 1;

@@ -1,7 +1,12 @@
-use crate::traits::ParseBytes;
-use crate::VERSION_NUMBER;
-use crate::{impl_name, result::SqliteResult};
-use core::ops::Deref;
+use std::ops::Deref;
+
+use sq3_derive::Name;
+
+use crate::{
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
+    VERSION_NUMBER,
+};
 
 /// # Write library version number (4 Bytes)
 ///
@@ -21,7 +26,7 @@ use core::ops::Deref;
 /// > write library version number is outdated, and must be ignored.
 /// >
 /// >  **Reference:** https://stackoverflow.com/a/45420823
-#[derive(Debug)]
+#[derive(Debug, Name)]
 pub struct WriteLibraryVersion(u32);
 impl Default for WriteLibraryVersion {
     fn default() -> Self {
@@ -35,8 +40,6 @@ impl Deref for WriteLibraryVersion {
         &self.0
     }
 }
-
-impl_name! {WriteLibraryVersion}
 
 impl ParseBytes for WriteLibraryVersion {
     const LENGTH_BYTES: usize = 4;

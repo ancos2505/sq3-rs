@@ -1,8 +1,10 @@
-use core::ops::Deref;
+use std::ops::Deref;
 
-use crate::traits::{Name, ParseBytes};
+use sq3_derive::Name;
+
+use crate::traits::{ParseBytes, TypeName};
 use crate::{
-    field_parsing_error, impl_name,
+    field_parsing_error,
     result::{SqliteError, SqliteResult},
 };
 
@@ -14,7 +16,7 @@ use crate::{
 /// format of the b-tree algorithm. However, that functionality is not
 /// supported and there are no current plans to add support in the future.
 /// Hence, these three bytes are fixed at the values specified.
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Name)]
 pub struct PayloadFractions {
     /// Maximum embedded payload fraction. Must be 64.
     maximum: MaximumEmbeddedPayloadFraction,
@@ -38,8 +40,6 @@ impl PayloadFractions {
     }
 }
 
-impl_name! {PayloadFractions}
-
 impl ParseBytes for PayloadFractions {
     const LENGTH_BYTES: usize = 3;
 
@@ -56,7 +56,7 @@ impl ParseBytes for PayloadFractions {
 }
 
 /// Maximum embedded payload fraction. Must be 64.
-#[derive(Debug)]
+#[derive(Debug, Name)]
 pub struct MaximumEmbeddedPayloadFraction(u8);
 impl Default for MaximumEmbeddedPayloadFraction {
     fn default() -> Self {
@@ -70,8 +70,6 @@ impl Deref for MaximumEmbeddedPayloadFraction {
         &self.0
     }
 }
-
-impl_name! {MaximumEmbeddedPayloadFraction}
 
 impl ParseBytes for MaximumEmbeddedPayloadFraction {
     const LENGTH_BYTES: usize = 1;
@@ -91,7 +89,7 @@ impl ParseBytes for MaximumEmbeddedPayloadFraction {
 }
 
 /// Minimum embedded payload fraction. Must be 32.
-#[derive(Debug)]
+#[derive(Debug, Name)]
 pub struct MinimumEmbeddedPayloadFraction(u8);
 impl Default for MinimumEmbeddedPayloadFraction {
     fn default() -> Self {
@@ -105,8 +103,6 @@ impl Deref for MinimumEmbeddedPayloadFraction {
         &self.0
     }
 }
-
-impl_name! {MinimumEmbeddedPayloadFraction}
 
 impl ParseBytes for MinimumEmbeddedPayloadFraction {
     const LENGTH_BYTES: usize = 1;
@@ -126,7 +122,7 @@ impl ParseBytes for MinimumEmbeddedPayloadFraction {
 }
 
 /// Leaf payload fraction. Must be 32.
-#[derive(Debug)]
+#[derive(Debug, Name)]
 pub struct LeafPayloadFraction(u8);
 impl Default for LeafPayloadFraction {
     fn default() -> Self {
@@ -140,8 +136,6 @@ impl Deref for LeafPayloadFraction {
         &self.0
     }
 }
-
-impl_name! {LeafPayloadFraction}
 
 impl ParseBytes for LeafPayloadFraction {
     const LENGTH_BYTES: usize = 1;
