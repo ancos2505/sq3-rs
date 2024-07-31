@@ -3,28 +3,37 @@ use crate::SqliteConnection;
 use super::SelectStmt;
 
 // const TEST_QUERIES: [&str; 10] = [
-const TEST_QUERIES: [&str; 5] = [
-    "SELECT (1)",
-    "SELECT (5+2)",
-    "SELECT (5-2)",
-    "SELECT (5*2)",
-    "SELECT (5/2)",
-    // "SELECT id,name FROM users WHERE age > 18",
-    // "UPDATE users SET name = 'John' WHERE id = 1",
-    // "INSERT INTO users (name, age) VALUES ('Alice', 30)",
-    // "DELETE FROM users WHERE id = 5",
-    // "TRUNCATE TABLE users",
-];
 
 #[test]
 #[ignore = "Todo"]
 fn ok_on_run_select_queries() {
-    for query in TEST_QUERIES {
+    for query in queries() {
         println!("Query: {}", query);
 
-        match SelectStmt::run(query) {
+        match SelectStmt::run(&query) {
             Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
             Err(e) => println!("Error: {}", e),
         }
     }
+}
+
+fn queries() -> Vec<String> {
+    vec![
+        "SELECT 1".into(),
+        "SELECT 1,2".into(),
+        "SELECT 1,2,1,3".into(),
+        "SELECT DISTINCT 1,2,1,3".into(),
+        // "SELECT (1)".into(),
+        // "SELECT (5+2)".into(),
+        // "SELECT (5-2)".into(),
+        // "SELECT (5*2)".into(),
+        // "SELECT (5/2)".into(),
+        // "SELECT id,name FROM users WHERE age > 18".into(),
+        // "SELECT ALL id,name FROM users WHERE age > 18".into(),
+        // "SELECT DISTINCT id,name FROM users WHERE age > 18".into(),
+        // "UPDATE users SET name = 'John' WHERE id = 1".into(),
+        // "INSERT INTO users (name, age) VALUES ('Alice', 30)".into(),
+        // "DELETE FROM users WHERE id = 5".into(),
+        // "TRUNCATE TABLE users".into(),
+    ]
 }

@@ -1,3 +1,2 @@
-mod digits;
-mod hex_digits;
+mod parser;
 mod traits;

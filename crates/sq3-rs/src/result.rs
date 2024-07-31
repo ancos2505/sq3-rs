@@ -3,6 +3,7 @@ use core::fmt::Display;
 use std::error::Error as StdError;
 use std::fmt::Debug;
 use std::io::Error as StdioError;
+use std::num::{ParseFloatError, ParseIntError};
 
 pub type SqliteResult<T> = Result<T, SqliteError>;
 
@@ -12,6 +13,8 @@ pub enum SqliteError {
     InvalidFileUriMode,
     HeaderValidationError(String),
     TryFromSliceError(TryFromSliceError),
+    ParseFloatError(ParseFloatError),
+    ParseIntError(ParseIntError),
     StdioError(StdioError),
     Custom(String),
     ParsingField(FieldParsingError),
@@ -38,6 +41,18 @@ impl Display for SqliteError {
 impl From<TryFromSliceError> for SqliteError {
     fn from(error: TryFromSliceError) -> Self {
         Self::TryFromSliceError(error)
+    }
+}
+
+impl From<ParseFloatError> for SqliteError {
+    fn from(error: ParseFloatError) -> Self {
+        Self::ParseFloatError(error)
+    }
+}
+
+impl From<ParseIntError> for SqliteError {
+    fn from(error: ParseIntError) -> Self {
+        Self::ParseIntError(error)
     }
 }
 

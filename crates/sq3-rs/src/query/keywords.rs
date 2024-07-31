@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 mod abort;
 mod action;
 mod add;
@@ -146,6 +149,10 @@ mod window;
 mod with;
 mod without;
 
+use std::any::Any;
+use std::fmt::Debug;
+use std::str::FromStr;
+
 use crate::result::{SqlParserError, SqliteError};
 
 pub(crate) use self::{
@@ -176,20 +183,6 @@ pub(crate) use self::{
     update::Update, using::Using, vacuum::Vacuum, values::Values, view::View, virtual_::Virtual,
     when::When, where_::Where, window::Window, with::With, without::Without,
 };
-
-// use super::traits::SqliteKeyword;
-use std::any::Any;
-use std::fmt::Debug;
-use std::str::FromStr;
-
-// #[derive(Debug)]
-// pub struct SqliteKeywords;
-
-// // impl SqliteKeywords {
-// //     pub const fn all_keywords() -> [&'static str; 1] {
-// //         [Abort::as_str()]
-// //     }
-// // }
 
 #[derive(Debug)]
 pub struct Keyword(pub Box<dyn Any>);
@@ -641,7 +634,7 @@ impl FromStr for Keyword {
         }
 
         Err(SqliteError::SqlParser(SqlParserError(
-            "Keyword not found.".into(),
+            "Not a valid SQLite keyword.".into(),
         )))
     }
 }
