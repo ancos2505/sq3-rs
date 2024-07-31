@@ -3,7 +3,9 @@ use std::ops::Deref;
 use sq3_derive::Name;
 
 use crate::{
-    field_parsing_error, result::SqliteResult, traits::{ParseBytes, TypeName}
+    field_parsing_error,
+    result::SqliteResult,
+    traits::{ParseBytes, TypeName},
 };
 
 /// # Reserved bytes per page (1 Byte)

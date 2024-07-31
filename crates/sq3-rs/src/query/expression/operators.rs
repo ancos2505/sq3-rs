@@ -1,88 +1,37 @@
-use std::str::FromStr;
+#[cfg(test)]
+mod tests;
 
-use crate::traits::TypeName;
-use sq3_derive::Name;
+use sq3_derive::{Name, ParseChar};
 
-use crate::result::{SqlParserError, SqliteError};
+use crate::{
+    result::{SqlParserError, SqliteError},
+    traits::TypeName,
+};
 
-#[derive(Debug, Name)]
+#[derive(Debug, Name, ParseChar)]
+#[char = "~"]
 pub struct Tilde;
 
-impl FromStr for Tilde {
-    type Err = SqliteError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "~" => Ok(Self),
-
-            _ => Err(SqliteError::SqlParser(SqlParserError(format!(
-                "Error on parsing {}",
-                Self::NAME,
-            )))),
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, Name, ParseChar)]
+#[char = "+"]
 pub struct Plus;
 
-impl FromStr for Plus {
-    type Err = SqliteError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "+" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(format!(
-                "Error on parsing {}",
-                stringify!(Self)
-            )))),
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, Name, ParseChar)]
+#[char = "-"]
 pub struct Minus;
 
-impl FromStr for Minus {
-    type Err = SqliteError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "-" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(format!(
-                "Error on parsing tilde"
-            )))),
-        }
-    }
-}
-
-#[derive(Debug)]
+#[derive(Debug, Name, ParseChar)]
+#[char = "*"]
 pub struct Multiplication;
 
-#[derive(Debug)]
+#[derive(Debug, Name, ParseChar)]
+#[char = "%"]
 pub struct Percent;
 
-#[derive(Debug)]
+#[derive(Debug, Name, ParseChar)]
+#[char = "("]
 pub struct LeftParenthesis;
 
-#[derive(Debug)]
+#[derive(Debug, Name, ParseChar)]
+#[char = ")"]
 pub struct RightParenthesis;
-
-#[cfg(test)]
-mod tests {
-    use super::Tilde;
-
-    #[test]
-    fn ok_on_parse_tilde() {
-        let res = "~".parse::<Tilde>();
-        dbg!(&res);
-        assert!(res.is_ok());
-    }
-
-    #[test]
-    fn err_on_parse_tilde() {
-        let res = "".parse::<Tilde>();
-        dbg!(&res);
-        assert!(res.is_err());
-    }
-}
