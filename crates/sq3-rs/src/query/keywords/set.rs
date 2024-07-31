@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Set;
+impl Set {
+    pub const fn as_str() -> &'static str {
+        "SET"
+    }
+}
 
-impl FromStr for Set {
-    type Err = SqliteError;
+impl PartialEq<&str> for Set {
+    fn eq(&self, other: &&str) -> bool {
+        Set::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "SET" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword SET not found.".into(),
-            ))),
-        }
+impl PartialEq<Set> for &str {
+    fn eq(&self, _: &Set) -> bool {
+        Set::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Set {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "SET")
+        write!(f, "{}", Self::as_str())
     }
 }
 

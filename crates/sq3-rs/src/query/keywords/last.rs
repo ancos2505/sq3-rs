@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Last;
+impl Last {
+    pub const fn as_str() -> &'static str {
+        "LAST"
+    }
+}
 
-impl FromStr for Last {
-    type Err = SqliteError;
+impl PartialEq<&str> for Last {
+    fn eq(&self, other: &&str) -> bool {
+        Last::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "LAST" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword LAST not found.".into(),
-            ))),
-        }
+impl PartialEq<Last> for &str {
+    fn eq(&self, _: &Last) -> bool {
+        Last::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Last {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "LAST")
+        write!(f, "{}", Self::as_str())
     }
 }
 

@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct On;
+impl On {
+    pub const fn as_str() -> &'static str {
+        "ON"
+    }
+}
 
-impl FromStr for On {
-    type Err = SqliteError;
+impl PartialEq<&str> for On {
+    fn eq(&self, other: &&str) -> bool {
+        On::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "ON" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword ON not found.".into(),
-            ))),
-        }
+impl PartialEq<On> for &str {
+    fn eq(&self, _: &On) -> bool {
+        On::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for On {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ON")
+        write!(f, "{}", Self::as_str())
     }
 }
 

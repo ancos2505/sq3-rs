@@ -1,31 +1,31 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::{DistinctProcessing, SqliteKeyword},
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Distinct;
+impl Distinct {
+    pub const fn as_str() -> &'static str {
+        "DISTINCT"
+    }
+}
 
-impl FromStr for Distinct {
-    type Err = SqliteError;
+impl PartialEq<&str> for Distinct {
+    fn eq(&self, other: &&str) -> bool {
+        Distinct::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "DISTINCT" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword DISTINCT not found.".into(),
-            ))),
-        }
+impl PartialEq<Distinct> for &str {
+    fn eq(&self, _: &Distinct) -> bool {
+        Distinct::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Distinct {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "DISTINCT")
+        write!(f, "{}", Self::as_str())
     }
 }
 
 impl SqliteKeyword for Distinct {}
-impl DistinctProcessing for Distinct {}

@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Recursive;
+impl Recursive {
+    pub const fn as_str() -> &'static str {
+        "RECURSIVE"
+    }
+}
 
-impl FromStr for Recursive {
-    type Err = SqliteError;
+impl PartialEq<&str> for Recursive {
+    fn eq(&self, other: &&str) -> bool {
+        Recursive::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "RECURSIVE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword RECURSIVE not found.".into(),
-            ))),
-        }
+impl PartialEq<Recursive> for &str {
+    fn eq(&self, _: &Recursive) -> bool {
+        Recursive::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Recursive {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "RECURSIVE")
+        write!(f, "{}", Self::as_str())
     }
 }
 

@@ -1,8 +1,4 @@
 use crate::result::{InvalidPayloadSizeError, SqliteError, SqliteResult};
-use std::fs::File;
-use std::io::Cursor;
-use std::io::Read;
-use std::io::Seek;
 
 pub trait TypeName {
     const NAME: &'static str;
@@ -37,8 +33,3 @@ where
 {
     fn validate_parsed(&self) -> SqliteResult<()>;
 }
-
-// pub(crate) trait SqliteRawIo: Read + Send + Sync + Write {}
-pub(crate) trait SqliteRawIo: Read + Send + Sync + Seek {}
-impl SqliteRawIo for Cursor<Vec<u8>> {}
-impl SqliteRawIo for File {}

@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Pragma;
+impl Pragma {
+    pub const fn as_str() -> &'static str {
+        "PRAGMA"
+    }
+}
 
-impl FromStr for Pragma {
-    type Err = SqliteError;
+impl PartialEq<&str> for Pragma {
+    fn eq(&self, other: &&str) -> bool {
+        Pragma::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "PRAGMA" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword PRAGMA not found.".into(),
-            ))),
-        }
+impl PartialEq<Pragma> for &str {
+    fn eq(&self, _: &Pragma) -> bool {
+        Pragma::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Pragma {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "PRAGMA")
+        write!(f, "{}", Self::as_str())
     }
 }
 

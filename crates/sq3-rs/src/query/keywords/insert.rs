@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Insert;
+impl Insert {
+    pub const fn as_str() -> &'static str {
+        "INSERT"
+    }
+}
 
-impl FromStr for Insert {
-    type Err = SqliteError;
+impl PartialEq<&str> for Insert {
+    fn eq(&self, other: &&str) -> bool {
+        Insert::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "INSERT" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword INSERT not found.".into(),
-            ))),
-        }
+impl PartialEq<Insert> for &str {
+    fn eq(&self, _: &Insert) -> bool {
+        Insert::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Insert {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "INSERT")
+        write!(f, "{}", Self::as_str())
     }
 }
 

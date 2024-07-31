@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Detach;
+impl Detach {
+    pub const fn as_str() -> &'static str {
+        "DETACH"
+    }
+}
 
-impl FromStr for Detach {
-    type Err = SqliteError;
+impl PartialEq<&str> for Detach {
+    fn eq(&self, other: &&str) -> bool {
+        Detach::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "DETACH" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword DETACH not found.".into(),
-            ))),
-        }
+impl PartialEq<Detach> for &str {
+    fn eq(&self, _: &Detach) -> bool {
+        Detach::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Detach {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "DETACH")
+        write!(f, "{}", Self::as_str())
     }
 }
 

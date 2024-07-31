@@ -1,30 +1,31 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
-pub(crate) struct KeywordFrom;
-
-impl FromStr for KeywordFrom {
-    type Err = SqliteError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "FROM" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword FROM not found.".into(),
-            ))),
-        }
+pub(crate) struct From;
+impl From {
+    pub const fn as_str() -> &'static str {
+        "FROM"
     }
 }
 
-impl Display for KeywordFrom {
+impl PartialEq<&str> for From {
+    fn eq(&self, other: &&str) -> bool {
+        From::as_str().eq_ignore_ascii_case(other)
+    }
+}
+
+impl PartialEq<From> for &str {
+    fn eq(&self, _: &From) -> bool {
+        From::as_str().eq_ignore_ascii_case(self)
+    }
+}
+
+impl Display for From {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "FROM")
+        write!(f, "{}", Self::as_str())
     }
 }
 
-impl SqliteKeyword for KeywordFrom {}
+impl SqliteKeyword for From {}

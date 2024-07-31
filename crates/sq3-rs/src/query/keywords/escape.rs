@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Escape;
+impl Escape {
+    pub const fn as_str() -> &'static str {
+        "ESCAPE"
+    }
+}
 
-impl FromStr for Escape {
-    type Err = SqliteError;
+impl PartialEq<&str> for Escape {
+    fn eq(&self, other: &&str) -> bool {
+        Escape::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "ESCAPE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword ESCAPE not found.".into(),
-            ))),
-        }
+impl PartialEq<Escape> for &str {
+    fn eq(&self, _: &Escape) -> bool {
+        Escape::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Escape {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ESCAPE")
+        write!(f, "{}", Self::as_str())
     }
 }
 

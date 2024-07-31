@@ -159,9 +159,9 @@ pub(crate) use self::{
     delete::Delete, desc::Desc, detach::Detach, distinct::Distinct, do_::Do, drop::Drop,
     each::Each, else_::Else, end::End, escape::Escape, except::Except, exclude::Exclude,
     exclusive::Exclusive, exists::Exists, explain::Explain, fail::Fail, filter::Filter,
-    first::First, following::Following, for_::For, foreign::Foreign, from::KeywordFrom, full::Full,
-    generated::Generated, glob::Glob, group::Group, groups::Groups, having::Having, if_::If,
-    ignore::Ignore, immediate::Immediate, in_::In, index::Index, indexed::Indexed,
+    first::First, following::Following, for_::For, foreign::Foreign, from::From as KeywordFrom,
+    full::Full, generated::Generated, glob::Glob, group::Group, groups::Groups, having::Having,
+    if_::If, ignore::Ignore, immediate::Immediate, in_::In, index::Index, indexed::Indexed,
     initially::Initially, inner::Inner, insert::Insert, instead::Instead, intersect::Intersect,
     into::Into, is::Is, isnull::Isnull, join::Join, key::Key, last::Last, left::Left, like::Like,
     limit::Limit, match_::Match, materialized::Materialized, natural::Natural, no::No, not::Not,
@@ -180,8 +180,16 @@ pub(crate) use self::{
 // use super::traits::SqliteKeyword;
 use std::any::Any;
 use std::fmt::Debug;
-
 use std::str::FromStr;
+
+// #[derive(Debug)]
+// pub struct SqliteKeywords;
+
+// // impl SqliteKeywords {
+// //     pub const fn all_keywords() -> [&'static str; 1] {
+// //         [Abort::as_str()]
+// //     }
+// // }
 
 #[derive(Debug)]
 pub struct Keyword(pub Box<dyn Any>);
@@ -189,160 +197,451 @@ pub struct Keyword(pub Box<dyn Any>);
 impl FromStr for Keyword {
     type Err = SqliteError;
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "ABORT" => Ok(Self(Box::new(s.parse::<Abort>()?) as Box<dyn Any>)),
-            "ACTION" => Ok(Self(Box::new(s.parse::<Action>()?) as Box<dyn Any>)),
-            "ADD" => Ok(Self(Box::new(s.parse::<Add>()?) as Box<dyn Any>)),
-            "AFTER" => Ok(Self(Box::new(s.parse::<After>()?) as Box<dyn Any>)),
-            "ALL" => Ok(Self(Box::new(s.parse::<All>()?) as Box<dyn Any>)),
-            "ALTER" => Ok(Self(Box::new(s.parse::<Alter>()?) as Box<dyn Any>)),
-            "ALWAYS" => Ok(Self(Box::new(s.parse::<Always>()?) as Box<dyn Any>)),
-            "ANALYZE" => Ok(Self(Box::new(s.parse::<Analyze>()?) as Box<dyn Any>)),
-            "AND" => Ok(Self(Box::new(s.parse::<And>()?) as Box<dyn Any>)),
-            "AS" => Ok(Self(Box::new(s.parse::<As>()?) as Box<dyn Any>)),
-            "ASC" => Ok(Self(Box::new(s.parse::<Asc>()?) as Box<dyn Any>)),
-            "ATTACH" => Ok(Self(Box::new(s.parse::<Attach>()?) as Box<dyn Any>)),
-            "AUTOINCREMENT" => Ok(Self(Box::new(s.parse::<Autoincrement>()?) as Box<dyn Any>)),
-            "BEFORE" => Ok(Self(Box::new(s.parse::<Before>()?) as Box<dyn Any>)),
-            "BEGIN" => Ok(Self(Box::new(s.parse::<Begin>()?) as Box<dyn Any>)),
-            "BETWEEN" => Ok(Self(Box::new(s.parse::<Between>()?) as Box<dyn Any>)),
-            "BY" => Ok(Self(Box::new(s.parse::<By>()?) as Box<dyn Any>)),
-            "CASCADE" => Ok(Self(Box::new(s.parse::<Cascade>()?) as Box<dyn Any>)),
-            "CASE" => Ok(Self(Box::new(s.parse::<Case>()?) as Box<dyn Any>)),
-            "CAST" => Ok(Self(Box::new(s.parse::<Cast>()?) as Box<dyn Any>)),
-            "CHECK" => Ok(Self(Box::new(s.parse::<Check>()?) as Box<dyn Any>)),
-            "COLLATE" => Ok(Self(Box::new(s.parse::<Collate>()?) as Box<dyn Any>)),
-            "COLUMN" => Ok(Self(Box::new(s.parse::<Column>()?) as Box<dyn Any>)),
-            "COMMIT" => Ok(Self(Box::new(s.parse::<Commit>()?) as Box<dyn Any>)),
-            "CONFLICT" => Ok(Self(Box::new(s.parse::<Conflict>()?) as Box<dyn Any>)),
-            "CONSTRAINT" => Ok(Self(Box::new(s.parse::<Constraint>()?) as Box<dyn Any>)),
-            "CREATE" => Ok(Self(Box::new(s.parse::<Create>()?) as Box<dyn Any>)),
-            "CROSS" => Ok(Self(Box::new(s.parse::<Cross>()?) as Box<dyn Any>)),
-            "CURRENT" => Ok(Self(Box::new(s.parse::<Current>()?) as Box<dyn Any>)),
-            "CURRENT_DATE" => Ok(Self(Box::new(s.parse::<Current_date>()?) as Box<dyn Any>)),
-            "CURRENT_TIME" => Ok(Self(Box::new(s.parse::<Current_time>()?) as Box<dyn Any>)),
-            "CURRENT_TIMESTAMP" => Ok(Self(
-                Box::new(s.parse::<Current_timestamp>()?) as Box<dyn Any>
-            )),
-            "DATABASE" => Ok(Self(Box::new(s.parse::<Database>()?) as Box<dyn Any>)),
-            "DEFAULT" => Ok(Self(Box::new(s.parse::<Default>()?) as Box<dyn Any>)),
-            "DEFERRABLE" => Ok(Self(Box::new(s.parse::<Deferrable>()?) as Box<dyn Any>)),
-            "DEFERRED" => Ok(Self(Box::new(s.parse::<Deferred>()?) as Box<dyn Any>)),
-            "DELETE" => Ok(Self(Box::new(s.parse::<Delete>()?) as Box<dyn Any>)),
-            "DESC" => Ok(Self(Box::new(s.parse::<Desc>()?) as Box<dyn Any>)),
-            "DETACH" => Ok(Self(Box::new(s.parse::<Detach>()?) as Box<dyn Any>)),
-            "DISTINCT" => Ok(Self(Box::new(s.parse::<Distinct>()?) as Box<dyn Any>)),
-            "DO" => Ok(Self(Box::new(s.parse::<Do>()?) as Box<dyn Any>)),
-            "DROP" => Ok(Self(Box::new(s.parse::<Drop>()?) as Box<dyn Any>)),
-            "EACH" => Ok(Self(Box::new(s.parse::<Each>()?) as Box<dyn Any>)),
-            "ELSE" => Ok(Self(Box::new(s.parse::<Else>()?) as Box<dyn Any>)),
-            "END" => Ok(Self(Box::new(s.parse::<End>()?) as Box<dyn Any>)),
-            "ESCAPE" => Ok(Self(Box::new(s.parse::<Escape>()?) as Box<dyn Any>)),
-            "EXCEPT" => Ok(Self(Box::new(s.parse::<Except>()?) as Box<dyn Any>)),
-            "EXCLUDE" => Ok(Self(Box::new(s.parse::<Exclude>()?) as Box<dyn Any>)),
-            "EXCLUSIVE" => Ok(Self(Box::new(s.parse::<Exclusive>()?) as Box<dyn Any>)),
-            "EXISTS" => Ok(Self(Box::new(s.parse::<Exists>()?) as Box<dyn Any>)),
-            "EXPLAIN" => Ok(Self(Box::new(s.parse::<Explain>()?) as Box<dyn Any>)),
-            "FAIL" => Ok(Self(Box::new(s.parse::<Fail>()?) as Box<dyn Any>)),
-            "FILTER" => Ok(Self(Box::new(s.parse::<Filter>()?) as Box<dyn Any>)),
-            "FIRST" => Ok(Self(Box::new(s.parse::<First>()?) as Box<dyn Any>)),
-            "FOLLOWING" => Ok(Self(Box::new(s.parse::<Following>()?) as Box<dyn Any>)),
-            "FOR" => Ok(Self(Box::new(s.parse::<For>()?) as Box<dyn Any>)),
-            "FOREIGN" => Ok(Self(Box::new(s.parse::<Foreign>()?) as Box<dyn Any>)),
-            "FROM" => Ok(Self(Box::new(s.parse::<KeywordFrom>()?) as Box<dyn Any>)),
-            "FULL" => Ok(Self(Box::new(s.parse::<Full>()?) as Box<dyn Any>)),
-            "GENERATED" => Ok(Self(Box::new(s.parse::<Generated>()?) as Box<dyn Any>)),
-            "GLOB" => Ok(Self(Box::new(s.parse::<Glob>()?) as Box<dyn Any>)),
-            "GROUP" => Ok(Self(Box::new(s.parse::<Group>()?) as Box<dyn Any>)),
-            "GROUPS" => Ok(Self(Box::new(s.parse::<Groups>()?) as Box<dyn Any>)),
-            "HAVING" => Ok(Self(Box::new(s.parse::<Having>()?) as Box<dyn Any>)),
-            "IF" => Ok(Self(Box::new(s.parse::<If>()?) as Box<dyn Any>)),
-            "IGNORE" => Ok(Self(Box::new(s.parse::<Ignore>()?) as Box<dyn Any>)),
-            "IMMEDIATE" => Ok(Self(Box::new(s.parse::<Immediate>()?) as Box<dyn Any>)),
-            "IN" => Ok(Self(Box::new(s.parse::<In>()?) as Box<dyn Any>)),
-            "INDEX" => Ok(Self(Box::new(s.parse::<Index>()?) as Box<dyn Any>)),
-            "INDEXED" => Ok(Self(Box::new(s.parse::<Indexed>()?) as Box<dyn Any>)),
-            "INITIALLY" => Ok(Self(Box::new(s.parse::<Initially>()?) as Box<dyn Any>)),
-            "INNER" => Ok(Self(Box::new(s.parse::<Inner>()?) as Box<dyn Any>)),
-            "INSERT" => Ok(Self(Box::new(s.parse::<Insert>()?) as Box<dyn Any>)),
-            "INSTEAD" => Ok(Self(Box::new(s.parse::<Instead>()?) as Box<dyn Any>)),
-            "INTERSECT" => Ok(Self(Box::new(s.parse::<Intersect>()?) as Box<dyn Any>)),
-            "INTO" => Ok(Self(Box::new(s.parse::<Into>()?) as Box<dyn Any>)),
-            "IS" => Ok(Self(Box::new(s.parse::<Is>()?) as Box<dyn Any>)),
-            "ISNULL" => Ok(Self(Box::new(s.parse::<Isnull>()?) as Box<dyn Any>)),
-            "JOIN" => Ok(Self(Box::new(s.parse::<Join>()?) as Box<dyn Any>)),
-            "KEY" => Ok(Self(Box::new(s.parse::<Key>()?) as Box<dyn Any>)),
-            "LAST" => Ok(Self(Box::new(s.parse::<Last>()?) as Box<dyn Any>)),
-            "LEFT" => Ok(Self(Box::new(s.parse::<Left>()?) as Box<dyn Any>)),
-            "LIKE" => Ok(Self(Box::new(s.parse::<Like>()?) as Box<dyn Any>)),
-            "LIMIT" => Ok(Self(Box::new(s.parse::<Limit>()?) as Box<dyn Any>)),
-            "MATCH" => Ok(Self(Box::new(s.parse::<Match>()?) as Box<dyn Any>)),
-            "MATERIALIZED" => Ok(Self(Box::new(s.parse::<Materialized>()?) as Box<dyn Any>)),
-            "NATURAL" => Ok(Self(Box::new(s.parse::<Natural>()?) as Box<dyn Any>)),
-            "NO" => Ok(Self(Box::new(s.parse::<No>()?) as Box<dyn Any>)),
-            "NOT" => Ok(Self(Box::new(s.parse::<Not>()?) as Box<dyn Any>)),
-            "NOTHING" => Ok(Self(Box::new(s.parse::<Nothing>()?) as Box<dyn Any>)),
-            "NOTNULL" => Ok(Self(Box::new(s.parse::<Notnull>()?) as Box<dyn Any>)),
-            "NULL" => Ok(Self(Box::new(s.parse::<Null>()?) as Box<dyn Any>)),
-            "NULLS" => Ok(Self(Box::new(s.parse::<Nulls>()?) as Box<dyn Any>)),
-            "OF" => Ok(Self(Box::new(s.parse::<Of>()?) as Box<dyn Any>)),
-            "OFFSET" => Ok(Self(Box::new(s.parse::<Offset>()?) as Box<dyn Any>)),
-            "ON" => Ok(Self(Box::new(s.parse::<On>()?) as Box<dyn Any>)),
-            "OR" => Ok(Self(Box::new(s.parse::<Or>()?) as Box<dyn Any>)),
-            "ORDER" => Ok(Self(Box::new(s.parse::<Order>()?) as Box<dyn Any>)),
-            "OTHERS" => Ok(Self(Box::new(s.parse::<Others>()?) as Box<dyn Any>)),
-            "OUTER" => Ok(Self(Box::new(s.parse::<Outer>()?) as Box<dyn Any>)),
-            "OVER" => Ok(Self(Box::new(s.parse::<Over>()?) as Box<dyn Any>)),
-            "PARTITION" => Ok(Self(Box::new(s.parse::<Partition>()?) as Box<dyn Any>)),
-            "PLAN" => Ok(Self(Box::new(s.parse::<Plan>()?) as Box<dyn Any>)),
-            "PRAGMA" => Ok(Self(Box::new(s.parse::<Pragma>()?) as Box<dyn Any>)),
-            "PRECEDING" => Ok(Self(Box::new(s.parse::<Preceding>()?) as Box<dyn Any>)),
-            "PRIMARY" => Ok(Self(Box::new(s.parse::<Primary>()?) as Box<dyn Any>)),
-            "QUERY" => Ok(Self(Box::new(s.parse::<Query>()?) as Box<dyn Any>)),
-            "RAISE" => Ok(Self(Box::new(s.parse::<Raise>()?) as Box<dyn Any>)),
-            "RANGE" => Ok(Self(Box::new(s.parse::<Range>()?) as Box<dyn Any>)),
-            "RECURSIVE" => Ok(Self(Box::new(s.parse::<Recursive>()?) as Box<dyn Any>)),
-            "REFERENCES" => Ok(Self(Box::new(s.parse::<References>()?) as Box<dyn Any>)),
-            "REGEXP" => Ok(Self(Box::new(s.parse::<Regexp>()?) as Box<dyn Any>)),
-            "REINDEX" => Ok(Self(Box::new(s.parse::<Reindex>()?) as Box<dyn Any>)),
-            "RELEASE" => Ok(Self(Box::new(s.parse::<Release>()?) as Box<dyn Any>)),
-            "RENAME" => Ok(Self(Box::new(s.parse::<Rename>()?) as Box<dyn Any>)),
-            "REPLACE" => Ok(Self(Box::new(s.parse::<Replace>()?) as Box<dyn Any>)),
-            "RESTRICT" => Ok(Self(Box::new(s.parse::<Restrict>()?) as Box<dyn Any>)),
-            "RETURNING" => Ok(Self(Box::new(s.parse::<Returning>()?) as Box<dyn Any>)),
-            "RIGHT" => Ok(Self(Box::new(s.parse::<Right>()?) as Box<dyn Any>)),
-            "ROLLBACK" => Ok(Self(Box::new(s.parse::<Rollback>()?) as Box<dyn Any>)),
-            "ROW" => Ok(Self(Box::new(s.parse::<Row>()?) as Box<dyn Any>)),
-            "ROWS" => Ok(Self(Box::new(s.parse::<Rows>()?) as Box<dyn Any>)),
-            "SAVEPOINT" => Ok(Self(Box::new(s.parse::<Savepoint>()?) as Box<dyn Any>)),
-            "SELECT" => Ok(Self(Box::new(s.parse::<Select>()?) as Box<dyn Any>)),
-            "SET" => Ok(Self(Box::new(s.parse::<Set>()?) as Box<dyn Any>)),
-            "TABLE" => Ok(Self(Box::new(s.parse::<Table>()?) as Box<dyn Any>)),
-            "TEMP" => Ok(Self(Box::new(s.parse::<Temp>()?) as Box<dyn Any>)),
-            "TEMPORARY" => Ok(Self(Box::new(s.parse::<Temporary>()?) as Box<dyn Any>)),
-            "THEN" => Ok(Self(Box::new(s.parse::<Then>()?) as Box<dyn Any>)),
-            "TIES" => Ok(Self(Box::new(s.parse::<Ties>()?) as Box<dyn Any>)),
-            "TO" => Ok(Self(Box::new(s.parse::<To>()?) as Box<dyn Any>)),
-            "TRANSACTION" => Ok(Self(Box::new(s.parse::<Transaction>()?) as Box<dyn Any>)),
-            "TRIGGER" => Ok(Self(Box::new(s.parse::<Trigger>()?) as Box<dyn Any>)),
-            "UNBOUNDED" => Ok(Self(Box::new(s.parse::<Unbounded>()?) as Box<dyn Any>)),
-            "UNION" => Ok(Self(Box::new(s.parse::<Union>()?) as Box<dyn Any>)),
-            "UNIQUE" => Ok(Self(Box::new(s.parse::<Unique>()?) as Box<dyn Any>)),
-            "UPDATE" => Ok(Self(Box::new(s.parse::<Update>()?) as Box<dyn Any>)),
-            "USING" => Ok(Self(Box::new(s.parse::<Using>()?) as Box<dyn Any>)),
-            "VACUUM" => Ok(Self(Box::new(s.parse::<Vacuum>()?) as Box<dyn Any>)),
-            "VALUES" => Ok(Self(Box::new(s.parse::<Values>()?) as Box<dyn Any>)),
-            "VIEW" => Ok(Self(Box::new(s.parse::<View>()?) as Box<dyn Any>)),
-            "VIRTUAL" => Ok(Self(Box::new(s.parse::<Virtual>()?) as Box<dyn Any>)),
-            "WHEN" => Ok(Self(Box::new(s.parse::<When>()?) as Box<dyn Any>)),
-            "WHERE" => Ok(Self(Box::new(s.parse::<Where>()?) as Box<dyn Any>)),
-            "WINDOW" => Ok(Self(Box::new(s.parse::<Window>()?) as Box<dyn Any>)),
-            "WITH" => Ok(Self(Box::new(s.parse::<With>()?) as Box<dyn Any>)),
-            "WITHOUT" => Ok(Self(Box::new(s.parse::<Without>()?) as Box<dyn Any>)),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword not found.".into(),
-            ))),
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        if Abort::as_str() == input {
+            return Ok(Self(Box::new(Abort) as Box<dyn Any>));
         }
+        if Action::as_str() == input {
+            return Ok(Self(Box::new(Action) as Box<dyn Any>));
+        }
+        if Add::as_str() == input {
+            return Ok(Self(Box::new(Add) as Box<dyn Any>));
+        }
+        if After::as_str() == input {
+            return Ok(Self(Box::new(After) as Box<dyn Any>));
+        }
+        if All::as_str() == input {
+            return Ok(Self(Box::new(All) as Box<dyn Any>));
+        }
+        if Alter::as_str() == input {
+            return Ok(Self(Box::new(Alter) as Box<dyn Any>));
+        }
+        if Always::as_str() == input {
+            return Ok(Self(Box::new(Always) as Box<dyn Any>));
+        }
+        if Analyze::as_str() == input {
+            return Ok(Self(Box::new(Analyze) as Box<dyn Any>));
+        }
+        if And::as_str() == input {
+            return Ok(Self(Box::new(And) as Box<dyn Any>));
+        }
+        if As::as_str() == input {
+            return Ok(Self(Box::new(As) as Box<dyn Any>));
+        }
+        if Asc::as_str() == input {
+            return Ok(Self(Box::new(Asc) as Box<dyn Any>));
+        }
+        if Attach::as_str() == input {
+            return Ok(Self(Box::new(Attach) as Box<dyn Any>));
+        }
+        if Autoincrement::as_str() == input {
+            return Ok(Self(Box::new(Autoincrement) as Box<dyn Any>));
+        }
+        if Before::as_str() == input {
+            return Ok(Self(Box::new(Before) as Box<dyn Any>));
+        }
+        if Begin::as_str() == input {
+            return Ok(Self(Box::new(Begin) as Box<dyn Any>));
+        }
+        if Between::as_str() == input {
+            return Ok(Self(Box::new(Between) as Box<dyn Any>));
+        }
+        if By::as_str() == input {
+            return Ok(Self(Box::new(By) as Box<dyn Any>));
+        }
+        if Cascade::as_str() == input {
+            return Ok(Self(Box::new(Cascade) as Box<dyn Any>));
+        }
+        if Case::as_str() == input {
+            return Ok(Self(Box::new(Case) as Box<dyn Any>));
+        }
+        if Cast::as_str() == input {
+            return Ok(Self(Box::new(Cast) as Box<dyn Any>));
+        }
+        if Check::as_str() == input {
+            return Ok(Self(Box::new(Check) as Box<dyn Any>));
+        }
+        if Collate::as_str() == input {
+            return Ok(Self(Box::new(Collate) as Box<dyn Any>));
+        }
+        if Column::as_str() == input {
+            return Ok(Self(Box::new(Column) as Box<dyn Any>));
+        }
+        if Commit::as_str() == input {
+            return Ok(Self(Box::new(Commit) as Box<dyn Any>));
+        }
+        if Conflict::as_str() == input {
+            return Ok(Self(Box::new(Conflict) as Box<dyn Any>));
+        }
+        if Constraint::as_str() == input {
+            return Ok(Self(Box::new(Constraint) as Box<dyn Any>));
+        }
+        if Create::as_str() == input {
+            return Ok(Self(Box::new(Create) as Box<dyn Any>));
+        }
+        if Cross::as_str() == input {
+            return Ok(Self(Box::new(Cross) as Box<dyn Any>));
+        }
+        if Current::as_str() == input {
+            return Ok(Self(Box::new(Current) as Box<dyn Any>));
+        }
+        if Current_date::as_str() == input {
+            return Ok(Self(Box::new(Current_date) as Box<dyn Any>));
+        }
+        if Current_time::as_str() == input {
+            return Ok(Self(Box::new(Current_time) as Box<dyn Any>));
+        }
+        if Current_timestamp::as_str() == input {
+            return Ok(Self(Box::new(Current_timestamp) as Box<dyn Any>));
+        }
+        if Database::as_str() == input {
+            return Ok(Self(Box::new(Database) as Box<dyn Any>));
+        }
+        if Default::as_str() == input {
+            return Ok(Self(Box::new(Default) as Box<dyn Any>));
+        }
+        if Deferrable::as_str() == input {
+            return Ok(Self(Box::new(Deferrable) as Box<dyn Any>));
+        }
+        if Deferred::as_str() == input {
+            return Ok(Self(Box::new(Deferred) as Box<dyn Any>));
+        }
+        if Delete::as_str() == input {
+            return Ok(Self(Box::new(Delete) as Box<dyn Any>));
+        }
+        if Desc::as_str() == input {
+            return Ok(Self(Box::new(Desc) as Box<dyn Any>));
+        }
+        if Detach::as_str() == input {
+            return Ok(Self(Box::new(Detach) as Box<dyn Any>));
+        }
+        if Distinct::as_str() == input {
+            return Ok(Self(Box::new(Distinct) as Box<dyn Any>));
+        }
+        if Do::as_str() == input {
+            return Ok(Self(Box::new(Do) as Box<dyn Any>));
+        }
+        if Drop::as_str() == input {
+            return Ok(Self(Box::new(Drop) as Box<dyn Any>));
+        }
+        if Each::as_str() == input {
+            return Ok(Self(Box::new(Each) as Box<dyn Any>));
+        }
+        if Else::as_str() == input {
+            return Ok(Self(Box::new(Else) as Box<dyn Any>));
+        }
+        if End::as_str() == input {
+            return Ok(Self(Box::new(End) as Box<dyn Any>));
+        }
+        if Escape::as_str() == input {
+            return Ok(Self(Box::new(Escape) as Box<dyn Any>));
+        }
+        if Except::as_str() == input {
+            return Ok(Self(Box::new(Except) as Box<dyn Any>));
+        }
+        if Exclude::as_str() == input {
+            return Ok(Self(Box::new(Exclude) as Box<dyn Any>));
+        }
+        if Exclusive::as_str() == input {
+            return Ok(Self(Box::new(Exclusive) as Box<dyn Any>));
+        }
+        if Exists::as_str() == input {
+            return Ok(Self(Box::new(Exists) as Box<dyn Any>));
+        }
+        if Explain::as_str() == input {
+            return Ok(Self(Box::new(Explain) as Box<dyn Any>));
+        }
+        if Fail::as_str() == input {
+            return Ok(Self(Box::new(Fail) as Box<dyn Any>));
+        }
+        if Filter::as_str() == input {
+            return Ok(Self(Box::new(Filter) as Box<dyn Any>));
+        }
+        if First::as_str() == input {
+            return Ok(Self(Box::new(First) as Box<dyn Any>));
+        }
+        if Following::as_str() == input {
+            return Ok(Self(Box::new(Following) as Box<dyn Any>));
+        }
+        if For::as_str() == input {
+            return Ok(Self(Box::new(For) as Box<dyn Any>));
+        }
+        if Foreign::as_str() == input {
+            return Ok(Self(Box::new(Foreign) as Box<dyn Any>));
+        }
+        if KeywordFrom::as_str() == input {
+            return Ok(Self(Box::new(KeywordFrom) as Box<dyn Any>));
+        }
+        if Full::as_str() == input {
+            return Ok(Self(Box::new(Full) as Box<dyn Any>));
+        }
+        if Generated::as_str() == input {
+            return Ok(Self(Box::new(Generated) as Box<dyn Any>));
+        }
+        if Glob::as_str() == input {
+            return Ok(Self(Box::new(Glob) as Box<dyn Any>));
+        }
+        if Group::as_str() == input {
+            return Ok(Self(Box::new(Group) as Box<dyn Any>));
+        }
+        if Groups::as_str() == input {
+            return Ok(Self(Box::new(Groups) as Box<dyn Any>));
+        }
+        if Having::as_str() == input {
+            return Ok(Self(Box::new(Having) as Box<dyn Any>));
+        }
+        if If::as_str() == input {
+            return Ok(Self(Box::new(If) as Box<dyn Any>));
+        }
+        if Ignore::as_str() == input {
+            return Ok(Self(Box::new(Ignore) as Box<dyn Any>));
+        }
+        if Immediate::as_str() == input {
+            return Ok(Self(Box::new(Immediate) as Box<dyn Any>));
+        }
+        if In::as_str() == input {
+            return Ok(Self(Box::new(In) as Box<dyn Any>));
+        }
+        if Index::as_str() == input {
+            return Ok(Self(Box::new(Index) as Box<dyn Any>));
+        }
+        if Indexed::as_str() == input {
+            return Ok(Self(Box::new(Indexed) as Box<dyn Any>));
+        }
+        if Initially::as_str() == input {
+            return Ok(Self(Box::new(Initially) as Box<dyn Any>));
+        }
+        if Inner::as_str() == input {
+            return Ok(Self(Box::new(Inner) as Box<dyn Any>));
+        }
+        if Insert::as_str() == input {
+            return Ok(Self(Box::new(Insert) as Box<dyn Any>));
+        }
+        if Instead::as_str() == input {
+            return Ok(Self(Box::new(Instead) as Box<dyn Any>));
+        }
+        if Intersect::as_str() == input {
+            return Ok(Self(Box::new(Intersect) as Box<dyn Any>));
+        }
+        if Into::as_str() == input {
+            return Ok(Self(Box::new(Into) as Box<dyn Any>));
+        }
+        if Is::as_str() == input {
+            return Ok(Self(Box::new(Is) as Box<dyn Any>));
+        }
+        if Isnull::as_str() == input {
+            return Ok(Self(Box::new(Isnull) as Box<dyn Any>));
+        }
+        if Join::as_str() == input {
+            return Ok(Self(Box::new(Join) as Box<dyn Any>));
+        }
+        if Key::as_str() == input {
+            return Ok(Self(Box::new(Key) as Box<dyn Any>));
+        }
+        if Last::as_str() == input {
+            return Ok(Self(Box::new(Last) as Box<dyn Any>));
+        }
+        if Left::as_str() == input {
+            return Ok(Self(Box::new(Left) as Box<dyn Any>));
+        }
+        if Like::as_str() == input {
+            return Ok(Self(Box::new(Like) as Box<dyn Any>));
+        }
+        if Limit::as_str() == input {
+            return Ok(Self(Box::new(Limit) as Box<dyn Any>));
+        }
+        if Match::as_str() == input {
+            return Ok(Self(Box::new(Match) as Box<dyn Any>));
+        }
+        if Materialized::as_str() == input {
+            return Ok(Self(Box::new(Materialized) as Box<dyn Any>));
+        }
+        if Natural::as_str() == input {
+            return Ok(Self(Box::new(Natural) as Box<dyn Any>));
+        }
+        if No::as_str() == input {
+            return Ok(Self(Box::new(No) as Box<dyn Any>));
+        }
+        if Not::as_str() == input {
+            return Ok(Self(Box::new(Not) as Box<dyn Any>));
+        }
+        if Nothing::as_str() == input {
+            return Ok(Self(Box::new(Nothing) as Box<dyn Any>));
+        }
+        if Notnull::as_str() == input {
+            return Ok(Self(Box::new(Notnull) as Box<dyn Any>));
+        }
+        if Null::as_str() == input {
+            return Ok(Self(Box::new(Null) as Box<dyn Any>));
+        }
+        if Nulls::as_str() == input {
+            return Ok(Self(Box::new(Nulls) as Box<dyn Any>));
+        }
+        if Of::as_str() == input {
+            return Ok(Self(Box::new(Of) as Box<dyn Any>));
+        }
+        if Offset::as_str() == input {
+            return Ok(Self(Box::new(Offset) as Box<dyn Any>));
+        }
+        if On::as_str() == input {
+            return Ok(Self(Box::new(On) as Box<dyn Any>));
+        }
+        if Or::as_str() == input {
+            return Ok(Self(Box::new(Or) as Box<dyn Any>));
+        }
+        if Order::as_str() == input {
+            return Ok(Self(Box::new(Order) as Box<dyn Any>));
+        }
+        if Others::as_str() == input {
+            return Ok(Self(Box::new(Others) as Box<dyn Any>));
+        }
+        if Outer::as_str() == input {
+            return Ok(Self(Box::new(Outer) as Box<dyn Any>));
+        }
+        if Over::as_str() == input {
+            return Ok(Self(Box::new(Over) as Box<dyn Any>));
+        }
+        if Partition::as_str() == input {
+            return Ok(Self(Box::new(Partition) as Box<dyn Any>));
+        }
+        if Plan::as_str() == input {
+            return Ok(Self(Box::new(Plan) as Box<dyn Any>));
+        }
+        if Pragma::as_str() == input {
+            return Ok(Self(Box::new(Pragma) as Box<dyn Any>));
+        }
+        if Preceding::as_str() == input {
+            return Ok(Self(Box::new(Preceding) as Box<dyn Any>));
+        }
+        if Primary::as_str() == input {
+            return Ok(Self(Box::new(Primary) as Box<dyn Any>));
+        }
+        if Query::as_str() == input {
+            return Ok(Self(Box::new(Query) as Box<dyn Any>));
+        }
+        if Raise::as_str() == input {
+            return Ok(Self(Box::new(Raise) as Box<dyn Any>));
+        }
+        if Range::as_str() == input {
+            return Ok(Self(Box::new(Range) as Box<dyn Any>));
+        }
+        if Recursive::as_str() == input {
+            return Ok(Self(Box::new(Recursive) as Box<dyn Any>));
+        }
+        if References::as_str() == input {
+            return Ok(Self(Box::new(References) as Box<dyn Any>));
+        }
+        if Regexp::as_str() == input {
+            return Ok(Self(Box::new(Regexp) as Box<dyn Any>));
+        }
+        if Reindex::as_str() == input {
+            return Ok(Self(Box::new(Reindex) as Box<dyn Any>));
+        }
+        if Release::as_str() == input {
+            return Ok(Self(Box::new(Release) as Box<dyn Any>));
+        }
+        if Rename::as_str() == input {
+            return Ok(Self(Box::new(Rename) as Box<dyn Any>));
+        }
+        if Replace::as_str() == input {
+            return Ok(Self(Box::new(Replace) as Box<dyn Any>));
+        }
+        if Restrict::as_str() == input {
+            return Ok(Self(Box::new(Restrict) as Box<dyn Any>));
+        }
+        if Returning::as_str() == input {
+            return Ok(Self(Box::new(Returning) as Box<dyn Any>));
+        }
+        if Right::as_str() == input {
+            return Ok(Self(Box::new(Right) as Box<dyn Any>));
+        }
+        if Rollback::as_str() == input {
+            return Ok(Self(Box::new(Rollback) as Box<dyn Any>));
+        }
+        if Row::as_str() == input {
+            return Ok(Self(Box::new(Row) as Box<dyn Any>));
+        }
+        if Rows::as_str() == input {
+            return Ok(Self(Box::new(Rows) as Box<dyn Any>));
+        }
+        if Savepoint::as_str() == input {
+            return Ok(Self(Box::new(Savepoint) as Box<dyn Any>));
+        }
+        if Select::as_str() == input {
+            return Ok(Self(Box::new(Select) as Box<dyn Any>));
+        }
+        if Set::as_str() == input {
+            return Ok(Self(Box::new(Set) as Box<dyn Any>));
+        }
+        if Table::as_str() == input {
+            return Ok(Self(Box::new(Table) as Box<dyn Any>));
+        }
+        if Temp::as_str() == input {
+            return Ok(Self(Box::new(Temp) as Box<dyn Any>));
+        }
+        if Temporary::as_str() == input {
+            return Ok(Self(Box::new(Temporary) as Box<dyn Any>));
+        }
+        if Then::as_str() == input {
+            return Ok(Self(Box::new(Then) as Box<dyn Any>));
+        }
+        if Ties::as_str() == input {
+            return Ok(Self(Box::new(Ties) as Box<dyn Any>));
+        }
+        if To::as_str() == input {
+            return Ok(Self(Box::new(To) as Box<dyn Any>));
+        }
+        if Transaction::as_str() == input {
+            return Ok(Self(Box::new(Transaction) as Box<dyn Any>));
+        }
+        if Trigger::as_str() == input {
+            return Ok(Self(Box::new(Trigger) as Box<dyn Any>));
+        }
+        if Unbounded::as_str() == input {
+            return Ok(Self(Box::new(Unbounded) as Box<dyn Any>));
+        }
+        if Union::as_str() == input {
+            return Ok(Self(Box::new(Union) as Box<dyn Any>));
+        }
+        if Unique::as_str() == input {
+            return Ok(Self(Box::new(Unique) as Box<dyn Any>));
+        }
+        if Update::as_str() == input {
+            return Ok(Self(Box::new(Update) as Box<dyn Any>));
+        }
+        if Using::as_str() == input {
+            return Ok(Self(Box::new(Using) as Box<dyn Any>));
+        }
+        if Vacuum::as_str() == input {
+            return Ok(Self(Box::new(Vacuum) as Box<dyn Any>));
+        }
+        if Values::as_str() == input {
+            return Ok(Self(Box::new(Values) as Box<dyn Any>));
+        }
+        if View::as_str() == input {
+            return Ok(Self(Box::new(View) as Box<dyn Any>));
+        }
+        if Virtual::as_str() == input {
+            return Ok(Self(Box::new(Virtual) as Box<dyn Any>));
+        }
+        if When::as_str() == input {
+            return Ok(Self(Box::new(When) as Box<dyn Any>));
+        }
+        if Where::as_str() == input {
+            return Ok(Self(Box::new(Where) as Box<dyn Any>));
+        }
+        if Window::as_str() == input {
+            return Ok(Self(Box::new(Window) as Box<dyn Any>));
+        }
+        if With::as_str() == input {
+            return Ok(Self(Box::new(With) as Box<dyn Any>));
+        }
+        if Without::as_str() == input {
+            return Ok(Self(Box::new(Without) as Box<dyn Any>));
+        }
+
+        Err(SqliteError::SqlParser(SqlParserError(
+            "Keyword not found.".into(),
+        )))
     }
 }

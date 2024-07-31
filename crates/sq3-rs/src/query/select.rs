@@ -18,13 +18,12 @@
 #[cfg(test)]
 mod tests;
 
-use std::iter;
-use std::str::FromStr;
+use crate::{
+    query::keywords::{All, Distinct, Keyword, KeywordFrom},
+    result::{SqlParserError, SqliteError, SqliteResult},
+};
 
 use super::traits::DistinctProcessing;
-use super::{expression::SqliteExpression, traits::SqliteKeyword};
-use crate::query::keywords::{All, Distinct, Keyword, KeywordFrom};
-use crate::result::{SqlParserError, SqliteError, SqliteResult};
 
 #[derive(Debug, Default)]
 pub(super) struct SelectStmt<'a> {
@@ -38,14 +37,14 @@ pub(super) struct SelectStmt<'a> {
 }
 
 impl<'a> SelectStmt<'a> {
-    pub fn run(input: &'a str) -> SqliteResult<Self> {
-        let cleaned_sql = input
-            .trim()
-            .split(';')
-            .next()
-            .ok_or(SqliteError::SqlParser(SqlParserError(
-                "Invalid SQL. Can't start a query with `;`".into(),
-            )))?;
+    pub fn run(sql: &'a str) -> SqliteResult<Self> {
+        let cleaned_sql =
+            sql.trim()
+                .split(';')
+                .next()
+                .ok_or(SqliteError::SqlParser(SqlParserError(
+                    "Invalid SQL. Can't start a query with `;`".into(),
+                )))?;
 
         let mut iter = cleaned_sql.split_whitespace();
 

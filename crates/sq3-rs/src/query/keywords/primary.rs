@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Primary;
+impl Primary {
+    pub const fn as_str() -> &'static str {
+        "PRIMARY"
+    }
+}
 
-impl FromStr for Primary {
-    type Err = SqliteError;
+impl PartialEq<&str> for Primary {
+    fn eq(&self, other: &&str) -> bool {
+        Primary::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "PRIMARY" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword PRIMARY not found.".into(),
-            ))),
-        }
+impl PartialEq<Primary> for &str {
+    fn eq(&self, _: &Primary) -> bool {
+        Primary::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Primary {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "PRIMARY")
+        write!(f, "{}", Self::as_str())
     }
 }
 

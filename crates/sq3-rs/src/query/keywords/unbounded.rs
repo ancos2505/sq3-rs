@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Unbounded;
+impl Unbounded {
+    pub const fn as_str() -> &'static str {
+        "UNBOUNDED"
+    }
+}
 
-impl FromStr for Unbounded {
-    type Err = SqliteError;
+impl PartialEq<&str> for Unbounded {
+    fn eq(&self, other: &&str) -> bool {
+        Unbounded::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "UNBOUNDED" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword UNBOUNDED not found.".into(),
-            ))),
-        }
+impl PartialEq<Unbounded> for &str {
+    fn eq(&self, _: &Unbounded) -> bool {
+        Unbounded::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Unbounded {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "UNBOUNDED")
+        write!(f, "{}", Self::as_str())
     }
 }
 

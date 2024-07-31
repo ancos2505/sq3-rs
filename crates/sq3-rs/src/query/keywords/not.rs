@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Not;
+impl Not {
+    pub const fn as_str() -> &'static str {
+        "NOT"
+    }
+}
 
-impl FromStr for Not {
-    type Err = SqliteError;
+impl PartialEq<&str> for Not {
+    fn eq(&self, other: &&str) -> bool {
+        Not::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "NOT" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword NOT not found.".into(),
-            ))),
-        }
+impl PartialEq<Not> for &str {
+    fn eq(&self, _: &Not) -> bool {
+        Not::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Not {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "NOT")
+        write!(f, "{}", Self::as_str())
     }
 }
 

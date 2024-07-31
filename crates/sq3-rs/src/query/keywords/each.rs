@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Each;
+impl Each {
+    pub const fn as_str() -> &'static str {
+        "EACH"
+    }
+}
 
-impl FromStr for Each {
-    type Err = SqliteError;
+impl PartialEq<&str> for Each {
+    fn eq(&self, other: &&str) -> bool {
+        Each::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "EACH" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword EACH not found.".into(),
-            ))),
-        }
+impl PartialEq<Each> for &str {
+    fn eq(&self, _: &Each) -> bool {
+        Each::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Each {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "EACH")
+        write!(f, "{}", Self::as_str())
     }
 }
 

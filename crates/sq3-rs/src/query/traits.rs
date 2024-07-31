@@ -1,6 +1,9 @@
 use std::fmt::Debug;
 use std::fmt::Display;
 
+use super::keywords::All;
+use super::keywords::Distinct;
+
 // pub(super) trait SqliteExpression {}
 pub(super) trait SqliteKeyword: Display + Debug {}
 
@@ -19,6 +22,8 @@ pub(super) trait SqliteKeyword: Display + Debug {}
 ///
 /// **Reference:** https://www.sqlite.org/lang_select.html#distinct
 pub(super) trait DistinctProcessing: SqliteKeyword {}
+impl DistinctProcessing for All {}
+impl DistinctProcessing for Distinct {}
 
 /// ## DeterminationOfInputData
 ///

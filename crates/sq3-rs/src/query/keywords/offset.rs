@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Offset;
+impl Offset {
+    pub const fn as_str() -> &'static str {
+        "OFFSET"
+    }
+}
 
-impl FromStr for Offset {
-    type Err = SqliteError;
+impl PartialEq<&str> for Offset {
+    fn eq(&self, other: &&str) -> bool {
+        Offset::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "OFFSET" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword OFFSET not found.".into(),
-            ))),
-        }
+impl PartialEq<Offset> for &str {
+    fn eq(&self, _: &Offset) -> bool {
+        Offset::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Offset {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "OFFSET")
+        write!(f, "{}", Self::as_str())
     }
 }
 

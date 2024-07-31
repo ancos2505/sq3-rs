@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Where;
+impl Where {
+    pub const fn as_str() -> &'static str {
+        "WHERE"
+    }
+}
 
-impl FromStr for Where {
-    type Err = SqliteError;
+impl PartialEq<&str> for Where {
+    fn eq(&self, other: &&str) -> bool {
+        Where::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "WHERE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword WHERE not found.".into(),
-            ))),
-        }
+impl PartialEq<Where> for &str {
+    fn eq(&self, _: &Where) -> bool {
+        Where::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Where {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "WHERE")
+        write!(f, "{}", Self::as_str())
     }
 }
 

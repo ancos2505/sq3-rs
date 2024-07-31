@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Case;
+impl Case {
+    pub const fn as_str() -> &'static str {
+        "CASE"
+    }
+}
 
-impl FromStr for Case {
-    type Err = SqliteError;
+impl PartialEq<&str> for Case {
+    fn eq(&self, other: &&str) -> bool {
+        Case::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "CASE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword CASE not found.".into(),
-            ))),
-        }
+impl PartialEq<Case> for &str {
+    fn eq(&self, _: &Case) -> bool {
+        Case::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Case {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "CASE")
+        write!(f, "{}", Self::as_str())
     }
 }
 

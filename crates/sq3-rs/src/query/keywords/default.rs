@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Default;
+impl Default {
+    pub const fn as_str() -> &'static str {
+        "DEFAULT"
+    }
+}
 
-impl FromStr for Default {
-    type Err = SqliteError;
+impl PartialEq<&str> for Default {
+    fn eq(&self, other: &&str) -> bool {
+        Default::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "DEFAULT" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword DEFAULT not found.".into(),
-            ))),
-        }
+impl PartialEq<Default> for &str {
+    fn eq(&self, _: &Default) -> bool {
+        Default::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Default {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "DEFAULT")
+        write!(f, "{}", Self::as_str())
     }
 }
 

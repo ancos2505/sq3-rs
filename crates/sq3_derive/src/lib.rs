@@ -4,39 +4,14 @@ use proc_macro::TokenStream;
 pub fn name_derive(input: TokenStream) -> TokenStream {
     let input = input.to_string();
 
-    let struct_name = input
-        .lines()
-        .find(|line| line.trim().contains("struct") || line.trim().contains("enum"))
-        .and_then(|line| {
-            let type_name = if line.contains("struct") {
-                line.split("struct").nth(1)
-            } else {
-                line.split("enum").nth(1)
-            };
-            type_name
-                .unwrap()
-                .split_whitespace()
-                // .nth(2)
-                .next()
-                .map(|s| {
-                    let mut modified: Option<&str> = Some(s);
-
-                    for c in [';', '{', '('].iter() {
-                        modified = modified
-                            .map(|char_found| char_found.split(*c).next())
-                            .flatten()
-                    }
-                    modified
-                })
-                .flatten()
-        })
-        .expect(format!("Error on macro parsing input: {input}").as_str());
+    let type_name =
+        extract_type_name(&input).expect(format!("Error on macro parsing input: {input}").as_str());
 
     let output = format!(
         "impl TypeName for {0} {{
             const NAME: &'static str = \"{0}\";
         }}",
-        struct_name
+        type_name
     );
 
     output.parse().unwrap()
@@ -46,34 +21,8 @@ pub fn name_derive(input: TokenStream) -> TokenStream {
 pub fn derive_parse_char(input: TokenStream) -> TokenStream {
     let input = input.to_string();
 
-    let struct_name = input
-        .lines()
-        .find(|line| line.trim().contains("struct") || line.trim().contains("enum"))
-        .and_then(|line| {
-            let type_name = if line.contains("struct") {
-                line.split("struct").nth(1)
-            } else {
-                line.split("enum").nth(1)
-            };
-            type_name
-                .unwrap()
-                .split_whitespace()
-                // .nth(2)
-                .next()
-                .map(|s| {
-                    let mut modified: Option<&str> = Some(s);
-
-                    for c in [';', '{', '('].iter() {
-                        modified = modified
-                            .map(|char_found| char_found.split(*c).next())
-                            .flatten()
-                    }
-
-                    modified
-                })
-                .flatten()
-        })
-        .expect(format!("Error on macro parsing input: {input}").as_str());
+    let type_name =
+        extract_type_name(&input).expect(format!("Error on macro parsing input: {input}").as_str());
 
     let char_value = input
         .lines()
@@ -102,8 +51,37 @@ pub fn derive_parse_char(input: TokenStream) -> TokenStream {
                 }}
             }}
         }}"#,
-        struct_name, char_value
+        type_name, char_value
     );
 
     output.parse().unwrap()
+}
+
+fn extract_type_name(input: &str) -> Option<&str> {
+    input
+        .lines()
+        .find(|line| line.trim().contains("struct") || line.trim().contains("enum"))
+        .and_then(|line| {
+            let type_name = if line.contains("struct") {
+                line.split("struct").nth(1)
+            } else {
+                line.split("enum").nth(1)
+            };
+            type_name
+                .unwrap()
+                .split_whitespace()
+                .next()
+                .map(|s| {
+                    let mut modified: Option<&str> = Some(s);
+
+                    for c in [';', '{', '('].iter() {
+                        modified = modified
+                            .map(|char_found| char_found.split(*c).next())
+                            .flatten()
+                    }
+
+                    modified
+                })
+                .flatten()
+        })
 }

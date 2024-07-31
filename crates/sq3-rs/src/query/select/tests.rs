@@ -1,5 +1,7 @@
 use crate::SqliteConnection;
 
+use super::SelectStmt;
+
 // const TEST_QUERIES: [&str; 10] = [
 const TEST_QUERIES: [&str; 5] = [
     "SELECT (1)",
@@ -16,13 +18,11 @@ const TEST_QUERIES: [&str; 5] = [
 
 #[test]
 #[ignore = "Todo"]
-fn run_queries() {
-    let conn_str = "./data/small.sqlite3";
-    let mut conn = SqliteConnection::connect(conn_str).unwrap();
+fn ok_on_run_select_queries() {
     for query in TEST_QUERIES {
         println!("Query: {}", query);
 
-        match conn.run_query(query) {
+        match SelectStmt::run(query) {
             Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
             Err(e) => println!("Error: {}", e),
         }

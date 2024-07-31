@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Indexed;
+impl Indexed {
+    pub const fn as_str() -> &'static str {
+        "INDEXED"
+    }
+}
 
-impl FromStr for Indexed {
-    type Err = SqliteError;
+impl PartialEq<&str> for Indexed {
+    fn eq(&self, other: &&str) -> bool {
+        Indexed::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "INDEXED" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword INDEXED not found.".into(),
-            ))),
-        }
+impl PartialEq<Indexed> for &str {
+    fn eq(&self, _: &Indexed) -> bool {
+        Indexed::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Indexed {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "INDEXED")
+        write!(f, "{}", Self::as_str())
     }
 }
 

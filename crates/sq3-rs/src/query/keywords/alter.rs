@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Alter;
+impl Alter {
+    pub const fn as_str() -> &'static str {
+        "ALTER"
+    }
+}
 
-impl FromStr for Alter {
-    type Err = SqliteError;
+impl PartialEq<&str> for Alter {
+    fn eq(&self, other: &&str) -> bool {
+        Alter::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "ALTER" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword ALTER not found.".into(),
-            ))),
-        }
+impl PartialEq<Alter> for &str {
+    fn eq(&self, _: &Alter) -> bool {
+        Alter::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Alter {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ALTER")
+        write!(f, "{}", Self::as_str())
     }
 }
 

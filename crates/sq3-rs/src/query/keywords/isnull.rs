@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Isnull;
+impl Isnull {
+    pub const fn as_str() -> &'static str {
+        "ISNULL"
+    }
+}
 
-impl FromStr for Isnull {
-    type Err = SqliteError;
+impl PartialEq<&str> for Isnull {
+    fn eq(&self, other: &&str) -> bool {
+        Isnull::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "ISNULL" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword ISNULL not found.".into(),
-            ))),
-        }
+impl PartialEq<Isnull> for &str {
+    fn eq(&self, _: &Isnull) -> bool {
+        Isnull::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Isnull {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ISNULL")
+        write!(f, "{}", Self::as_str())
     }
 }
 

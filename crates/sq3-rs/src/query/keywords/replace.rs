@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Replace;
+impl Replace {
+    pub const fn as_str() -> &'static str {
+        "REPLACE"
+    }
+}
 
-impl FromStr for Replace {
-    type Err = SqliteError;
+impl PartialEq<&str> for Replace {
+    fn eq(&self, other: &&str) -> bool {
+        Replace::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "REPLACE" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword REPLACE not found.".into(),
-            ))),
-        }
+impl PartialEq<Replace> for &str {
+    fn eq(&self, _: &Replace) -> bool {
+        Replace::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Replace {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "REPLACE")
+        write!(f, "{}", Self::as_str())
     }
 }
 

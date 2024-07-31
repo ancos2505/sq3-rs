@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Regexp;
+impl Regexp {
+    pub const fn as_str() -> &'static str {
+        "REGEXP"
+    }
+}
 
-impl FromStr for Regexp {
-    type Err = SqliteError;
+impl PartialEq<&str> for Regexp {
+    fn eq(&self, other: &&str) -> bool {
+        Regexp::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "REGEXP" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword REGEXP not found.".into(),
-            ))),
-        }
+impl PartialEq<Regexp> for &str {
+    fn eq(&self, _: &Regexp) -> bool {
+        Regexp::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Regexp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "REGEXP")
+        write!(f, "{}", Self::as_str())
     }
 }
 

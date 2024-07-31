@@ -38,6 +38,10 @@ impl SqliteIo {
     }
 
     pub fn connect<S: AsRef<str>>(conn_str: S) -> SqliteResult<Self> {
+        // TODO:  Implement database mode parameter.
+        // TODO: Ex:
+        // TODO:    - For in-memory: "sqlite://:memory:?mode=rwc"
+        // TODO:    - For file.....: "sqlite://./data/small.sqlite3?mode=rwc"
         let s = conn_str.as_ref();
         let uri_str = if !s.contains("://") {
             format!("sqlite://{s}")

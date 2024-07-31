@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Transaction;
+impl Transaction {
+    pub const fn as_str() -> &'static str {
+        "TRANSACTION"
+    }
+}
 
-impl FromStr for Transaction {
-    type Err = SqliteError;
+impl PartialEq<&str> for Transaction {
+    fn eq(&self, other: &&str) -> bool {
+        Transaction::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "TRANSACTION" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword TRANSACTION not found.".into(),
-            ))),
-        }
+impl PartialEq<Transaction> for &str {
+    fn eq(&self, _: &Transaction) -> bool {
+        Transaction::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Transaction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "TRANSACTION")
+        write!(f, "{}", Self::as_str())
     }
 }
 

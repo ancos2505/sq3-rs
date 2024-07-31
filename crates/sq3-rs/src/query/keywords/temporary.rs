@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Temporary;
+impl Temporary {
+    pub const fn as_str() -> &'static str {
+        "TEMPORARY"
+    }
+}
 
-impl FromStr for Temporary {
-    type Err = SqliteError;
+impl PartialEq<&str> for Temporary {
+    fn eq(&self, other: &&str) -> bool {
+        Temporary::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "TEMPORARY" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword TEMPORARY not found.".into(),
-            ))),
-        }
+impl PartialEq<Temporary> for &str {
+    fn eq(&self, _: &Temporary) -> bool {
+        Temporary::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Temporary {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "TEMPORARY")
+        write!(f, "{}", Self::as_str())
     }
 }
 

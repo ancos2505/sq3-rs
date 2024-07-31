@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Current_timestamp;
+impl Current_timestamp {
+    pub const fn as_str() -> &'static str {
+        "CURRENT_TIMESTAMP"
+    }
+}
 
-impl FromStr for Current_timestamp {
-    type Err = SqliteError;
+impl PartialEq<&str> for Current_timestamp {
+    fn eq(&self, other: &&str) -> bool {
+        Current_timestamp::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "CURRENT_TIMESTAMP" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword CURRENT_TIMESTAMP not found.".into(),
-            ))),
-        }
+impl PartialEq<Current_timestamp> for &str {
+    fn eq(&self, _: &Current_timestamp) -> bool {
+        Current_timestamp::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Current_timestamp {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "CURRENT_TIMESTAMP")
+        write!(f, "{}", Self::as_str())
     }
 }
 

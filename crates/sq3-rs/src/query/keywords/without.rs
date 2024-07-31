@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Without;
+impl Without {
+    pub const fn as_str() -> &'static str {
+        "WITHOUT"
+    }
+}
 
-impl FromStr for Without {
-    type Err = SqliteError;
+impl PartialEq<&str> for Without {
+    fn eq(&self, other: &&str) -> bool {
+        Without::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "WITHOUT" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword WITHOUT not found.".into(),
-            ))),
-        }
+impl PartialEq<Without> for &str {
+    fn eq(&self, _: &Without) -> bool {
+        Without::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Without {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "WITHOUT")
+        write!(f, "{}", Self::as_str())
     }
 }
 

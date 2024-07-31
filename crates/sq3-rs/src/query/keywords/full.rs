@@ -1,29 +1,30 @@
-use std::{fmt::Display, str::FromStr};
+use std::fmt::Display;
 
-use crate::{
-    query::traits::SqliteKeyword,
-    result::{SqlParserError, SqliteError},
-};
+use crate::query::traits::SqliteKeyword;
 
 #[derive(Debug)]
 pub(crate) struct Full;
+impl Full {
+    pub const fn as_str() -> &'static str {
+        "FULL"
+    }
+}
 
-impl FromStr for Full {
-    type Err = SqliteError;
+impl PartialEq<&str> for Full {
+    fn eq(&self, other: &&str) -> bool {
+        Full::as_str().eq_ignore_ascii_case(other)
+    }
+}
 
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "FULL" => Ok(Self),
-            _ => Err(SqliteError::SqlParser(SqlParserError(
-                "Keyword FULL not found.".into(),
-            ))),
-        }
+impl PartialEq<Full> for &str {
+    fn eq(&self, _: &Full) -> bool {
+        Full::as_str().eq_ignore_ascii_case(self)
     }
 }
 
 impl Display for Full {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "FULL")
+        write!(f, "{}", Self::as_str())
     }
 }
 
