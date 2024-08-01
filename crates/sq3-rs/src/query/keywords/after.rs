@@ -1,8 +1,8 @@
-use std::fmt::Display;
+use std::{any::Any, fmt::Display};
 
 use crate::query::traits::SqliteKeyword;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub(crate) struct After;
 impl After {
     pub const fn as_str() -> &'static str {
@@ -28,4 +28,11 @@ impl Display for After {
     }
 }
 
-impl SqliteKeyword for After {}
+impl SqliteKeyword for After {
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+    fn to_any(self) -> Box<dyn Any> {
+        Box::new(self)
+    }
+}

@@ -1,15 +1,10 @@
-use crate::SqliteConnection;
-
-use super::SelectStmt;
-
-// const TEST_QUERIES: [&str; 10] = [
+use crate::query::{select::SelectStmt, traits::SqliteStatement};
 
 #[test]
 #[ignore = "Todo"]
 fn ok_on_run_select_queries() {
     for query in queries() {
         println!("Query: {}", query);
-
         match SelectStmt::run(&query) {
             Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
             Err(e) => println!("Error: {}", e),

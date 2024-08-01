@@ -1,16 +1,18 @@
+mod delete;
 mod expression;
+mod insert;
 mod keywords;
 mod literal_value;
+mod router;
 mod select;
+#[cfg(test)]
+mod tests;
 mod traits;
+mod update;
 
-use std::time::{Duration, Instant};
-
-use traits::SqliteKeyword;
-
+use self::{router::QueryRouter, traits::SqliteKeyword};
 use crate::result::SqliteResult;
-
-// use self::select::SelectQuery;
+use std::time::{Duration, Instant};
 
 #[derive(Debug)]
 pub(super) struct SqliteQuery {
@@ -19,13 +21,17 @@ pub(super) struct SqliteQuery {
 
 impl SqliteQuery {
     pub fn run(sql: &str) -> SqliteResult<SqliteQueryOutcome> {
-        use self::select::SelectStmt;
         let timer = Self::timer_start();
-        let res = SelectStmt::run(sql)?;
-        dbg!(res);
+
+        let maybe_keyword = sql.split_ascii_whitespace().next();
+        dbg!(&maybe_keyword);
+
+        let db_outcome = QueryRouter::run(sql)?;
+
         let elapsed = timer.elapsed().as_millis();
         println!("Query elapsed: {elapsed} ms");
-        todo!()
+        dbg!(&db_outcome);
+        Ok(db_outcome)
     }
     fn timer_start() -> Self {
         Self {

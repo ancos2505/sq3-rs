@@ -185,7 +185,15 @@ pub(crate) use self::{
 };
 
 #[derive(Debug)]
-pub struct Keyword(pub Box<dyn Any>);
+pub struct Keyword(Box<dyn Any>);
+impl Keyword {
+    pub fn get(&self) -> &Box<dyn Any> {
+        &self.0
+    }
+    pub fn into_inner(self) -> Box<dyn Any> {
+        Box::new(self)
+    }
+}
 
 impl FromStr for Keyword {
     type Err = SqliteError;

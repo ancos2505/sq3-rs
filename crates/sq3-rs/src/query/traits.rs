@@ -1,11 +1,24 @@
+use std::any::Any;
 use std::fmt::Debug;
 use std::fmt::Display;
 
-use super::keywords::All;
-use super::keywords::Distinct;
+use crate::SqliteResult;
+
+use super::{
+    keywords::{All, Distinct},
+    SqliteQueryOutcome,
+};
 
 // pub(super) trait SqliteExpression {}
-pub(super) trait SqliteKeyword: Display + Debug {}
+
+pub(super) trait SqliteKeyword: Display + Debug {
+    fn as_any(&self) -> &dyn Any;
+    fn to_any(self) -> Box<dyn Any>;
+}
+
+pub(super) trait SqliteStatement {
+    fn run(stmt_content: &str) -> SqliteResult<SqliteQueryOutcome>;
+}
 
 /// ## DistictProcessing
 ///
