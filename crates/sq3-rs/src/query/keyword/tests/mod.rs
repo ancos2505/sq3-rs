@@ -27,7 +27,7 @@ use super::{
     when::When, where_::Where, window::Window, with::With, without::Without,
 };
 
-use crate::query::keywords::Keyword;
+use crate::query::keyword::Keyword;
 
 struct SqliteKeywords;
 
