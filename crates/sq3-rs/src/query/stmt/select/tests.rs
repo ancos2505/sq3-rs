@@ -1,4 +1,4 @@
-use crate::query::{select::SelectStmt, traits::SqliteStatement};
+use crate::query::{stmt::SelectStmt, traits::SqliteStatement};
 
 #[test]
 #[ignore = "Todo"]

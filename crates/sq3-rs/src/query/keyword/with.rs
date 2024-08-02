@@ -1,7 +1,16 @@
 use std::{any::Any, fmt::Display};
 
-use crate::query::traits::SqliteKeyword;
+use crate::query::traits::{SqliteClause, SqliteKeyword};
 
+impl SqliteClause for With {}
+
+/// ## WITH clause
+///
+/// **References:**
+///                 - https://www.sqlite.org/syntaxdiagrams.html#with-clause
+///                 - https://www.sqlite.org/syntaxdiagrams.html#cte-table-name
+///                 - https://www.sqlite.org/syntaxdiagrams.html#select-stmt
+///
 #[derive(Debug, PartialEq, Eq)]
 pub(crate) struct With;
 impl With {

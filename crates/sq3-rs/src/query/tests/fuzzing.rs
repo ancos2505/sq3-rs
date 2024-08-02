@@ -20,16 +20,16 @@ struct FuzzingResult {
 
 impl Display for FuzzingResult {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let (status, result) = {
+        let (is_success, result) = {
             match &self.result {
-                Ok(outcome) => (1, format!("{outcome:?}")),
-                Err(err) => (0, format!("{err:?}")),
+                Ok(outcome) => (true, format!("{outcome:?}")),
+                Err(err) => (false, format!("{err:?}")),
             }
         };
         let output = format!(
-            r#"{{ "input": "{input}", "status": {status}, "result": "{result}", "elapsed_micro": {elapsed_micro} }}"#,
+            r#"{{ "input": "{input}", "is_success": {is_success}, "result": "{result}", "elapsed_micro": {elapsed_micro} }}"#,
             input = self.input,
-            status = status,
+            is_success = is_success,
             result = result.replace("\\\"", "\"").replace("\"", "\\\""),
             elapsed_micro = self.elapsed_micro
         );
@@ -90,7 +90,6 @@ fn valid_queries() -> Vec<&'static str> {
         // "EXPLAIN QUERY",
         // "EXPLAIN QUERY PLAN",
         "SELECT 1",
-        "SELECT 1",
         "SELECT 1,2",
         "SELECT 1,2,1,3",
         "SELECT DISTINCT 1,2,1,3",
@@ -126,8 +125,6 @@ impl Permutation {
         let mut result = Vec::new();
         let n = words.len();
         let mut c = vec![0; n];
-
-        result.push(words.clone());
 
         fn generate<T: Clone>(
             k: usize,

@@ -1,16 +1,14 @@
-mod delete;
 mod explain;
 mod expression;
 mod helpers;
-mod insert;
-mod keywords;
+mod keyword;
 mod literal_value;
 mod router;
-mod select;
+mod stmt;
+mod traits;
+
 #[cfg(test)]
 mod tests;
-mod traits;
-mod update;
 
 use std::time::{Duration, Instant};
 
@@ -34,7 +32,6 @@ impl SqliteQuery {
         let timer = Self::timer_start();
 
         let maybe_keyword = sql.split_ascii_whitespace().next();
-        dbg!(&maybe_keyword);
 
         let db_outcome = QueryRouter::run(sql)?;
 

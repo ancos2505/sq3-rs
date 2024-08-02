@@ -20,19 +20,19 @@ mod tests;
 
 use crate::{
     query::{
-        keywords::{All, Distinct, Keyword, KeywordFrom},
+        keyword::{All, Distinct, Keyword, KeywordFrom},
         SqliteDatabaseError,
     },
     result::{SqlParserError, SqliteError, SqliteResult},
 };
 
-use super::{
+use crate::query::{
     traits::{DistinctProcessing, SqliteStatement},
     SqliteQueryOutcome,
 };
 
 #[derive(Debug, Default)]
-pub(super) struct SelectStmt<'a> {
+pub(crate) struct SelectStmt<'a> {
     distinct: Option<Box<dyn DistinctProcessing>>,
     result_columns: Option<ResultColumns<'a>>,
     from: Option<KeywordFrom>,
@@ -68,7 +68,6 @@ impl SqliteStatement for SelectStmt<'_> {
                         stmt.distinct = all;
                         continue;
                     } else if keyword.get().downcast_ref::<Distinct>().is_some() {
-                        // dbg!(k);
                         let distinct = keyword
                             .into_inner()
                             .downcast::<Distinct>()
@@ -107,7 +106,6 @@ impl SqliteStatement for SelectStmt<'_> {
                 }
             }
         }
-        dbg!(stmt);
 
         Ok(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo))
     }

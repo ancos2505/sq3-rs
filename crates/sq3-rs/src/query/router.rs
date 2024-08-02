@@ -1,11 +1,8 @@
 use crate::{
     query::{
-        delete::DeleteStmt,
         explain::ExplainStmt,
-        insert::InsertStmt,
-        keywords::{Delete, Explain, Insert, Keyword, Select, Update},
-        select::SelectStmt,
-        update::UpdateStmt,
+        keyword::{Delete, Explain, Insert, Keyword, Select, Update},
+        stmt::{DeleteStmt, InsertStmt, SelectStmt, UpdateStmt},
     },
     result::{SqlParserError, SqliteError},
     SqliteResult,
@@ -20,7 +17,7 @@ impl QueryRouter {
     pub(super) fn run(sql: &str) -> SqliteResult<SqliteQueryOutcome> {
         let mut iter = sql.split_ascii_whitespace();
         let maybe_keyword = iter.next();
-        dbg!(&maybe_keyword);
+
         let sql_statement_content = iter.next().unwrap_or_default();
 
         let keyword = maybe_keyword.unwrap().parse::<Keyword>()?;

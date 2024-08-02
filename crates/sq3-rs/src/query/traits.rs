@@ -6,10 +6,12 @@ use crate::SqliteResult;
 
 use super::{
     helpers::SqliteQueryOutcome,
-    keywords::{All, Distinct},
+    keyword::{All, Distinct},
 };
 
 // pub(super) trait SqliteExpression {}
+
+pub(super) trait SqliteClause: SqliteKeyword {}
 
 pub(super) trait SqliteKeyword: Display + Debug {
     fn as_any(&self) -> &dyn Any;
@@ -35,8 +37,6 @@ pub(super) trait SqliteStatement {
 ///
 /// **Reference:** https://www.sqlite.org/lang_select.html#distinct
 pub(super) trait DistinctProcessing: SqliteKeyword {}
-impl DistinctProcessing for All {}
-impl DistinctProcessing for Distinct {}
 
 /// ## DeterminationOfInputData
 ///

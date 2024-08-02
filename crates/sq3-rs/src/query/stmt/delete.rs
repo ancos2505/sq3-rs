@@ -1,9 +1,9 @@
 use crate::result::SqliteResult;
 
-use super::{traits::SqliteStatement, SqliteDatabaseError, SqliteQueryOutcome};
+use crate::query::{traits::SqliteStatement, SqliteDatabaseError, SqliteQueryOutcome};
 
 #[derive(Debug, Default)]
-pub(super) struct DeleteStmt<'a> {
+pub(crate) struct DeleteStmt<'a> {
     input: &'a str, // TODO
 }
 

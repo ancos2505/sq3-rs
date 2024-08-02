@@ -51,12 +51,11 @@ impl SqliteIo {
         let mut iter = uri_str.split("://");
 
         let proto = iter.next();
-        // dbg!(&proto);
+
         let mut file_metadata = Option::<Metadata>::None;
         let mode: SqliteIoMode;
         let raw_io = match iter.next() {
             Some(path) => {
-                // dbg!(&path);
                 if path.contains(":") {
                     mode = SqliteIoMode::InMemory;
                     Box::new(Cursor::new(Vec::<u8>::new())) as Box<dyn SqliteRawIo>
@@ -77,7 +76,7 @@ impl SqliteIo {
             raw_io,
             file_metadata,
         };
-        // dbg!(&io);
+
         Ok(io)
     }
     pub fn rewind(&mut self) -> SqliteResult<()> {
@@ -85,7 +84,6 @@ impl SqliteIo {
         Ok(())
     }
     pub fn seek(&mut self, pos: u32) -> SqliteResult<()> {
-        // dbg!(&pos);
         self.raw_io.seek(SeekFrom::Start(pos.into()))?;
         Ok(())
     }

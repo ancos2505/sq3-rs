@@ -1,6 +1,8 @@
 use std::{any::Any, fmt::Display};
 
-use crate::query::traits::SqliteKeyword;
+use crate::query::traits::{DistinctProcessing, SqliteKeyword};
+
+impl DistinctProcessing for Distinct {}
 
 #[derive(Debug, PartialEq, Eq)]
 pub(crate) struct Distinct;

@@ -40,7 +40,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 512;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -48,7 +48,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 1024;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -56,7 +56,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 2048;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -64,7 +64,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 4096;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -72,7 +72,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 8192;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -80,7 +80,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 16384;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -88,7 +88,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 32768;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -96,7 +96,7 @@ impl Pager {
                 const PAGE_SIZE: usize = 65536;
                 let mut buf: [u8; PAGE_SIZE] = [0; PAGE_SIZE];
                 let bytes_read = self.io.read(&mut buf)?;
-                // dbg!(bytes_read);
+
                 let page = Page::<PAGE_SIZE>::parse(pos.into(), buf);
                 Self::get_data(page)
             }
@@ -107,7 +107,7 @@ impl Pager {
     fn get_file_header(io: &mut impl Read) -> SqliteResult<SqliteHeader> {
         let mut buf = [0; SqliteHeader::LENGTH_BYTES];
         let bytes_read = io.read(&mut buf)?;
-        // dbg!(&bytes_read);
+
         Ok(SqliteHeader::parse_bytes(&buf)?)
     }
 
