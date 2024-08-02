@@ -34,14 +34,12 @@ impl SqliteRuntime {
 
         let p4 = self.pager.get_page(NonZeroU32::new(4).unwrap())?;
         // println!("{p4:X?}");
-        // query.set_outcome(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo));
 
         Ok(Default::default())
     }
     pub fn run_query(&mut self, query_str: &str) -> SqliteResult<SqliteRecord> {
-        SqliteQuery::run(query_str)?;
-        // query.set_outcome(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo));
+        let sqlite_outcome = SqliteQuery::run(query_str)?;
 
-        Ok(Default::default())
+        Ok(sqlite_outcome.into())
     }
 }

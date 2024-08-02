@@ -1,8 +1,9 @@
 use crate::{
     query::{
         delete::DeleteStmt,
+        explain::ExplainStmt,
         insert::InsertStmt,
-        keywords::{Delete, Insert, Keyword, Select, Update},
+        keywords::{Delete, Explain, Insert, Keyword, Select, Update},
         select::SelectStmt,
         update::UpdateStmt,
     },
@@ -32,6 +33,8 @@ impl QueryRouter {
             UpdateStmt::run(sql_statement_content)
         } else if keyword.get().downcast_ref::<Delete>().is_some() {
             DeleteStmt::run(sql_statement_content)
+        } else if keyword.get().downcast_ref::<Explain>().is_some() {
+            ExplainStmt::run(sql_statement_content)
         } else {
             // TODO
             Err(SqliteError::SqlParser(SqlParserError(format!(

@@ -5,8 +5,8 @@ use std::fmt::Display;
 use crate::SqliteResult;
 
 use super::{
+    helpers::SqliteQueryOutcome,
     keywords::{All, Distinct},
-    SqliteQueryOutcome,
 };
 
 // pub(super) trait SqliteExpression {}
