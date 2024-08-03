@@ -6,7 +6,7 @@ exclude = ["misc/*"]
 [workspace.package]
 edition = "2021"
 rust-version = "1.80.0"
-version = "0.2.11"
+version = "0.2.12"
 description = "SQLite reader with no dependencies"
 readme = "README.md"
 keywords = ["sqlite", "database"]

@@ -1,3 +1,5 @@
+pub(crate) const ASCII_WHITESPACE_CHAR: char = ' ';
+
 #[derive(Debug, Default, PartialEq, Eq)]
 pub struct SqliteRecord(String);
 

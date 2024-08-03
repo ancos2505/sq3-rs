@@ -10,9 +10,7 @@ mod traits;
 #[cfg(test)]
 mod tests;
 
-use std::time::{Duration, Instant};
-
-use crate::result::SqliteResult;
+use crate::result::{SqlParserError, SqliteError, SqliteResult};
 
 use self::router::QueryRouter;
 
@@ -23,28 +21,18 @@ pub use self::helpers::{SqliteDatabaseError, SqliteQueryOutcome, SqliteRecord};
 /// **Reference:** https://www.sqlite.org/syntaxdiagrams.html#sql-stmt
 ///
 #[derive(Debug)]
-pub(super) struct SqliteQuery {
-    start: Instant,
-}
+pub(super) struct SqliteQuery;
 
 impl SqliteQuery {
     pub fn run(sql: &str) -> SqliteResult<SqliteQueryOutcome> {
-        let timer = Self::timer_start();
-
-        let maybe_keyword = sql.split_ascii_whitespace().next();
+        if !sql.ends_with(";") {
+            return Err(SqliteError::SqlParser(SqlParserError(
+                "Invalid query. Reason: Every query must ends with `;`.".into(),
+            )));
+        }
 
         let db_outcome = QueryRouter::run(sql)?;
 
-        let elapsed = timer.elapsed().as_micros();
-
         Ok(db_outcome)
-    }
-    fn timer_start() -> Self {
-        Self {
-            start: Instant::now(),
-        }
-    }
-    fn elapsed(self) -> Duration {
-        Instant::now() - self.start
     }
 }

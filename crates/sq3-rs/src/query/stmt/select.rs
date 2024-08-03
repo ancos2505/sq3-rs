@@ -20,6 +20,7 @@ mod tests;
 
 use crate::{
     query::{
+        expression::SqliteExpression,
         keyword::{All, Distinct, Keyword, KeywordFrom},
         SqliteDatabaseError,
     },
@@ -38,8 +39,8 @@ pub(crate) struct SelectStmt<'a> {
     from: Option<KeywordFrom>,
     // TODO
     origin: Option<TableName<'a>>,
-    // distinct: Option<Keyword>,
-    // expr: Option<SqliteExpression>,
+    // TODO
+    expr: Option<SqliteExpression>,
 }
 
 impl SqliteStatement for SelectStmt<'_> {
@@ -56,57 +57,49 @@ impl SqliteStatement for SelectStmt<'_> {
 
         let mut stmt = Self::default();
 
-        while let Some(looking_ahead) = iter.next() {
+        while let Some(current_chunk) = iter.next() {
             if stmt.distinct.is_none() {
-                if let Some(keyword) = looking_ahead.parse::<Keyword>().ok() {
-                    if keyword.get().downcast_ref::<All>().is_some() {
-                        let all = keyword
-                            .into_inner()
-                            .downcast::<All>()
-                            .ok()
-                            .map(|all| all as Box<dyn DistinctProcessing>);
-                        stmt.distinct = all;
-                        continue;
-                    } else if keyword.get().downcast_ref::<Distinct>().is_some() {
-                        let distinct = keyword
-                            .into_inner()
-                            .downcast::<Distinct>()
-                            .ok()
-                            .map(|distinct| distinct as Box<dyn DistinctProcessing>);
-                        stmt.distinct = distinct;
-                        continue;
+                if let Some(keyword) = current_chunk.parse::<Keyword>().ok() {
+                    if keyword.get().downcast_ref::<Distinct>().is_some() {
+                        stmt.distinct = Some(Box::new(Distinct) as Box<dyn DistinctProcessing>);
                     }
                 }
                 stmt.distinct = Some(Box::new(All) as Box<dyn DistinctProcessing>);
             }
 
-            if stmt.result_columns.is_none() {
-                if let Some(result_columns) = ResultColumns::parse(looking_ahead).ok() {
+            if stmt.result_columns.is_none() && stmt.distinct.is_some() {
+                if let Some(result_columns) = ResultColumns::parse(current_chunk).ok() {
                     stmt.result_columns = Some(result_columns);
-                    continue;
                 }
             }
 
-            if stmt.from.is_none() {
-                let some_keyword = looking_ahead.parse::<Keyword>();
-
-                if let Some(keyword) = some_keyword.ok() {
+            if stmt.from.is_none() && stmt.result_columns.is_some() && stmt.distinct.is_some() {
+                if let Some(keyword) = current_chunk.parse::<Keyword>().ok() {
                     if keyword.get().downcast_ref::<KeywordFrom>().is_some() {
-                        let from = keyword.into_inner().downcast::<KeywordFrom>().ok();
-                        stmt.from = from.map(|boxed| *boxed);
-                        continue;
+                        stmt.from = Some(KeywordFrom);
                     }
                 }
             }
 
-            if stmt.from.is_some() && stmt.origin.is_none() {
-                if let Some(table_name) = TableName::parse(looking_ahead).ok() {
+            if stmt.origin.is_none()
+                && stmt.from.is_some()
+                && stmt.result_columns.is_some()
+                && stmt.distinct.is_some()
+            {
+                if let Some(table_name) = TableName::parse(current_chunk).ok() {
                     stmt.origin = Some(table_name);
-                    continue;
                 }
             }
-        }
 
+            if stmt.origin.is_none()
+                && stmt.from.is_none()
+                && stmt.result_columns.is_none()
+                && stmt.distinct.is_some()
+            {
+                stmt.expr = Some(SqliteExpression::from(current_chunk.to_string()));
+            }
+        }
+        println!("Parsed: {stmt:?}");
         Ok(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo))
     }
 }

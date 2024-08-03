@@ -2,36 +2,36 @@ use crate::query::SqliteQuery;
 
 fn valid_queries() -> Vec<&'static str> {
     vec![
-        "sElEcT 1",
-        "SeLeCt 1",
-        "SElECT 1,2",
-        "SELECT 1,2,1,3",
-        "SeLECT DISTINCT 1,2,1,3",
-        "SELeCT (1)",
-        "SElEcT (5+2)",
-        "SELECT (5-2)",
-        "sELECt (5*2)",
-        "SELECT (5/2)",
-        "SELECT id,name FROM users WHERE age > 18",
-        "SELECT ALL id,name FROM users WHERE age > 18",
-        "SELECT DISTINCT id,name FROM users WHERE age > 18",
-        "UPDATE users SET name = 'John' WHERE id = 1",
-        "INSERT INTO users (name, age) VALUES ('Alice', 30)",
-        "DELETE FROM users WHERE id = 5",
+        "sElEcT 1;",
+        "SeLeCt 1;",
+        "SElECT 1,2;",
+        "SELECT ALL 1,2,1,3;",
+        "SeLECT DISTINCT 1,2,1,3;",
+        "SELeCT (1);",
+        "SElEcT (5+2);",
+        "SELECT (5-2);",
+        "sELECt (5*2);",
+        "SELECT (5/2);",
+        "SELECT id,name FROM users WHERE age > 18;",
+        "SELECT ALL id,name FROM users WHERE age > 18;",
+        "SELECT DISTINCT id,name FROM users WHERE age > 18;",
+        "UPDATE users SET name = 'John' WHERE id = 1;",
+        "INSERT INTO users (name, age) VALUES ('Alice', 30);",
+        "DELETE FROM users WHERE id = 5;",
         // TODO: Not supported yet
-        // "ExPlAiN QUERY",
-        // "EXPLAIN QUeRy PLaN",
+        // "ExPlAiN QUERY;",
+        // "EXPLAIN QUeRy PLaN;",
     ]
 }
 
 fn invalid_queries() -> Vec<&'static str> {
     vec![
-        "TRUNCATE TABLE users",
-        "EXPLAIN PLAN",
-        "EXPLAIN",
-        "QUERY PLAN",
-        "QUERY",
-        "PLAN",
+        "TRUNCATE TABLE users;",
+        "EXPLAIN PLAN;",
+        "EXPLAIN;",
+        "QUERY PLAN;",
+        "QUERY;",
+        "PLAN;",
     ]
 }
 
