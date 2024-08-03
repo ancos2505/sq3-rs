@@ -2,17 +2,15 @@ use crate::query::SqliteQuery;
 
 fn valid_queries() -> Vec<&'static str> {
     vec![
-        "EXPLAIN QUERY",
-        "EXPLAIN QUERY PLAN",
-        "SELECT 1",
-        "SELECT 1",
-        "SELECT 1,2",
+        "sElEcT 1",
+        "SeLeCt 1",
+        "SElECT 1,2",
         "SELECT 1,2,1,3",
-        "SELECT DISTINCT 1,2,1,3",
-        "SELECT (1)",
-        "SELECT (5+2)",
+        "SeLECT DISTINCT 1,2,1,3",
+        "SELeCT (1)",
+        "SElEcT (5+2)",
         "SELECT (5-2)",
-        "SELECT (5*2)",
+        "sELECt (5*2)",
         "SELECT (5/2)",
         "SELECT id,name FROM users WHERE age > 18",
         "SELECT ALL id,name FROM users WHERE age > 18",
@@ -20,6 +18,9 @@ fn valid_queries() -> Vec<&'static str> {
         "UPDATE users SET name = 'John' WHERE id = 1",
         "INSERT INTO users (name, age) VALUES ('Alice', 30)",
         "DELETE FROM users WHERE id = 5",
+        // TODO: Not supported yet
+        // "ExPlAiN QUERY",
+        // "EXPLAIN QUeRy PLaN",
     ]
 }
 

@@ -6,7 +6,7 @@ fn ok_on_run_select_queries() {
     for query in queries() {
         println!("Query: {}", query);
         match SelectStmt::run(&query) {
-            Ok(parsed_query) => println!("Parsed query: {:#?}", parsed_query),
+            Ok(query_outcome) => println!("Parsed query: {:#?}", query_outcome),
             Err(e) => println!("Error: {}", e),
         }
     }

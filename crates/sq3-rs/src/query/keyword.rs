@@ -199,445 +199,445 @@ impl FromStr for Keyword {
     type Err = SqliteError;
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
-        if Abort::as_str() == input {
+        if Abort == input {
             return Ok(Self(Box::new(Abort) as Box<dyn Any>));
         }
-        if Action::as_str() == input {
+        if Action == input {
             return Ok(Self(Box::new(Action) as Box<dyn Any>));
         }
-        if Add::as_str() == input {
+        if Add == input {
             return Ok(Self(Box::new(Add) as Box<dyn Any>));
         }
-        if After::as_str() == input {
+        if After == input {
             return Ok(Self(Box::new(After) as Box<dyn Any>));
         }
-        if All::as_str() == input {
+        if All == input {
             return Ok(Self(Box::new(All) as Box<dyn Any>));
         }
-        if Alter::as_str() == input {
+        if Alter == input {
             return Ok(Self(Box::new(Alter) as Box<dyn Any>));
         }
-        if Always::as_str() == input {
+        if Always == input {
             return Ok(Self(Box::new(Always) as Box<dyn Any>));
         }
-        if Analyze::as_str() == input {
+        if Analyze == input {
             return Ok(Self(Box::new(Analyze) as Box<dyn Any>));
         }
-        if And::as_str() == input {
+        if And == input {
             return Ok(Self(Box::new(And) as Box<dyn Any>));
         }
-        if As::as_str() == input {
+        if As == input {
             return Ok(Self(Box::new(As) as Box<dyn Any>));
         }
-        if Asc::as_str() == input {
+        if Asc == input {
             return Ok(Self(Box::new(Asc) as Box<dyn Any>));
         }
-        if Attach::as_str() == input {
+        if Attach == input {
             return Ok(Self(Box::new(Attach) as Box<dyn Any>));
         }
-        if Autoincrement::as_str() == input {
+        if Autoincrement == input {
             return Ok(Self(Box::new(Autoincrement) as Box<dyn Any>));
         }
-        if Before::as_str() == input {
+        if Before == input {
             return Ok(Self(Box::new(Before) as Box<dyn Any>));
         }
-        if Begin::as_str() == input {
+        if Begin == input {
             return Ok(Self(Box::new(Begin) as Box<dyn Any>));
         }
-        if Between::as_str() == input {
+        if Between == input {
             return Ok(Self(Box::new(Between) as Box<dyn Any>));
         }
-        if By::as_str() == input {
+        if By == input {
             return Ok(Self(Box::new(By) as Box<dyn Any>));
         }
-        if Cascade::as_str() == input {
+        if Cascade == input {
             return Ok(Self(Box::new(Cascade) as Box<dyn Any>));
         }
-        if Case::as_str() == input {
+        if Case == input {
             return Ok(Self(Box::new(Case) as Box<dyn Any>));
         }
-        if Cast::as_str() == input {
+        if Cast == input {
             return Ok(Self(Box::new(Cast) as Box<dyn Any>));
         }
-        if Check::as_str() == input {
+        if Check == input {
             return Ok(Self(Box::new(Check) as Box<dyn Any>));
         }
-        if Collate::as_str() == input {
+        if Collate == input {
             return Ok(Self(Box::new(Collate) as Box<dyn Any>));
         }
-        if Column::as_str() == input {
+        if Column == input {
             return Ok(Self(Box::new(Column) as Box<dyn Any>));
         }
-        if Commit::as_str() == input {
+        if Commit == input {
             return Ok(Self(Box::new(Commit) as Box<dyn Any>));
         }
-        if Conflict::as_str() == input {
+        if Conflict == input {
             return Ok(Self(Box::new(Conflict) as Box<dyn Any>));
         }
-        if Constraint::as_str() == input {
+        if Constraint == input {
             return Ok(Self(Box::new(Constraint) as Box<dyn Any>));
         }
-        if Create::as_str() == input {
+        if Create == input {
             return Ok(Self(Box::new(Create) as Box<dyn Any>));
         }
-        if Cross::as_str() == input {
+        if Cross == input {
             return Ok(Self(Box::new(Cross) as Box<dyn Any>));
         }
-        if Current::as_str() == input {
+        if Current == input {
             return Ok(Self(Box::new(Current) as Box<dyn Any>));
         }
-        if Current_date::as_str() == input {
+        if Current_date == input {
             return Ok(Self(Box::new(Current_date) as Box<dyn Any>));
         }
-        if Current_time::as_str() == input {
+        if Current_time == input {
             return Ok(Self(Box::new(Current_time) as Box<dyn Any>));
         }
-        if Current_timestamp::as_str() == input {
+        if Current_timestamp == input {
             return Ok(Self(Box::new(Current_timestamp) as Box<dyn Any>));
         }
-        if Database::as_str() == input {
+        if Database == input {
             return Ok(Self(Box::new(Database) as Box<dyn Any>));
         }
-        if Default::as_str() == input {
+        if Default == input {
             return Ok(Self(Box::new(Default) as Box<dyn Any>));
         }
-        if Deferrable::as_str() == input {
+        if Deferrable == input {
             return Ok(Self(Box::new(Deferrable) as Box<dyn Any>));
         }
-        if Deferred::as_str() == input {
+        if Deferred == input {
             return Ok(Self(Box::new(Deferred) as Box<dyn Any>));
         }
-        if Delete::as_str() == input {
+        if Delete == input {
             return Ok(Self(Box::new(Delete) as Box<dyn Any>));
         }
-        if Desc::as_str() == input {
+        if Desc == input {
             return Ok(Self(Box::new(Desc) as Box<dyn Any>));
         }
-        if Detach::as_str() == input {
+        if Detach == input {
             return Ok(Self(Box::new(Detach) as Box<dyn Any>));
         }
-        if Distinct::as_str() == input {
+        if Distinct == input {
             return Ok(Self(Box::new(Distinct) as Box<dyn Any>));
         }
-        if Do::as_str() == input {
+        if Do == input {
             return Ok(Self(Box::new(Do) as Box<dyn Any>));
         }
-        if Drop::as_str() == input {
+        if Drop == input {
             return Ok(Self(Box::new(Drop) as Box<dyn Any>));
         }
-        if Each::as_str() == input {
+        if Each == input {
             return Ok(Self(Box::new(Each) as Box<dyn Any>));
         }
-        if Else::as_str() == input {
+        if Else == input {
             return Ok(Self(Box::new(Else) as Box<dyn Any>));
         }
-        if End::as_str() == input {
+        if End == input {
             return Ok(Self(Box::new(End) as Box<dyn Any>));
         }
-        if Escape::as_str() == input {
+        if Escape == input {
             return Ok(Self(Box::new(Escape) as Box<dyn Any>));
         }
-        if Except::as_str() == input {
+        if Except == input {
             return Ok(Self(Box::new(Except) as Box<dyn Any>));
         }
-        if Exclude::as_str() == input {
+        if Exclude == input {
             return Ok(Self(Box::new(Exclude) as Box<dyn Any>));
         }
-        if Exclusive::as_str() == input {
+        if Exclusive == input {
             return Ok(Self(Box::new(Exclusive) as Box<dyn Any>));
         }
-        if Exists::as_str() == input {
+        if Exists == input {
             return Ok(Self(Box::new(Exists) as Box<dyn Any>));
         }
-        if Explain::as_str() == input {
+        if Explain == input {
             return Ok(Self(Box::new(Explain) as Box<dyn Any>));
         }
-        if Fail::as_str() == input {
+        if Fail == input {
             return Ok(Self(Box::new(Fail) as Box<dyn Any>));
         }
-        if Filter::as_str() == input {
+        if Filter == input {
             return Ok(Self(Box::new(Filter) as Box<dyn Any>));
         }
-        if First::as_str() == input {
+        if First == input {
             return Ok(Self(Box::new(First) as Box<dyn Any>));
         }
-        if Following::as_str() == input {
+        if Following == input {
             return Ok(Self(Box::new(Following) as Box<dyn Any>));
         }
-        if For::as_str() == input {
+        if For == input {
             return Ok(Self(Box::new(For) as Box<dyn Any>));
         }
-        if Foreign::as_str() == input {
+        if Foreign == input {
             return Ok(Self(Box::new(Foreign) as Box<dyn Any>));
         }
-        if KeywordFrom::as_str() == input {
+        if KeywordFrom == input {
             return Ok(Self(Box::new(KeywordFrom) as Box<dyn Any>));
         }
-        if Full::as_str() == input {
+        if Full == input {
             return Ok(Self(Box::new(Full) as Box<dyn Any>));
         }
-        if Generated::as_str() == input {
+        if Generated == input {
             return Ok(Self(Box::new(Generated) as Box<dyn Any>));
         }
-        if Glob::as_str() == input {
+        if Glob == input {
             return Ok(Self(Box::new(Glob) as Box<dyn Any>));
         }
-        if Group::as_str() == input {
+        if Group == input {
             return Ok(Self(Box::new(Group) as Box<dyn Any>));
         }
-        if Groups::as_str() == input {
+        if Groups == input {
             return Ok(Self(Box::new(Groups) as Box<dyn Any>));
         }
-        if Having::as_str() == input {
+        if Having == input {
             return Ok(Self(Box::new(Having) as Box<dyn Any>));
         }
-        if If::as_str() == input {
+        if If == input {
             return Ok(Self(Box::new(If) as Box<dyn Any>));
         }
-        if Ignore::as_str() == input {
+        if Ignore == input {
             return Ok(Self(Box::new(Ignore) as Box<dyn Any>));
         }
-        if Immediate::as_str() == input {
+        if Immediate == input {
             return Ok(Self(Box::new(Immediate) as Box<dyn Any>));
         }
-        if In::as_str() == input {
+        if In == input {
             return Ok(Self(Box::new(In) as Box<dyn Any>));
         }
-        if Index::as_str() == input {
+        if Index == input {
             return Ok(Self(Box::new(Index) as Box<dyn Any>));
         }
-        if Indexed::as_str() == input {
+        if Indexed == input {
             return Ok(Self(Box::new(Indexed) as Box<dyn Any>));
         }
-        if Initially::as_str() == input {
+        if Initially == input {
             return Ok(Self(Box::new(Initially) as Box<dyn Any>));
         }
-        if Inner::as_str() == input {
+        if Inner == input {
             return Ok(Self(Box::new(Inner) as Box<dyn Any>));
         }
-        if Insert::as_str() == input {
+        if Insert == input {
             return Ok(Self(Box::new(Insert) as Box<dyn Any>));
         }
-        if Instead::as_str() == input {
+        if Instead == input {
             return Ok(Self(Box::new(Instead) as Box<dyn Any>));
         }
-        if Intersect::as_str() == input {
+        if Intersect == input {
             return Ok(Self(Box::new(Intersect) as Box<dyn Any>));
         }
-        if Into::as_str() == input {
+        if Into == input {
             return Ok(Self(Box::new(Into) as Box<dyn Any>));
         }
-        if Is::as_str() == input {
+        if Is == input {
             return Ok(Self(Box::new(Is) as Box<dyn Any>));
         }
-        if Isnull::as_str() == input {
+        if Isnull == input {
             return Ok(Self(Box::new(Isnull) as Box<dyn Any>));
         }
-        if Join::as_str() == input {
+        if Join == input {
             return Ok(Self(Box::new(Join) as Box<dyn Any>));
         }
-        if Key::as_str() == input {
+        if Key == input {
             return Ok(Self(Box::new(Key) as Box<dyn Any>));
         }
-        if Last::as_str() == input {
+        if Last == input {
             return Ok(Self(Box::new(Last) as Box<dyn Any>));
         }
-        if Left::as_str() == input {
+        if Left == input {
             return Ok(Self(Box::new(Left) as Box<dyn Any>));
         }
-        if Like::as_str() == input {
+        if Like == input {
             return Ok(Self(Box::new(Like) as Box<dyn Any>));
         }
-        if Limit::as_str() == input {
+        if Limit == input {
             return Ok(Self(Box::new(Limit) as Box<dyn Any>));
         }
-        if Match::as_str() == input {
+        if Match == input {
             return Ok(Self(Box::new(Match) as Box<dyn Any>));
         }
-        if Materialized::as_str() == input {
+        if Materialized == input {
             return Ok(Self(Box::new(Materialized) as Box<dyn Any>));
         }
-        if Natural::as_str() == input {
+        if Natural == input {
             return Ok(Self(Box::new(Natural) as Box<dyn Any>));
         }
-        if No::as_str() == input {
+        if No == input {
             return Ok(Self(Box::new(No) as Box<dyn Any>));
         }
-        if Not::as_str() == input {
+        if Not == input {
             return Ok(Self(Box::new(Not) as Box<dyn Any>));
         }
-        if Nothing::as_str() == input {
+        if Nothing == input {
             return Ok(Self(Box::new(Nothing) as Box<dyn Any>));
         }
-        if Notnull::as_str() == input {
+        if Notnull == input {
             return Ok(Self(Box::new(Notnull) as Box<dyn Any>));
         }
-        if Null::as_str() == input {
+        if Null == input {
             return Ok(Self(Box::new(Null) as Box<dyn Any>));
         }
-        if Nulls::as_str() == input {
+        if Nulls == input {
             return Ok(Self(Box::new(Nulls) as Box<dyn Any>));
         }
-        if Of::as_str() == input {
+        if Of == input {
             return Ok(Self(Box::new(Of) as Box<dyn Any>));
         }
-        if Offset::as_str() == input {
+        if Offset == input {
             return Ok(Self(Box::new(Offset) as Box<dyn Any>));
         }
-        if On::as_str() == input {
+        if On == input {
             return Ok(Self(Box::new(On) as Box<dyn Any>));
         }
-        if Or::as_str() == input {
+        if Or == input {
             return Ok(Self(Box::new(Or) as Box<dyn Any>));
         }
-        if Order::as_str() == input {
+        if Order == input {
             return Ok(Self(Box::new(Order) as Box<dyn Any>));
         }
-        if Others::as_str() == input {
+        if Others == input {
             return Ok(Self(Box::new(Others) as Box<dyn Any>));
         }
-        if Outer::as_str() == input {
+        if Outer == input {
             return Ok(Self(Box::new(Outer) as Box<dyn Any>));
         }
-        if Over::as_str() == input {
+        if Over == input {
             return Ok(Self(Box::new(Over) as Box<dyn Any>));
         }
-        if Partition::as_str() == input {
+        if Partition == input {
             return Ok(Self(Box::new(Partition) as Box<dyn Any>));
         }
-        if Plan::as_str() == input {
+        if Plan == input {
             return Ok(Self(Box::new(Plan) as Box<dyn Any>));
         }
-        if Pragma::as_str() == input {
+        if Pragma == input {
             return Ok(Self(Box::new(Pragma) as Box<dyn Any>));
         }
-        if Preceding::as_str() == input {
+        if Preceding == input {
             return Ok(Self(Box::new(Preceding) as Box<dyn Any>));
         }
-        if Primary::as_str() == input {
+        if Primary == input {
             return Ok(Self(Box::new(Primary) as Box<dyn Any>));
         }
-        if Query::as_str() == input {
+        if Query == input {
             return Ok(Self(Box::new(Query) as Box<dyn Any>));
         }
-        if Raise::as_str() == input {
+        if Raise == input {
             return Ok(Self(Box::new(Raise) as Box<dyn Any>));
         }
-        if Range::as_str() == input {
+        if Range == input {
             return Ok(Self(Box::new(Range) as Box<dyn Any>));
         }
-        if Recursive::as_str() == input {
+        if Recursive == input {
             return Ok(Self(Box::new(Recursive) as Box<dyn Any>));
         }
-        if References::as_str() == input {
+        if References == input {
             return Ok(Self(Box::new(References) as Box<dyn Any>));
         }
-        if Regexp::as_str() == input {
+        if Regexp == input {
             return Ok(Self(Box::new(Regexp) as Box<dyn Any>));
         }
-        if Reindex::as_str() == input {
+        if Reindex == input {
             return Ok(Self(Box::new(Reindex) as Box<dyn Any>));
         }
-        if Release::as_str() == input {
+        if Release == input {
             return Ok(Self(Box::new(Release) as Box<dyn Any>));
         }
-        if Rename::as_str() == input {
+        if Rename == input {
             return Ok(Self(Box::new(Rename) as Box<dyn Any>));
         }
-        if Replace::as_str() == input {
+        if Replace == input {
             return Ok(Self(Box::new(Replace) as Box<dyn Any>));
         }
-        if Restrict::as_str() == input {
+        if Restrict == input {
             return Ok(Self(Box::new(Restrict) as Box<dyn Any>));
         }
-        if Returning::as_str() == input {
+        if Returning == input {
             return Ok(Self(Box::new(Returning) as Box<dyn Any>));
         }
-        if Right::as_str() == input {
+        if Right == input {
             return Ok(Self(Box::new(Right) as Box<dyn Any>));
         }
-        if Rollback::as_str() == input {
+        if Rollback == input {
             return Ok(Self(Box::new(Rollback) as Box<dyn Any>));
         }
-        if Row::as_str() == input {
+        if Row == input {
             return Ok(Self(Box::new(Row) as Box<dyn Any>));
         }
-        if Rows::as_str() == input {
+        if Rows == input {
             return Ok(Self(Box::new(Rows) as Box<dyn Any>));
         }
-        if Savepoint::as_str() == input {
+        if Savepoint == input {
             return Ok(Self(Box::new(Savepoint) as Box<dyn Any>));
         }
-        if Select::as_str() == input {
+        if Select == input {
             return Ok(Self(Box::new(Select) as Box<dyn Any>));
         }
-        if Set::as_str() == input {
+        if Set == input {
             return Ok(Self(Box::new(Set) as Box<dyn Any>));
         }
-        if Table::as_str() == input {
+        if Table == input {
             return Ok(Self(Box::new(Table) as Box<dyn Any>));
         }
-        if Temp::as_str() == input {
+        if Temp == input {
             return Ok(Self(Box::new(Temp) as Box<dyn Any>));
         }
-        if Temporary::as_str() == input {
+        if Temporary == input {
             return Ok(Self(Box::new(Temporary) as Box<dyn Any>));
         }
-        if Then::as_str() == input {
+        if Then == input {
             return Ok(Self(Box::new(Then) as Box<dyn Any>));
         }
-        if Ties::as_str() == input {
+        if Ties == input {
             return Ok(Self(Box::new(Ties) as Box<dyn Any>));
         }
-        if To::as_str() == input {
+        if To == input {
             return Ok(Self(Box::new(To) as Box<dyn Any>));
         }
-        if Transaction::as_str() == input {
+        if Transaction == input {
             return Ok(Self(Box::new(Transaction) as Box<dyn Any>));
         }
-        if Trigger::as_str() == input {
+        if Trigger == input {
             return Ok(Self(Box::new(Trigger) as Box<dyn Any>));
         }
-        if Unbounded::as_str() == input {
+        if Unbounded == input {
             return Ok(Self(Box::new(Unbounded) as Box<dyn Any>));
         }
-        if Union::as_str() == input {
+        if Union == input {
             return Ok(Self(Box::new(Union) as Box<dyn Any>));
         }
-        if Unique::as_str() == input {
+        if Unique == input {
             return Ok(Self(Box::new(Unique) as Box<dyn Any>));
         }
-        if Update::as_str() == input {
+        if Update == input {
             return Ok(Self(Box::new(Update) as Box<dyn Any>));
         }
-        if Using::as_str() == input {
+        if Using == input {
             return Ok(Self(Box::new(Using) as Box<dyn Any>));
         }
-        if Vacuum::as_str() == input {
+        if Vacuum == input {
             return Ok(Self(Box::new(Vacuum) as Box<dyn Any>));
         }
-        if Values::as_str() == input {
+        if Values == input {
             return Ok(Self(Box::new(Values) as Box<dyn Any>));
         }
-        if View::as_str() == input {
+        if View == input {
             return Ok(Self(Box::new(View) as Box<dyn Any>));
         }
-        if Virtual::as_str() == input {
+        if Virtual == input {
             return Ok(Self(Box::new(Virtual) as Box<dyn Any>));
         }
-        if When::as_str() == input {
+        if When == input {
             return Ok(Self(Box::new(When) as Box<dyn Any>));
         }
-        if Where::as_str() == input {
+        if Where == input {
             return Ok(Self(Box::new(Where) as Box<dyn Any>));
         }
-        if Window::as_str() == input {
+        if Window == input {
             return Ok(Self(Box::new(Window) as Box<dyn Any>));
         }
-        if With::as_str() == input {
+        if With == input {
             return Ok(Self(Box::new(With) as Box<dyn Any>));
         }
-        if Without::as_str() == input {
+        if Without == input {
             return Ok(Self(Box::new(Without) as Box<dyn Any>));
         }
 
