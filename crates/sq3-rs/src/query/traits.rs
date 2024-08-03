@@ -15,8 +15,8 @@ pub(super) trait SqliteKeyword: Display + Debug {
     fn to_any(self) -> Box<dyn Any>;
 }
 
-pub(super) trait SqliteStatement {
-    fn run(stmt_content: &str) -> SqliteResult<SqliteQueryOutcome>;
+pub(super) trait SqliteStatement<'a> {
+    fn run(stmt_content: &'a str) -> SqliteResult<SqliteQueryOutcome>;
 }
 
 /// ## DistictProcessing

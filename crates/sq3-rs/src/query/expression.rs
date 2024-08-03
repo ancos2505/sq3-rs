@@ -1,6 +1,6 @@
 mod operators;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub(super) struct SqliteExpression(String);
 
 impl From<String> for SqliteExpression {

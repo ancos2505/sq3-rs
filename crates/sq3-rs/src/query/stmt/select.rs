@@ -34,17 +34,19 @@ use crate::query::{
 
 #[derive(Debug, Default)]
 pub(crate) struct SelectStmt<'a> {
-    distinct: Option<Box<dyn DistinctProcessing>>,
-    result_columns: Option<ResultColumns<'a>>,
-    from: Option<KeywordFrom>,
+    pub(self) distinct: Option<Box<dyn DistinctProcessing>>,
+    pub(self) result_columns: Option<ResultColumns<'a>>,
+    pub(self) from: Option<KeywordFrom>,
     // TODO
-    origin: Option<TableName<'a>>,
+    pub(self) origin: Option<TableName<'a>>,
     // TODO
-    expr: Option<SqliteExpression>,
+    pub(self) expr: Option<SqliteExpression>,
 }
-
-impl SqliteStatement for SelectStmt<'_> {
-    fn run(sql: &str) -> SqliteResult<SqliteQueryOutcome> {
+impl<'a> SelectStmt<'a> {
+    fn parse(sql: &'a str) -> SqliteResult<Self>
+    where
+        Self: 'a,
+    {
         let cleaned_sql =
             sql.trim()
                 .split(';')
@@ -57,54 +59,76 @@ impl SqliteStatement for SelectStmt<'_> {
 
         let mut stmt = Self::default();
 
-        while let Some(current_chunk) = iter.next() {
+        while let Some(chunk) = iter.next() {
+            // dbg!(1, chunk, &stmt);
             if stmt.distinct.is_none() {
-                if let Some(keyword) = current_chunk.parse::<Keyword>().ok() {
+                if let Some(keyword) = chunk.parse::<Keyword>().ok() {
                     if keyword.get().downcast_ref::<Distinct>().is_some() {
-                        stmt.distinct = Some(Box::new(Distinct) as Box<dyn DistinctProcessing>);
+                        let distinct = keyword.into_inner().downcast::<Distinct>().ok();
+
+                        stmt.distinct = distinct.map(|inner| inner as Box<dyn DistinctProcessing>);
+                        continue;
                     }
                 }
+            }
+            if stmt.distinct.is_none() {
                 stmt.distinct = Some(Box::new(All) as Box<dyn DistinctProcessing>);
             }
 
-            if stmt.result_columns.is_none() && stmt.distinct.is_some() {
-                if let Some(result_columns) = ResultColumns::parse(current_chunk).ok() {
+            // dbg!(2, chunk, &stmt);
+            if stmt.distinct.is_some() && stmt.result_columns.is_none() {
+                if let Some(result_columns) = ResultColumns::parse(chunk).ok() {
                     stmt.result_columns = Some(result_columns);
+                    continue;
                 }
             }
-
-            if stmt.from.is_none() && stmt.result_columns.is_some() && stmt.distinct.is_some() {
-                if let Some(keyword) = current_chunk.parse::<Keyword>().ok() {
+            // dbg!(3, chunk, &stmt);
+            if stmt.distinct.is_some() && stmt.result_columns.is_some() && stmt.from.is_none() {
+                if let Some(keyword) = chunk.parse::<Keyword>().ok() {
                     if keyword.get().downcast_ref::<KeywordFrom>().is_some() {
-                        stmt.from = Some(KeywordFrom);
+                        let from = keyword
+                            .into_inner()
+                            .downcast::<KeywordFrom>()
+                            .ok()
+                            .map(|inner| *inner);
+
+                        stmt.from = from;
+                        continue;
                     }
                 }
             }
-
-            if stmt.origin.is_none()
-                && stmt.from.is_some()
+            // dbg!(4, chunk, &stmt);
+            if stmt.distinct.is_some()
                 && stmt.result_columns.is_some()
-                && stmt.distinct.is_some()
+                && stmt.from.is_some()
+                && stmt.origin.is_none()
             {
-                if let Some(table_name) = TableName::parse(current_chunk).ok() {
+                if let Some(table_name) = TableName::parse(chunk).ok() {
                     stmt.origin = Some(table_name);
+                    continue;
                 }
             }
-
+            // dbg!(5, chunk, &stmt);
             if stmt.origin.is_none()
                 && stmt.from.is_none()
                 && stmt.result_columns.is_none()
                 && stmt.distinct.is_some()
             {
-                stmt.expr = Some(SqliteExpression::from(current_chunk.to_string()));
+                stmt.expr = Some(SqliteExpression::from(chunk.to_string()));
             }
         }
+        Ok(stmt)
+    }
+}
+impl<'a> SqliteStatement<'a> for SelectStmt<'a> {
+    fn run(sql: &'a str) -> SqliteResult<SqliteQueryOutcome> {
+        let stmt: SelectStmt<'a> = Self::parse(sql)?;
         println!("Parsed: {stmt:?}");
         Ok(SqliteQueryOutcome::Failure(SqliteDatabaseError::_Todo))
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 enum ResultColumns<'a> {
     Asterisk,
     Filter(Vec<ColumnName<'a>>),
@@ -130,7 +154,7 @@ impl<'a> ResultColumns<'a> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 struct ColumnName<'a>(&'a str);
 impl<'a> ColumnName<'a> {
     pub fn parse(s: &'a str) -> SqliteResult<Self> {
@@ -149,7 +173,7 @@ impl<'a> ColumnName<'a> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 struct TableName<'a>(&'a str);
 impl<'a> TableName<'a> {
     pub fn parse(s: &'a str) -> SqliteResult<Self> {

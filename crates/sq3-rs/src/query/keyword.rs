@@ -191,7 +191,7 @@ impl Keyword {
         &self.0
     }
     pub fn into_inner(self) -> Box<dyn Any> {
-        Box::new(self)
+        self.0
     }
 }
 
