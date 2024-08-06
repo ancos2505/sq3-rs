@@ -38,10 +38,10 @@ impl Display for FuzzingResult {
 }
 
 #[test]
-#[ignore = "fuzzing"]
+#[ignore = "fuzzer"]
 /// How to run:
 /// ```sh
-/// time cargo test fuzzing_on_valid_queries -- --test-threads=1 --ignored --nocapture >/dev/null 2>&1
+/// time cargo test fuzzing_on_valid_queries --features fuzzer -- --test-threads=1 --ignored --nocapture >/dev/null 2>&1
 /// find ./ -name "fuzzing-log*.json" | xargs jq '. | length'
 /// ```
 /// TODO: Migrate to xtask pattern

@@ -10,7 +10,7 @@ use std::sync::OnceLock;
 
 use crate::{query::SqliteRecord, runtime::SqliteRuntime};
 
-pub use crate::result::SqliteResult;
+pub use crate::{result::SqliteResult, traits::TypeName};
 
 static VERSION_NUMBER: OnceLock<u32> = OnceLock::new();
 

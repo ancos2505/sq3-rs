@@ -2,6 +2,17 @@
 
 SQLite3 library written in Idiomatic Rust and no dependencies (Under Development) 
 
+## Getting Started
+
+Run the task runner built on top o **xtask** pattern
+
+```sh
+alias cx="cargo xtask"
+cx 
+cx build
+cx fuzzer
+```
+
 ## SQL
 
 ### Syntax
