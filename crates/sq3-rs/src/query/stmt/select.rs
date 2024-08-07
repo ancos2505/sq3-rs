@@ -15,13 +15,15 @@
 //!                 - https://www.sqlite.org/syntax/simple-select-stmt.html
 //!
 
+mod parser;
+
 #[cfg(test)]
 mod tests;
 
 use crate::{
     query::{
         expression::SqliteExpression,
-        keyword::{All, Distinct, Keyword, KeywordFrom},
+        keyword::{All, Distinct, Keyword, KeywordFrom, KeywordWhere},
         SqliteDatabaseError,
     },
     result::{SqlParserError, SqliteError, SqliteResult},
@@ -32,6 +34,8 @@ use crate::query::{
     SqliteQueryOutcome,
 };
 
+pub(super) use self::parser::{Initial, SelectParser};
+
 #[derive(Debug, Default)]
 pub(crate) struct SelectStmt<'a> {
     pub(self) distinct: Option<Box<dyn DistinctProcessing>>,
@@ -40,6 +44,10 @@ pub(crate) struct SelectStmt<'a> {
     // TODO
     pub(self) origin: Option<TableName<'a>>,
     // TODO
+    pub(self) r#where: Option<KeywordWhere>,
+
+    pub(self) r#where_expr: Option<SqliteExpression>,
+
     pub(self) expr: Option<SqliteExpression>,
 }
 impl<'a> SelectStmt<'a> {
@@ -55,12 +63,14 @@ impl<'a> SelectStmt<'a> {
                     "Invalid SQL. Can't start a query with `;`".into(),
                 )))?;
 
+        // TODO Implement chunk navigator
         let mut iter = cleaned_sql.split_whitespace();
 
         let mut stmt = Self::default();
 
+        // TODO Implement chunk navigator
         while let Some(chunk) = iter.next() {
-            // dbg!(1, chunk, &stmt);
+            dbg!(1, &stmt);
             if stmt.distinct.is_none() {
                 if let Some(keyword) = chunk.parse::<Keyword>().ok() {
                     if keyword.get().downcast_ref::<Distinct>().is_some() {
@@ -75,14 +85,15 @@ impl<'a> SelectStmt<'a> {
                 stmt.distinct = Some(Box::new(All) as Box<dyn DistinctProcessing>);
             }
 
-            // dbg!(2, chunk, &stmt);
+            dbg!(2, chunk, &stmt);
             if stmt.distinct.is_some() && stmt.result_columns.is_none() {
                 if let Some(result_columns) = ResultColumns::parse(chunk).ok() {
                     stmt.result_columns = Some(result_columns);
                     continue;
                 }
             }
-            // dbg!(3, chunk, &stmt);
+
+            dbg!(3, chunk, &stmt);
             if stmt.distinct.is_some() && stmt.result_columns.is_some() && stmt.from.is_none() {
                 if let Some(keyword) = chunk.parse::<Keyword>().ok() {
                     if keyword.get().downcast_ref::<KeywordFrom>().is_some() {
@@ -97,7 +108,8 @@ impl<'a> SelectStmt<'a> {
                     }
                 }
             }
-            // dbg!(4, chunk, &stmt);
+
+            dbg!(4, chunk, &stmt);
             if stmt.distinct.is_some()
                 && stmt.result_columns.is_some()
                 && stmt.from.is_some()
@@ -108,11 +120,66 @@ impl<'a> SelectStmt<'a> {
                     continue;
                 }
             }
-            // dbg!(5, chunk, &stmt);
-            if stmt.origin.is_none()
-                && stmt.from.is_none()
+
+            dbg!(5, chunk, &stmt);
+            if stmt.distinct.is_some()
+                && stmt.result_columns.is_some()
+                && stmt.from.is_some()
+                && stmt.origin.is_some()
+                && stmt.r#where.is_none()
+            {
+                if let Some(keyword) = chunk.parse::<Keyword>().ok() {
+                    if keyword.get().downcast_ref::<KeywordWhere>().is_some() {
+                        let keyword_where = keyword
+                            .into_inner()
+                            .downcast::<KeywordWhere>()
+                            .ok()
+                            .map(|k| *k);
+
+                        stmt.r#where = keyword_where;
+                        continue;
+                    }
+                }
+            }
+
+            dbg!(6, chunk, &stmt);
+            if stmt.distinct.is_some()
+                && stmt.result_columns.is_some()
+                && stmt.from.is_some()
+                && stmt.origin.is_some()
+                && stmt.r#where.is_none()
+            {
+                if let Some(keyword) = chunk.parse::<Keyword>().ok() {
+                    if keyword.get().downcast_ref::<KeywordWhere>().is_some() {
+                        let keyword_where = keyword
+                            .into_inner()
+                            .downcast::<KeywordWhere>()
+                            .ok()
+                            .map(|k| *k);
+
+                        stmt.r#where = keyword_where;
+                        continue;
+                    }
+                }
+            }
+
+            if stmt.distinct.is_some()
+                && stmt.result_columns.is_some()
+                && stmt.from.is_some()
+                && stmt.origin.is_some()
+                && stmt.r#where.is_some()
+                && stmt.where_expr.is_none()
+            {
+                stmt.where_expr = Some(SqliteExpression::from(chunk.to_string()));
+            }
+
+            // Expr
+            if stmt.distinct.is_some()
                 && stmt.result_columns.is_none()
-                && stmt.distinct.is_some()
+                && stmt.from.is_none()
+                && stmt.origin.is_none()
+                && stmt.r#where.is_none()
+                && stmt.where_expr.is_none()
             {
                 stmt.expr = Some(SqliteExpression::from(chunk.to_string()));
             }
@@ -191,16 +258,3 @@ impl<'a> TableName<'a> {
         error
     }
 }
-
-#[derive(Debug)]
-struct SelectExpr {
-    keyword: Option<Keyword>,
-    // expr: SqliteExpression,
-}
-
-// #[derive(Debug)]
-// pub(super) struct SelectStmt<D: DistinctProcessing> {
-//     distinct_processing: Option<PhantomData<D>>,
-//     result_columns: Vec<String>,
-//     from: From,
-// }

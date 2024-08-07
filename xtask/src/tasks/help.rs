@@ -39,11 +39,10 @@ fn usage_str() -> &'static str {
     fuzzer # Run the Fuzzing tests
 "#
 
-//     r#"Available tasks:
-//     build # Build the Application
-//     clean # Clean temporary files for building
-//     help  # This Task
-//     run   # Run the Application
-// "#
-
+    //     r#"Available tasks:
+    //     build # Build the Application
+    //     clean # Clean temporary files for building
+    //     help  # This Task
+    //     run   # Run the Application
+    // "#
 }

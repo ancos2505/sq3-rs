@@ -8,7 +8,23 @@ use crate::query::{
 };
 
 #[test]
-#[ignore = "Todo"]
+fn ok_on_test_select_parser() {
+    use crate::query::stmt::select::{Initial, SelectParser};
+    let input = String::from("SELECT id, name FROM users WHERE id = 1");
+    dbg!(&input);
+    let result = SelectParser::<Initial>::new(input)
+        .parse_select()
+        .and_then(|p| p.parse_columns())
+        .and_then(|p| p.parse_table())
+        .and_then(|p| p.parse_condition());
+
+    match result {
+        Ok(_) => println!("Parsing completed successfully"),
+        Err(e) => println!("Parsing error: {}", e),
+    }
+}
+
+#[test]
 fn ok_on_run_valid_select_query() {
     let expected = SelectStmt {
         distinct: Some(Box::new(Distinct)),
@@ -19,6 +35,7 @@ fn ok_on_run_valid_select_query() {
         from: Some(KeywordFrom),
         origin: Some(TableName("users")),
         expr: None,
+        ..Default::default()
     };
     let query = "SELECT DISTINCT id,name FROM users WHERE age > 18;";
 

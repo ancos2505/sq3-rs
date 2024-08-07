@@ -181,7 +181,7 @@ pub(crate) use self::{
     set::Set, table::Table, temp::Temp, temporary::Temporary, then::Then, ties::Ties, to::To,
     transaction::Transaction, trigger::Trigger, unbounded::Unbounded, union::Union, unique::Unique,
     update::Update, using::Using, vacuum::Vacuum, values::Values, view::View, virtual_::Virtual,
-    when::When, where_::Where, window::Window, with::With, without::Without,
+    when::When, where_::Where as KeywordWhere, window::Window, with::With, without::Without,
 };
 
 #[derive(Debug)]
@@ -628,8 +628,8 @@ impl FromStr for Keyword {
         if When == input {
             return Ok(Self(Box::new(When) as Box<dyn Any>));
         }
-        if Where == input {
-            return Ok(Self(Box::new(Where) as Box<dyn Any>));
+        if KeywordWhere == input {
+            return Ok(Self(Box::new(KeywordWhere) as Box<dyn Any>));
         }
         if Window == input {
             return Ok(Self(Box::new(Window) as Box<dyn Any>));
