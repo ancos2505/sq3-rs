@@ -8,6 +8,9 @@ impl Select {
     pub const fn as_str() -> &'static str {
         "SELECT"
     }
+    pub const fn len() -> usize {
+        6
+    }
 }
 
 impl PartialEq<&str> for Select {

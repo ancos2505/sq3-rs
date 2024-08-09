@@ -10,10 +10,11 @@ use crate::query::{
 #[test]
 fn ok_on_test_select_parser() {
     use crate::query::stmt::select::{Initial, SelectParser};
-    let input = String::from("SELECT id, name FROM users WHERE id = 1");
+    let input = "SELECT id, name FROM users WHERE id = 1";
     dbg!(&input);
     let result = SelectParser::<Initial>::new(input)
         .parse_select()
+        .and_then(|p| p.parse_distinct())
         .and_then(|p| p.parse_columns())
         .and_then(|p| p.parse_table())
         .and_then(|p| p.parse_condition());

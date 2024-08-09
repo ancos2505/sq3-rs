@@ -6,6 +6,7 @@ mod literal_value;
 mod router;
 mod stmt;
 mod traits;
+mod white_space;
 
 #[cfg(test)]
 mod tests;
@@ -13,6 +14,8 @@ mod tests;
 use crate::result::{SqlParserError, SqliteError, SqliteResult};
 
 use self::router::QueryRouter;
+
+pub(self) use self::white_space::WhiteSpace;
 
 pub use self::helpers::{SqliteDatabaseError, SqliteQueryOutcome, SqliteRecord};
 
