@@ -8,6 +8,9 @@ impl From {
     pub const fn as_str() -> &'static str {
         "FROM"
     }
+    pub const fn len() -> usize {
+        4
+    }
 }
 
 impl PartialEq<&str> for From {

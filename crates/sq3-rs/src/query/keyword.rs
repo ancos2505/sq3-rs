@@ -156,32 +156,66 @@ use std::str::FromStr;
 use crate::result::{SqlParserError, SqliteError};
 
 pub(crate) use self::{
-    abort::Abort, action::Action, add::Add, after::After, all::All, alter::Alter, always::Always,
-    analyze::Analyze, and::And, as_::As, asc::Asc, attach::Attach, autoincrement::Autoincrement,
-    before::Before, begin::Begin, between::Between, by::By, cascade::Cascade, case::Case,
-    cast::Cast, check::Check, collate::Collate, column::Column, commit::Commit, conflict::Conflict,
-    constraint::Constraint, create::Create, cross::Cross, current::Current,
-    current_date::Current_date, current_time::Current_time, current_timestamp::Current_timestamp,
-    database::Database, default::Default, deferrable::Deferrable, deferred::Deferred,
-    delete::Delete, desc::Desc, detach::Detach, distinct::Distinct, do_::Do, drop::Drop,
-    each::Each, else_::Else, end::End, escape::Escape, except::Except, exclude::Exclude,
-    exclusive::Exclusive, exists::Exists, explain::Explain, fail::Fail, filter::Filter,
-    first::First, following::Following, for_::For, foreign::Foreign, from::From as KeywordFrom,
-    full::Full, generated::Generated, glob::Glob, group::Group, groups::Groups, having::Having,
-    if_::If, ignore::Ignore, immediate::Immediate, in_::In, index::Index, indexed::Indexed,
-    initially::Initially, inner::Inner, insert::Insert, instead::Instead, intersect::Intersect,
-    into::Into, is::Is, isnull::Isnull, join::Join, key::Key, last::Last, left::Left, like::Like,
-    limit::Limit, match_::Match, materialized::Materialized, natural::Natural, no::No, not::Not,
-    nothing::Nothing, notnull::Notnull, null::Null, nulls::Nulls, of::Of, offset::Offset, on::On,
-    or::Or, order::Order, others::Others, outer::Outer, over::Over, partition::Partition,
-    plan::Plan, pragma::Pragma, preceding::Preceding, primary::Primary, query::Query, raise::Raise,
-    range::Range, recursive::Recursive, references::References, regexp::Regexp, reindex::Reindex,
-    release::Release, rename::Rename, replace::Replace, restrict::Restrict, returning::Returning,
-    right::Right, rollback::Rollback, row::Row, rows::Rows, savepoint::Savepoint, select::Select,
-    set::Set, table::Table, temp::Temp, temporary::Temporary, then::Then, ties::Ties, to::To,
-    transaction::Transaction, trigger::Trigger, unbounded::Unbounded, union::Union, unique::Unique,
-    update::Update, using::Using, vacuum::Vacuum, values::Values, view::View, virtual_::Virtual,
-    when::When, where_::Where as KeywordWhere, window::Window, with::With, without::Without,
+    abort::Abort as KeywordAbort, action::Action as KeywordAction, add::Add as KeywordAdd,
+    after::After as KeywordAfter, all::All as KeywordAll, alter::Alter as KeywordAlter,
+    always::Always as KeywordAlways, analyze::Analyze as KeywordAnalyze, and::And as KeywordAnd,
+    as_::As as KeywordAs, asc::Asc as KeywordAsc, attach::Attach as KeywordAttach,
+    autoincrement::Autoincrement as KeywordAutoincrement, before::Before as KeywordBefore,
+    begin::Begin as KeywordBegin, between::Between as KeywordBetween, by::By as KeywordBy,
+    cascade::Cascade as KeywordCascade, case::Case as KeywordCase, cast::Cast as KeywordCast,
+    check::Check as KeywordCheck, collate::Collate as KeywordCollate,
+    column::Column as KeywordColumn, commit::Commit as KeywordCommit,
+    conflict::Conflict as KeywordConflict, constraint::Constraint as KeywordConstraint,
+    create::Create as KeywordCreate, cross::Cross as KeywordCross,
+    current::Current as KeywordCurrent, current_date::Current_date as KeywordCurrent_date,
+    current_time::Current_time as KeywordCurrent_time,
+    current_timestamp::Current_timestamp as KeywordCurrent_timestamp,
+    database::Database as KeywordDatabase, default::Default as KeywordDefault,
+    deferrable::Deferrable as KeywordDeferrable, deferred::Deferred as KeywordDeferred,
+    delete::Delete as KeywordDelete, desc::Desc as KeywordDesc, detach::Detach as KeywordDetach,
+    distinct::Distinct as KeywordDistinct, do_::Do as KeywordDo, drop::Drop as KeywordDrop,
+    each::Each as KeywordEach, else_::Else as KeywordElse, end::End as KeywordEnd,
+    escape::Escape as KeywordEscape, except::Except as KeywordExcept,
+    exclude::Exclude as KeywordExclude, exclusive::Exclusive as KeywordExclusive,
+    exists::Exists as KeywordExists, explain::Explain as KeywordExplain, fail::Fail as KeywordFail,
+    filter::Filter as KeywordFilter, first::First as KeywordFirst,
+    following::Following as KeywordFollowing, for_::For as KeywordFor,
+    foreign::Foreign as KeywordForeign, from::From as KeywordFrom, full::Full as KeywordFull,
+    generated::Generated as KeywordGenerated, glob::Glob as KeywordGlob,
+    group::Group as KeywordGroup, groups::Groups as KeywordGroups, having::Having as KeywordHaving,
+    if_::If as KeywordIf, ignore::Ignore as KeywordIgnore,
+    immediate::Immediate as KeywordImmediate, in_::In as KeywordIn, index::Index as KeywordIndex,
+    indexed::Indexed as KeywordIndexed, initially::Initially as KeywordInitially,
+    inner::Inner as KeywordInner, insert::Insert as KeywordInsert,
+    instead::Instead as KeywordInstead, intersect::Intersect as KeywordIntersect,
+    into::Into as KeywordInto, is::Is as KeywordIs, isnull::Isnull as KeywordIsnull,
+    join::Join as KeywordJoin, key::Key as KeywordKey, last::Last as KeywordLast,
+    left::Left as KeywordLeft, like::Like as KeywordLike, limit::Limit as KeywordLimit,
+    match_::Match as KeywordMatch, materialized::Materialized as KeywordMaterialized,
+    natural::Natural as KeywordNatural, no::No as KeywordNo, not::Not as KeywordNot,
+    nothing::Nothing as KeywordNothing, notnull::Notnull as KeywordNotnull,
+    null::Null as KeywordNull, nulls::Nulls as KeywordNulls, of::Of as KeywordOf,
+    offset::Offset as KeywordOffset, on::On as KeywordOn, or::Or as KeywordOr,
+    order::Order as KeywordOrder, others::Others as KeywordOthers, outer::Outer as KeywordOuter,
+    over::Over as KeywordOver, partition::Partition as KeywordPartition, plan::Plan as KeywordPlan,
+    pragma::Pragma as KeywordPragma, preceding::Preceding as KeywordPreceding,
+    primary::Primary as KeywordPrimary, query::Query as KeywordQuery, raise::Raise as KeywordRaise,
+    range::Range as KeywordRange, recursive::Recursive as KeywordRecursive,
+    references::References as KeywordReferences, regexp::Regexp as KeywordRegexp,
+    reindex::Reindex as KeywordReindex, release::Release as KeywordRelease,
+    rename::Rename as KeywordRename, replace::Replace as KeywordReplace,
+    restrict::Restrict as KeywordRestrict, returning::Returning as KeywordReturning,
+    right::Right as KeywordRight, rollback::Rollback as KeywordRollback, row::Row as KeywordRow,
+    rows::Rows as KeywordRows, savepoint::Savepoint as KeywordSavepoint,
+    select::Select as KeywordSelect, set::Set as KeywordSet, table::Table as KeywordTable,
+    temp::Temp as KeywordTemp, temporary::Temporary as KeywordTemporary, then::Then as KeywordThen,
+    ties::Ties as KeywordTies, to::To as KeywordTo, transaction::Transaction as KeywordTransaction,
+    trigger::Trigger as KeywordTrigger, unbounded::Unbounded as KeywordUnbounded,
+    union::Union as KeywordUnion, unique::Unique as KeywordUnique, update::Update as KeywordUpdate,
+    using::Using as KeywordUsing, vacuum::Vacuum as KeywordVacuum, values::Values as KeywordValues,
+    view::View as KeywordView, virtual_::Virtual as KeywordVirtual, when::When as KeywordWhen,
+    where_::Where as KeywordWhere, window::Window as KeywordWindow, with::With as KeywordWith,
+    without::Without as KeywordWithout,
 };
 
 #[derive(Debug)]
@@ -199,446 +233,446 @@ impl FromStr for Keyword {
     type Err = SqliteError;
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
-        if Abort == input {
-            return Ok(Self(Box::new(Abort) as Box<dyn Any>));
+        if KeywordAbort == input {
+            return Ok(Self(Box::new(KeywordAbort) as Box<dyn Any>));
         }
-        if Action == input {
-            return Ok(Self(Box::new(Action) as Box<dyn Any>));
+        if KeywordAction == input {
+            return Ok(Self(Box::new(KeywordAction) as Box<dyn Any>));
         }
-        if Add == input {
-            return Ok(Self(Box::new(Add) as Box<dyn Any>));
+        if KeywordAdd == input {
+            return Ok(Self(Box::new(KeywordAdd) as Box<dyn Any>));
         }
-        if After == input {
-            return Ok(Self(Box::new(After) as Box<dyn Any>));
+        if KeywordAfter == input {
+            return Ok(Self(Box::new(KeywordAfter) as Box<dyn Any>));
         }
-        if All == input {
-            return Ok(Self(Box::new(All) as Box<dyn Any>));
+        if KeywordAll == input {
+            return Ok(Self(Box::new(KeywordAll) as Box<dyn Any>));
         }
-        if Alter == input {
-            return Ok(Self(Box::new(Alter) as Box<dyn Any>));
+        if KeywordAlter == input {
+            return Ok(Self(Box::new(KeywordAlter) as Box<dyn Any>));
         }
-        if Always == input {
-            return Ok(Self(Box::new(Always) as Box<dyn Any>));
+        if KeywordAlways == input {
+            return Ok(Self(Box::new(KeywordAlways) as Box<dyn Any>));
         }
-        if Analyze == input {
-            return Ok(Self(Box::new(Analyze) as Box<dyn Any>));
+        if KeywordAnalyze == input {
+            return Ok(Self(Box::new(KeywordAnalyze) as Box<dyn Any>));
         }
-        if And == input {
-            return Ok(Self(Box::new(And) as Box<dyn Any>));
+        if KeywordAnd == input {
+            return Ok(Self(Box::new(KeywordAnd) as Box<dyn Any>));
         }
-        if As == input {
-            return Ok(Self(Box::new(As) as Box<dyn Any>));
+        if KeywordAs == input {
+            return Ok(Self(Box::new(KeywordAs) as Box<dyn Any>));
         }
-        if Asc == input {
-            return Ok(Self(Box::new(Asc) as Box<dyn Any>));
+        if KeywordAsc == input {
+            return Ok(Self(Box::new(KeywordAsc) as Box<dyn Any>));
         }
-        if Attach == input {
-            return Ok(Self(Box::new(Attach) as Box<dyn Any>));
+        if KeywordAttach == input {
+            return Ok(Self(Box::new(KeywordAttach) as Box<dyn Any>));
         }
-        if Autoincrement == input {
-            return Ok(Self(Box::new(Autoincrement) as Box<dyn Any>));
+        if KeywordAutoincrement == input {
+            return Ok(Self(Box::new(KeywordAutoincrement) as Box<dyn Any>));
         }
-        if Before == input {
-            return Ok(Self(Box::new(Before) as Box<dyn Any>));
+        if KeywordBefore == input {
+            return Ok(Self(Box::new(KeywordBefore) as Box<dyn Any>));
         }
-        if Begin == input {
-            return Ok(Self(Box::new(Begin) as Box<dyn Any>));
+        if KeywordBegin == input {
+            return Ok(Self(Box::new(KeywordBegin) as Box<dyn Any>));
         }
-        if Between == input {
-            return Ok(Self(Box::new(Between) as Box<dyn Any>));
+        if KeywordBetween == input {
+            return Ok(Self(Box::new(KeywordBetween) as Box<dyn Any>));
         }
-        if By == input {
-            return Ok(Self(Box::new(By) as Box<dyn Any>));
+        if KeywordBy == input {
+            return Ok(Self(Box::new(KeywordBy) as Box<dyn Any>));
         }
-        if Cascade == input {
-            return Ok(Self(Box::new(Cascade) as Box<dyn Any>));
+        if KeywordCascade == input {
+            return Ok(Self(Box::new(KeywordCascade) as Box<dyn Any>));
         }
-        if Case == input {
-            return Ok(Self(Box::new(Case) as Box<dyn Any>));
+        if KeywordCase == input {
+            return Ok(Self(Box::new(KeywordCase) as Box<dyn Any>));
         }
-        if Cast == input {
-            return Ok(Self(Box::new(Cast) as Box<dyn Any>));
+        if KeywordCast == input {
+            return Ok(Self(Box::new(KeywordCast) as Box<dyn Any>));
         }
-        if Check == input {
-            return Ok(Self(Box::new(Check) as Box<dyn Any>));
+        if KeywordCheck == input {
+            return Ok(Self(Box::new(KeywordCheck) as Box<dyn Any>));
         }
-        if Collate == input {
-            return Ok(Self(Box::new(Collate) as Box<dyn Any>));
+        if KeywordCollate == input {
+            return Ok(Self(Box::new(KeywordCollate) as Box<dyn Any>));
         }
-        if Column == input {
-            return Ok(Self(Box::new(Column) as Box<dyn Any>));
+        if KeywordColumn == input {
+            return Ok(Self(Box::new(KeywordColumn) as Box<dyn Any>));
         }
-        if Commit == input {
-            return Ok(Self(Box::new(Commit) as Box<dyn Any>));
+        if KeywordCommit == input {
+            return Ok(Self(Box::new(KeywordCommit) as Box<dyn Any>));
         }
-        if Conflict == input {
-            return Ok(Self(Box::new(Conflict) as Box<dyn Any>));
+        if KeywordConflict == input {
+            return Ok(Self(Box::new(KeywordConflict) as Box<dyn Any>));
         }
-        if Constraint == input {
-            return Ok(Self(Box::new(Constraint) as Box<dyn Any>));
+        if KeywordConstraint == input {
+            return Ok(Self(Box::new(KeywordConstraint) as Box<dyn Any>));
         }
-        if Create == input {
-            return Ok(Self(Box::new(Create) as Box<dyn Any>));
+        if KeywordCreate == input {
+            return Ok(Self(Box::new(KeywordCreate) as Box<dyn Any>));
         }
-        if Cross == input {
-            return Ok(Self(Box::new(Cross) as Box<dyn Any>));
+        if KeywordCross == input {
+            return Ok(Self(Box::new(KeywordCross) as Box<dyn Any>));
         }
-        if Current == input {
-            return Ok(Self(Box::new(Current) as Box<dyn Any>));
+        if KeywordCurrent == input {
+            return Ok(Self(Box::new(KeywordCurrent) as Box<dyn Any>));
         }
-        if Current_date == input {
-            return Ok(Self(Box::new(Current_date) as Box<dyn Any>));
+        if KeywordCurrent_date == input {
+            return Ok(Self(Box::new(KeywordCurrent_date) as Box<dyn Any>));
         }
-        if Current_time == input {
-            return Ok(Self(Box::new(Current_time) as Box<dyn Any>));
+        if KeywordCurrent_time == input {
+            return Ok(Self(Box::new(KeywordCurrent_time) as Box<dyn Any>));
         }
-        if Current_timestamp == input {
-            return Ok(Self(Box::new(Current_timestamp) as Box<dyn Any>));
+        if KeywordCurrent_timestamp == input {
+            return Ok(Self(Box::new(KeywordCurrent_timestamp) as Box<dyn Any>));
         }
-        if Database == input {
-            return Ok(Self(Box::new(Database) as Box<dyn Any>));
+        if KeywordDatabase == input {
+            return Ok(Self(Box::new(KeywordDatabase) as Box<dyn Any>));
         }
-        if Default == input {
-            return Ok(Self(Box::new(Default) as Box<dyn Any>));
+        if KeywordDefault == input {
+            return Ok(Self(Box::new(KeywordDefault) as Box<dyn Any>));
         }
-        if Deferrable == input {
-            return Ok(Self(Box::new(Deferrable) as Box<dyn Any>));
+        if KeywordDeferrable == input {
+            return Ok(Self(Box::new(KeywordDeferrable) as Box<dyn Any>));
         }
-        if Deferred == input {
-            return Ok(Self(Box::new(Deferred) as Box<dyn Any>));
+        if KeywordDeferred == input {
+            return Ok(Self(Box::new(KeywordDeferred) as Box<dyn Any>));
         }
-        if Delete == input {
-            return Ok(Self(Box::new(Delete) as Box<dyn Any>));
+        if KeywordDelete == input {
+            return Ok(Self(Box::new(KeywordDelete) as Box<dyn Any>));
         }
-        if Desc == input {
-            return Ok(Self(Box::new(Desc) as Box<dyn Any>));
+        if KeywordDesc == input {
+            return Ok(Self(Box::new(KeywordDesc) as Box<dyn Any>));
         }
-        if Detach == input {
-            return Ok(Self(Box::new(Detach) as Box<dyn Any>));
+        if KeywordDetach == input {
+            return Ok(Self(Box::new(KeywordDetach) as Box<dyn Any>));
         }
-        if Distinct == input {
-            return Ok(Self(Box::new(Distinct) as Box<dyn Any>));
+        if KeywordDistinct == input {
+            return Ok(Self(Box::new(KeywordDistinct) as Box<dyn Any>));
         }
-        if Do == input {
-            return Ok(Self(Box::new(Do) as Box<dyn Any>));
+        if KeywordDo == input {
+            return Ok(Self(Box::new(KeywordDo) as Box<dyn Any>));
         }
-        if Drop == input {
-            return Ok(Self(Box::new(Drop) as Box<dyn Any>));
+        if KeywordDrop == input {
+            return Ok(Self(Box::new(KeywordDrop) as Box<dyn Any>));
         }
-        if Each == input {
-            return Ok(Self(Box::new(Each) as Box<dyn Any>));
+        if KeywordEach == input {
+            return Ok(Self(Box::new(KeywordEach) as Box<dyn Any>));
         }
-        if Else == input {
-            return Ok(Self(Box::new(Else) as Box<dyn Any>));
+        if KeywordElse == input {
+            return Ok(Self(Box::new(KeywordElse) as Box<dyn Any>));
         }
-        if End == input {
-            return Ok(Self(Box::new(End) as Box<dyn Any>));
+        if KeywordEnd == input {
+            return Ok(Self(Box::new(KeywordEnd) as Box<dyn Any>));
         }
-        if Escape == input {
-            return Ok(Self(Box::new(Escape) as Box<dyn Any>));
+        if KeywordEscape == input {
+            return Ok(Self(Box::new(KeywordEscape) as Box<dyn Any>));
         }
-        if Except == input {
-            return Ok(Self(Box::new(Except) as Box<dyn Any>));
+        if KeywordExcept == input {
+            return Ok(Self(Box::new(KeywordExcept) as Box<dyn Any>));
         }
-        if Exclude == input {
-            return Ok(Self(Box::new(Exclude) as Box<dyn Any>));
+        if KeywordExclude == input {
+            return Ok(Self(Box::new(KeywordExclude) as Box<dyn Any>));
         }
-        if Exclusive == input {
-            return Ok(Self(Box::new(Exclusive) as Box<dyn Any>));
+        if KeywordExclusive == input {
+            return Ok(Self(Box::new(KeywordExclusive) as Box<dyn Any>));
         }
-        if Exists == input {
-            return Ok(Self(Box::new(Exists) as Box<dyn Any>));
+        if KeywordExists == input {
+            return Ok(Self(Box::new(KeywordExists) as Box<dyn Any>));
         }
-        if Explain == input {
-            return Ok(Self(Box::new(Explain) as Box<dyn Any>));
+        if KeywordExplain == input {
+            return Ok(Self(Box::new(KeywordExplain) as Box<dyn Any>));
         }
-        if Fail == input {
-            return Ok(Self(Box::new(Fail) as Box<dyn Any>));
+        if KeywordFail == input {
+            return Ok(Self(Box::new(KeywordFail) as Box<dyn Any>));
         }
-        if Filter == input {
-            return Ok(Self(Box::new(Filter) as Box<dyn Any>));
+        if KeywordFilter == input {
+            return Ok(Self(Box::new(KeywordFilter) as Box<dyn Any>));
         }
-        if First == input {
-            return Ok(Self(Box::new(First) as Box<dyn Any>));
+        if KeywordFirst == input {
+            return Ok(Self(Box::new(KeywordFirst) as Box<dyn Any>));
         }
-        if Following == input {
-            return Ok(Self(Box::new(Following) as Box<dyn Any>));
+        if KeywordFollowing == input {
+            return Ok(Self(Box::new(KeywordFollowing) as Box<dyn Any>));
         }
-        if For == input {
-            return Ok(Self(Box::new(For) as Box<dyn Any>));
+        if KeywordFor == input {
+            return Ok(Self(Box::new(KeywordFor) as Box<dyn Any>));
         }
-        if Foreign == input {
-            return Ok(Self(Box::new(Foreign) as Box<dyn Any>));
+        if KeywordForeign == input {
+            return Ok(Self(Box::new(KeywordForeign) as Box<dyn Any>));
         }
         if KeywordFrom == input {
             return Ok(Self(Box::new(KeywordFrom) as Box<dyn Any>));
         }
-        if Full == input {
-            return Ok(Self(Box::new(Full) as Box<dyn Any>));
+        if KeywordFull == input {
+            return Ok(Self(Box::new(KeywordFull) as Box<dyn Any>));
         }
-        if Generated == input {
-            return Ok(Self(Box::new(Generated) as Box<dyn Any>));
+        if KeywordGenerated == input {
+            return Ok(Self(Box::new(KeywordGenerated) as Box<dyn Any>));
         }
-        if Glob == input {
-            return Ok(Self(Box::new(Glob) as Box<dyn Any>));
+        if KeywordGlob == input {
+            return Ok(Self(Box::new(KeywordGlob) as Box<dyn Any>));
         }
-        if Group == input {
-            return Ok(Self(Box::new(Group) as Box<dyn Any>));
+        if KeywordGroup == input {
+            return Ok(Self(Box::new(KeywordGroup) as Box<dyn Any>));
         }
-        if Groups == input {
-            return Ok(Self(Box::new(Groups) as Box<dyn Any>));
+        if KeywordGroups == input {
+            return Ok(Self(Box::new(KeywordGroups) as Box<dyn Any>));
         }
-        if Having == input {
-            return Ok(Self(Box::new(Having) as Box<dyn Any>));
+        if KeywordHaving == input {
+            return Ok(Self(Box::new(KeywordHaving) as Box<dyn Any>));
         }
-        if If == input {
-            return Ok(Self(Box::new(If) as Box<dyn Any>));
+        if KeywordIf == input {
+            return Ok(Self(Box::new(KeywordIf) as Box<dyn Any>));
         }
-        if Ignore == input {
-            return Ok(Self(Box::new(Ignore) as Box<dyn Any>));
+        if KeywordIgnore == input {
+            return Ok(Self(Box::new(KeywordIgnore) as Box<dyn Any>));
         }
-        if Immediate == input {
-            return Ok(Self(Box::new(Immediate) as Box<dyn Any>));
+        if KeywordImmediate == input {
+            return Ok(Self(Box::new(KeywordImmediate) as Box<dyn Any>));
         }
-        if In == input {
-            return Ok(Self(Box::new(In) as Box<dyn Any>));
+        if KeywordIn == input {
+            return Ok(Self(Box::new(KeywordIn) as Box<dyn Any>));
         }
-        if Index == input {
-            return Ok(Self(Box::new(Index) as Box<dyn Any>));
+        if KeywordIndex == input {
+            return Ok(Self(Box::new(KeywordIndex) as Box<dyn Any>));
         }
-        if Indexed == input {
-            return Ok(Self(Box::new(Indexed) as Box<dyn Any>));
+        if KeywordIndexed == input {
+            return Ok(Self(Box::new(KeywordIndexed) as Box<dyn Any>));
         }
-        if Initially == input {
-            return Ok(Self(Box::new(Initially) as Box<dyn Any>));
+        if KeywordInitially == input {
+            return Ok(Self(Box::new(KeywordInitially) as Box<dyn Any>));
         }
-        if Inner == input {
-            return Ok(Self(Box::new(Inner) as Box<dyn Any>));
+        if KeywordInner == input {
+            return Ok(Self(Box::new(KeywordInner) as Box<dyn Any>));
         }
-        if Insert == input {
-            return Ok(Self(Box::new(Insert) as Box<dyn Any>));
+        if KeywordInsert == input {
+            return Ok(Self(Box::new(KeywordInsert) as Box<dyn Any>));
         }
-        if Instead == input {
-            return Ok(Self(Box::new(Instead) as Box<dyn Any>));
+        if KeywordInstead == input {
+            return Ok(Self(Box::new(KeywordInstead) as Box<dyn Any>));
         }
-        if Intersect == input {
-            return Ok(Self(Box::new(Intersect) as Box<dyn Any>));
+        if KeywordIntersect == input {
+            return Ok(Self(Box::new(KeywordIntersect) as Box<dyn Any>));
         }
-        if Into == input {
-            return Ok(Self(Box::new(Into) as Box<dyn Any>));
+        if KeywordInto == input {
+            return Ok(Self(Box::new(KeywordInto) as Box<dyn Any>));
         }
-        if Is == input {
-            return Ok(Self(Box::new(Is) as Box<dyn Any>));
+        if KeywordIs == input {
+            return Ok(Self(Box::new(KeywordIs) as Box<dyn Any>));
         }
-        if Isnull == input {
-            return Ok(Self(Box::new(Isnull) as Box<dyn Any>));
+        if KeywordIsnull == input {
+            return Ok(Self(Box::new(KeywordIsnull) as Box<dyn Any>));
         }
-        if Join == input {
-            return Ok(Self(Box::new(Join) as Box<dyn Any>));
+        if KeywordJoin == input {
+            return Ok(Self(Box::new(KeywordJoin) as Box<dyn Any>));
         }
-        if Key == input {
-            return Ok(Self(Box::new(Key) as Box<dyn Any>));
+        if KeywordKey == input {
+            return Ok(Self(Box::new(KeywordKey) as Box<dyn Any>));
         }
-        if Last == input {
-            return Ok(Self(Box::new(Last) as Box<dyn Any>));
+        if KeywordLast == input {
+            return Ok(Self(Box::new(KeywordLast) as Box<dyn Any>));
         }
-        if Left == input {
-            return Ok(Self(Box::new(Left) as Box<dyn Any>));
+        if KeywordLeft == input {
+            return Ok(Self(Box::new(KeywordLeft) as Box<dyn Any>));
         }
-        if Like == input {
-            return Ok(Self(Box::new(Like) as Box<dyn Any>));
+        if KeywordLike == input {
+            return Ok(Self(Box::new(KeywordLike) as Box<dyn Any>));
         }
-        if Limit == input {
-            return Ok(Self(Box::new(Limit) as Box<dyn Any>));
+        if KeywordLimit == input {
+            return Ok(Self(Box::new(KeywordLimit) as Box<dyn Any>));
         }
-        if Match == input {
-            return Ok(Self(Box::new(Match) as Box<dyn Any>));
+        if KeywordMatch == input {
+            return Ok(Self(Box::new(KeywordMatch) as Box<dyn Any>));
         }
-        if Materialized == input {
-            return Ok(Self(Box::new(Materialized) as Box<dyn Any>));
+        if KeywordMaterialized == input {
+            return Ok(Self(Box::new(KeywordMaterialized) as Box<dyn Any>));
         }
-        if Natural == input {
-            return Ok(Self(Box::new(Natural) as Box<dyn Any>));
+        if KeywordNatural == input {
+            return Ok(Self(Box::new(KeywordNatural) as Box<dyn Any>));
         }
-        if No == input {
-            return Ok(Self(Box::new(No) as Box<dyn Any>));
+        if KeywordNo == input {
+            return Ok(Self(Box::new(KeywordNo) as Box<dyn Any>));
         }
-        if Not == input {
-            return Ok(Self(Box::new(Not) as Box<dyn Any>));
+        if KeywordNot == input {
+            return Ok(Self(Box::new(KeywordNot) as Box<dyn Any>));
         }
-        if Nothing == input {
-            return Ok(Self(Box::new(Nothing) as Box<dyn Any>));
+        if KeywordNothing == input {
+            return Ok(Self(Box::new(KeywordNothing) as Box<dyn Any>));
         }
-        if Notnull == input {
-            return Ok(Self(Box::new(Notnull) as Box<dyn Any>));
+        if KeywordNotnull == input {
+            return Ok(Self(Box::new(KeywordNotnull) as Box<dyn Any>));
         }
-        if Null == input {
-            return Ok(Self(Box::new(Null) as Box<dyn Any>));
+        if KeywordNull == input {
+            return Ok(Self(Box::new(KeywordNull) as Box<dyn Any>));
         }
-        if Nulls == input {
-            return Ok(Self(Box::new(Nulls) as Box<dyn Any>));
+        if KeywordNulls == input {
+            return Ok(Self(Box::new(KeywordNulls) as Box<dyn Any>));
         }
-        if Of == input {
-            return Ok(Self(Box::new(Of) as Box<dyn Any>));
+        if KeywordOf == input {
+            return Ok(Self(Box::new(KeywordOf) as Box<dyn Any>));
         }
-        if Offset == input {
-            return Ok(Self(Box::new(Offset) as Box<dyn Any>));
+        if KeywordOffset == input {
+            return Ok(Self(Box::new(KeywordOffset) as Box<dyn Any>));
         }
-        if On == input {
-            return Ok(Self(Box::new(On) as Box<dyn Any>));
+        if KeywordOn == input {
+            return Ok(Self(Box::new(KeywordOn) as Box<dyn Any>));
         }
-        if Or == input {
-            return Ok(Self(Box::new(Or) as Box<dyn Any>));
+        if KeywordOr == input {
+            return Ok(Self(Box::new(KeywordOr) as Box<dyn Any>));
         }
-        if Order == input {
-            return Ok(Self(Box::new(Order) as Box<dyn Any>));
+        if KeywordOrder == input {
+            return Ok(Self(Box::new(KeywordOrder) as Box<dyn Any>));
         }
-        if Others == input {
-            return Ok(Self(Box::new(Others) as Box<dyn Any>));
+        if KeywordOthers == input {
+            return Ok(Self(Box::new(KeywordOthers) as Box<dyn Any>));
         }
-        if Outer == input {
-            return Ok(Self(Box::new(Outer) as Box<dyn Any>));
+        if KeywordOuter == input {
+            return Ok(Self(Box::new(KeywordOuter) as Box<dyn Any>));
         }
-        if Over == input {
-            return Ok(Self(Box::new(Over) as Box<dyn Any>));
+        if KeywordOver == input {
+            return Ok(Self(Box::new(KeywordOver) as Box<dyn Any>));
         }
-        if Partition == input {
-            return Ok(Self(Box::new(Partition) as Box<dyn Any>));
+        if KeywordPartition == input {
+            return Ok(Self(Box::new(KeywordPartition) as Box<dyn Any>));
         }
-        if Plan == input {
-            return Ok(Self(Box::new(Plan) as Box<dyn Any>));
+        if KeywordPlan == input {
+            return Ok(Self(Box::new(KeywordPlan) as Box<dyn Any>));
         }
-        if Pragma == input {
-            return Ok(Self(Box::new(Pragma) as Box<dyn Any>));
+        if KeywordPragma == input {
+            return Ok(Self(Box::new(KeywordPragma) as Box<dyn Any>));
         }
-        if Preceding == input {
-            return Ok(Self(Box::new(Preceding) as Box<dyn Any>));
+        if KeywordPreceding == input {
+            return Ok(Self(Box::new(KeywordPreceding) as Box<dyn Any>));
         }
-        if Primary == input {
-            return Ok(Self(Box::new(Primary) as Box<dyn Any>));
+        if KeywordPrimary == input {
+            return Ok(Self(Box::new(KeywordPrimary) as Box<dyn Any>));
         }
-        if Query == input {
-            return Ok(Self(Box::new(Query) as Box<dyn Any>));
+        if KeywordQuery == input {
+            return Ok(Self(Box::new(KeywordQuery) as Box<dyn Any>));
         }
-        if Raise == input {
-            return Ok(Self(Box::new(Raise) as Box<dyn Any>));
+        if KeywordRaise == input {
+            return Ok(Self(Box::new(KeywordRaise) as Box<dyn Any>));
         }
-        if Range == input {
-            return Ok(Self(Box::new(Range) as Box<dyn Any>));
+        if KeywordRange == input {
+            return Ok(Self(Box::new(KeywordRange) as Box<dyn Any>));
         }
-        if Recursive == input {
-            return Ok(Self(Box::new(Recursive) as Box<dyn Any>));
+        if KeywordRecursive == input {
+            return Ok(Self(Box::new(KeywordRecursive) as Box<dyn Any>));
         }
-        if References == input {
-            return Ok(Self(Box::new(References) as Box<dyn Any>));
+        if KeywordReferences == input {
+            return Ok(Self(Box::new(KeywordReferences) as Box<dyn Any>));
         }
-        if Regexp == input {
-            return Ok(Self(Box::new(Regexp) as Box<dyn Any>));
+        if KeywordRegexp == input {
+            return Ok(Self(Box::new(KeywordRegexp) as Box<dyn Any>));
         }
-        if Reindex == input {
-            return Ok(Self(Box::new(Reindex) as Box<dyn Any>));
+        if KeywordReindex == input {
+            return Ok(Self(Box::new(KeywordReindex) as Box<dyn Any>));
         }
-        if Release == input {
-            return Ok(Self(Box::new(Release) as Box<dyn Any>));
+        if KeywordRelease == input {
+            return Ok(Self(Box::new(KeywordRelease) as Box<dyn Any>));
         }
-        if Rename == input {
-            return Ok(Self(Box::new(Rename) as Box<dyn Any>));
+        if KeywordRename == input {
+            return Ok(Self(Box::new(KeywordRename) as Box<dyn Any>));
         }
-        if Replace == input {
-            return Ok(Self(Box::new(Replace) as Box<dyn Any>));
+        if KeywordReplace == input {
+            return Ok(Self(Box::new(KeywordReplace) as Box<dyn Any>));
         }
-        if Restrict == input {
-            return Ok(Self(Box::new(Restrict) as Box<dyn Any>));
+        if KeywordRestrict == input {
+            return Ok(Self(Box::new(KeywordRestrict) as Box<dyn Any>));
         }
-        if Returning == input {
-            return Ok(Self(Box::new(Returning) as Box<dyn Any>));
+        if KeywordReturning == input {
+            return Ok(Self(Box::new(KeywordReturning) as Box<dyn Any>));
         }
-        if Right == input {
-            return Ok(Self(Box::new(Right) as Box<dyn Any>));
+        if KeywordRight == input {
+            return Ok(Self(Box::new(KeywordRight) as Box<dyn Any>));
         }
-        if Rollback == input {
-            return Ok(Self(Box::new(Rollback) as Box<dyn Any>));
+        if KeywordRollback == input {
+            return Ok(Self(Box::new(KeywordRollback) as Box<dyn Any>));
         }
-        if Row == input {
-            return Ok(Self(Box::new(Row) as Box<dyn Any>));
+        if KeywordRow == input {
+            return Ok(Self(Box::new(KeywordRow) as Box<dyn Any>));
         }
-        if Rows == input {
-            return Ok(Self(Box::new(Rows) as Box<dyn Any>));
+        if KeywordRows == input {
+            return Ok(Self(Box::new(KeywordRows) as Box<dyn Any>));
         }
-        if Savepoint == input {
-            return Ok(Self(Box::new(Savepoint) as Box<dyn Any>));
+        if KeywordSavepoint == input {
+            return Ok(Self(Box::new(KeywordSavepoint) as Box<dyn Any>));
         }
-        if Select == input {
-            return Ok(Self(Box::new(Select) as Box<dyn Any>));
+        if KeywordSelect == input {
+            return Ok(Self(Box::new(KeywordSelect) as Box<dyn Any>));
         }
-        if Set == input {
-            return Ok(Self(Box::new(Set) as Box<dyn Any>));
+        if KeywordSet == input {
+            return Ok(Self(Box::new(KeywordSet) as Box<dyn Any>));
         }
-        if Table == input {
-            return Ok(Self(Box::new(Table) as Box<dyn Any>));
+        if KeywordTable == input {
+            return Ok(Self(Box::new(KeywordTable) as Box<dyn Any>));
         }
-        if Temp == input {
-            return Ok(Self(Box::new(Temp) as Box<dyn Any>));
+        if KeywordTemp == input {
+            return Ok(Self(Box::new(KeywordTemp) as Box<dyn Any>));
         }
-        if Temporary == input {
-            return Ok(Self(Box::new(Temporary) as Box<dyn Any>));
+        if KeywordTemporary == input {
+            return Ok(Self(Box::new(KeywordTemporary) as Box<dyn Any>));
         }
-        if Then == input {
-            return Ok(Self(Box::new(Then) as Box<dyn Any>));
+        if KeywordThen == input {
+            return Ok(Self(Box::new(KeywordThen) as Box<dyn Any>));
         }
-        if Ties == input {
-            return Ok(Self(Box::new(Ties) as Box<dyn Any>));
+        if KeywordTies == input {
+            return Ok(Self(Box::new(KeywordTies) as Box<dyn Any>));
         }
-        if To == input {
-            return Ok(Self(Box::new(To) as Box<dyn Any>));
+        if KeywordTo == input {
+            return Ok(Self(Box::new(KeywordTo) as Box<dyn Any>));
         }
-        if Transaction == input {
-            return Ok(Self(Box::new(Transaction) as Box<dyn Any>));
+        if KeywordTransaction == input {
+            return Ok(Self(Box::new(KeywordTransaction) as Box<dyn Any>));
         }
-        if Trigger == input {
-            return Ok(Self(Box::new(Trigger) as Box<dyn Any>));
+        if KeywordTrigger == input {
+            return Ok(Self(Box::new(KeywordTrigger) as Box<dyn Any>));
         }
-        if Unbounded == input {
-            return Ok(Self(Box::new(Unbounded) as Box<dyn Any>));
+        if KeywordUnbounded == input {
+            return Ok(Self(Box::new(KeywordUnbounded) as Box<dyn Any>));
         }
-        if Union == input {
-            return Ok(Self(Box::new(Union) as Box<dyn Any>));
+        if KeywordUnion == input {
+            return Ok(Self(Box::new(KeywordUnion) as Box<dyn Any>));
         }
-        if Unique == input {
-            return Ok(Self(Box::new(Unique) as Box<dyn Any>));
+        if KeywordUnique == input {
+            return Ok(Self(Box::new(KeywordUnique) as Box<dyn Any>));
         }
-        if Update == input {
-            return Ok(Self(Box::new(Update) as Box<dyn Any>));
+        if KeywordUpdate == input {
+            return Ok(Self(Box::new(KeywordUpdate) as Box<dyn Any>));
         }
-        if Using == input {
-            return Ok(Self(Box::new(Using) as Box<dyn Any>));
+        if KeywordUsing == input {
+            return Ok(Self(Box::new(KeywordUsing) as Box<dyn Any>));
         }
-        if Vacuum == input {
-            return Ok(Self(Box::new(Vacuum) as Box<dyn Any>));
+        if KeywordVacuum == input {
+            return Ok(Self(Box::new(KeywordVacuum) as Box<dyn Any>));
         }
-        if Values == input {
-            return Ok(Self(Box::new(Values) as Box<dyn Any>));
+        if KeywordValues == input {
+            return Ok(Self(Box::new(KeywordValues) as Box<dyn Any>));
         }
-        if View == input {
-            return Ok(Self(Box::new(View) as Box<dyn Any>));
+        if KeywordView == input {
+            return Ok(Self(Box::new(KeywordView) as Box<dyn Any>));
         }
-        if Virtual == input {
-            return Ok(Self(Box::new(Virtual) as Box<dyn Any>));
+        if KeywordVirtual == input {
+            return Ok(Self(Box::new(KeywordVirtual) as Box<dyn Any>));
         }
-        if When == input {
-            return Ok(Self(Box::new(When) as Box<dyn Any>));
+        if KeywordWhen == input {
+            return Ok(Self(Box::new(KeywordWhen) as Box<dyn Any>));
         }
         if KeywordWhere == input {
             return Ok(Self(Box::new(KeywordWhere) as Box<dyn Any>));
         }
-        if Window == input {
-            return Ok(Self(Box::new(Window) as Box<dyn Any>));
+        if KeywordWindow == input {
+            return Ok(Self(Box::new(KeywordWindow) as Box<dyn Any>));
         }
-        if With == input {
-            return Ok(Self(Box::new(With) as Box<dyn Any>));
+        if KeywordWith == input {
+            return Ok(Self(Box::new(KeywordWith) as Box<dyn Any>));
         }
-        if Without == input {
-            return Ok(Self(Box::new(Without) as Box<dyn Any>));
+        if KeywordWithout == input {
+            return Ok(Self(Box::new(KeywordWithout) as Box<dyn Any>));
         }
 
         Err(SqliteError::SqlParser(SqlParserError(

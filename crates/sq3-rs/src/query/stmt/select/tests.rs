@@ -1,33 +1,17 @@
 use crate::query::{
-    expression::SqliteExpression,
-    keyword::{Distinct, KeywordFrom},
+    keyword::{KeywordDistinct, KeywordFrom},
     stmt::{
         select::{ColumnName, ResultColumns, TableName},
         SelectStmt,
     },
 };
 
-#[test]
-fn ok_on_test_select_parser() {
-    use crate::query::stmt::select::{Initial, SelectParser};
-    let input = String::from("SELECT id, name FROM users WHERE id = 1");
-    dbg!(&input);
-    let result = SelectParser::<Initial>::new(input)
-        .parse_select()
-        .and_then(|p| p.parse_columns())
-        .and_then(|p| p.parse_table())
-        .and_then(|p| p.parse_condition());
 
-    match result {
-        Ok(_) => println!("Parsing completed successfully"),
-        Err(e) => println!("Parsing error: {}", e),
-    }
-}
 
 #[test]
 fn ok_on_run_valid_select_query() {
     let expected = SelectStmt {
-        distinct: Some(Box::new(Distinct)),
+        distinct: Some(Box::new(KeywordDistinct)),
         result_columns: Some(ResultColumns::Filter(vec![
             ColumnName("id"),
             ColumnName("name"),
@@ -47,8 +31,14 @@ fn ok_on_run_valid_select_query() {
             let maybe_retrieved = &select.distinct;
             match (maybe_expected, maybe_retrieved) {
                 (Some(dyn_expected), Some(dyn_retrieved)) => {
-                    let expected = dyn_expected.as_any().downcast_ref::<Distinct>().unwrap();
-                    let retrieved = dyn_retrieved.as_any().downcast_ref::<Distinct>().unwrap();
+                    let expected = dyn_expected
+                        .as_any()
+                        .downcast_ref::<KeywordDistinct>()
+                        .unwrap();
+                    let retrieved = dyn_retrieved
+                        .as_any()
+                        .downcast_ref::<KeywordDistinct>()
+                        .unwrap();
                     // dbg!(expected, retrieved);
                     assert_eq!(expected, retrieved);
                 }

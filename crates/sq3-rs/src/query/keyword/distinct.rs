@@ -10,6 +10,9 @@ impl Distinct {
     pub const fn as_str() -> &'static str {
         "DISTINCT"
     }
+    pub const fn len() -> usize {
+        8
+    }
 }
 
 impl PartialEq<&str> for Distinct {

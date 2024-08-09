@@ -8,6 +8,9 @@ impl Where {
     pub const fn as_str() -> &'static str {
         "WHERE"
     }
+    pub const fn len() -> usize {
+        5
+    }
 }
 
 impl PartialEq<&str> for Where {

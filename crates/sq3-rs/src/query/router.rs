@@ -2,7 +2,10 @@ use crate::{
     query::{
         explain::ExplainStmt,
         helpers::ASCII_WHITESPACE_CHAR,
-        keyword::{Delete, Explain, Insert, Keyword, Select, Update, With},
+        keyword::{
+            Keyword, KeywordDelete, KeywordExplain, KeywordInsert, KeywordSelect, KeywordUpdate,
+            KeywordWith,
+        },
         stmt::{DeleteStmt, InsertStmt, SelectStmt, UpdateStmt},
     },
     result::{SqlParserError, SqliteError},
@@ -25,29 +28,31 @@ impl QueryRouter {
 
         let keyword = current_to_parse.parse::<Keyword>()?;
 
-        if keyword.get().downcast_ref::<Explain>().is_some() {
+        if keyword.get().downcast_ref::<KeywordExplain>().is_some() {
             return Err(SqliteError::SqlParser(SqlParserError(format!(
                 "{} is not supported.",
-                Explain
+                KeywordExplain
             ))));
         }
 
-        if keyword.get().downcast_ref::<With>().is_some() {
+        if keyword.get().downcast_ref::<KeywordWith>().is_some() {
             return Err(SqliteError::SqlParser(SqlParserError(format!(
                 "{} is not supported.",
-                With
+                KeywordWith
             ))));
         }
 
-        if keyword.get().downcast_ref::<Select>().is_some() {
-            SelectStmt::run(next_to_parse)
-        } else if keyword.get().downcast_ref::<Insert>().is_some() {
+        if keyword.get().downcast_ref::<KeywordSelect>().is_some() {
+            // TODO
+            // SelectStmt::run(next_to_parse)
             InsertStmt::run(next_to_parse)
-        } else if keyword.get().downcast_ref::<Update>().is_some() {
+        } else if keyword.get().downcast_ref::<KeywordInsert>().is_some() {
+            InsertStmt::run(next_to_parse)
+        } else if keyword.get().downcast_ref::<KeywordUpdate>().is_some() {
             UpdateStmt::run(next_to_parse)
-        } else if keyword.get().downcast_ref::<Delete>().is_some() {
+        } else if keyword.get().downcast_ref::<KeywordDelete>().is_some() {
             DeleteStmt::run(next_to_parse)
-        } else if keyword.get().downcast_ref::<Explain>().is_some() {
+        } else if keyword.get().downcast_ref::<KeywordExplain>().is_some() {
             ExplainStmt::run(next_to_parse)
         } else {
             // TODO
