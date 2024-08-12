@@ -22,9 +22,11 @@ mod write_library_version;
 
 use sq3_derive::Name;
 
+use sq3_parser::TypeName;
+
 use crate::{
     result::SqliteError,
-    traits::{ParseBytes, TypeName, ValidateParsed},
+    traits::{ParseBytes, ValidateParsed},
     SqliteResult,
 };
 

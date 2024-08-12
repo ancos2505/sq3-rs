@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 sq3_derive = { path = "../crates/sq3_derive" }
+sq3_parser = { path = "../crates/sq3_parser" }
 sq3-rs = { path = "../crates/sq3-rs" }
 # anyhow = { workspace = true }
 # clap = { workspace = true }

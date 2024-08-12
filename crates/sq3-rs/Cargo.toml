@@ -10,9 +10,9 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-sq3_derive = { version = "0.2", path = "../sq3_derive" }
+sq3_derive = { version = "0.3", path = "../sq3_derive" }
+sq3_parser = { version = "0.3", path = "../sq3_parser" }
 
 [features]
 default = ["log"]
 log = []
-fuzzer = []

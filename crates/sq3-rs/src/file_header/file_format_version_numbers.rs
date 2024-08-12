@@ -1,12 +1,9 @@
 use std::fmt::Display;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::{
-    field_parsing_error,
-    result::SqliteResult,
-    traits::{ParseBytes, TypeName},
-};
+use crate::{field_parsing_error, result::SqliteResult, traits::ParseBytes};
 
 /// # File format version numbers (2 Bytes)
 ///

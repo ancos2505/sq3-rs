@@ -1,9 +1,11 @@
-use core::array::TryFromSliceError;
-use core::fmt::Display;
+use std::array::TryFromSliceError;
 use std::error::Error as StdError;
 use std::fmt::Debug;
+use std::fmt::Display;
 use std::io::Error as StdioError;
 use std::num::{ParseFloatError, ParseIntError};
+
+use sq3_parser::Sq3ParserError;
 
 pub type SqliteResult<T> = Result<T, SqliteError>;
 
@@ -19,11 +21,14 @@ pub enum SqliteError {
     Custom(String),
     ParsingField(FieldParsingError),
     InvalidPayloadSize(InvalidPayloadSizeError),
-    SqlParser(SqlParserError),
+    SqlParser(Sq3ParserError),
 }
 
-#[derive(Debug)]
-pub struct SqlParserError(pub String);
+impl From<Sq3ParserError> for SqliteError {
+    fn from(error: Sq3ParserError) -> Self {
+        Self::SqlParser(error)
+    }
+}
 
 #[derive(Debug)]
 pub struct FieldParsingError(pub String);

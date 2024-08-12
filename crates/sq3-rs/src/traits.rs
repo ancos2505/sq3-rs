@@ -1,8 +1,6 @@
 use crate::result::{InvalidPayloadSizeError, SqliteError, SqliteResult};
 
-pub trait TypeName {
-    const NAME: &'static str;
-}
+use sq3_parser::TypeName;
 
 pub(super) trait ParseBytes
 where

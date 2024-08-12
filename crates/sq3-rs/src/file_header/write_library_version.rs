@@ -1,12 +1,9 @@
 use std::ops::Deref;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::{
-    result::SqliteResult,
-    traits::{ParseBytes, TypeName},
-    VERSION_NUMBER,
-};
+use crate::{result::SqliteResult, traits::ParseBytes, VERSION_NUMBER};
 
 /// # Write library version number (4 Bytes)
 ///

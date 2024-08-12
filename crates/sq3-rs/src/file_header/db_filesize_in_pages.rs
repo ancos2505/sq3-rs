@@ -2,10 +2,11 @@ use std::num::NonZeroU32;
 use std::ops::Deref;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
 use crate::{
     result::{SqliteError, SqliteResult},
-    traits::{ParseBytes, TypeName},
+    traits::ParseBytes,
 };
 
 /// # In-header database size (4 Bytes)

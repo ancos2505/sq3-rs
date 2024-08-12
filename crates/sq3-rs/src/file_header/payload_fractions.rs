@@ -1,8 +1,9 @@
 use std::ops::Deref;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::traits::{ParseBytes, TypeName};
+use crate::traits::ParseBytes;
 use crate::{
     field_parsing_error,
     result::{SqliteError, SqliteResult},

@@ -8,14 +8,22 @@ version = "0.1.0"
 
 [[package]]
 name = "sq3-rs"
-version = "0.2.16"
+version = "0.3.0"
 dependencies = [
  "sq3_derive",
+ "sq3_parser",
 ]
 
 [[package]]
 name = "sq3_derive"
-version = "0.2.16"
+version = "0.3.0"
+
+[[package]]
+name = "sq3_parser"
+version = "0.3.0"
+dependencies = [
+ "sq3_derive",
+]
 
 [[package]]
 name = "xtask"
@@ -23,4 +31,5 @@ version = "0.1.0"
 dependencies = [
  "sq3-rs",
  "sq3_derive",
+ "sq3_parser",
 ]

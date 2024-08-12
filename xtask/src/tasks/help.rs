@@ -1,7 +1,7 @@
 use std::{env::Args, str::FromStr};
 
 use sq3_derive::Name;
-use sq3_rs::TypeName;
+use sq3_parser::TypeName;
 
 use crate::{
     cli::Xtask,

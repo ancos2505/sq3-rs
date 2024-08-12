@@ -1,8 +1,9 @@
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
 use crate::{
     result::{SqliteError, SqliteResult},
-    traits::{ParseBytes, TypeName},
+    traits::ParseBytes,
 };
 /// # Page Size (2 Bytes)
 ///

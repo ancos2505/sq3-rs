@@ -2,10 +2,9 @@ mod pager;
 
 use std::num::NonZeroU32;
 
-use crate::{
-    query::{SqliteDatabaseError, SqliteQuery, SqliteQueryOutcome, SqliteRecord},
-    result::SqliteResult,
-};
+use sq3_parser::{SqliteQuery, SqliteRecord};
+
+use crate::result::SqliteResult;
 
 use self::pager::Pager;
 

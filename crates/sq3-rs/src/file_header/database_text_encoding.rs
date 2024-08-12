@@ -1,11 +1,12 @@
 use std::fmt::Display;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
 use crate::{
     field_parsing_error,
     result::{SqliteError, SqliteResult},
-    traits::{ParseBytes, TypeName},
+    traits::ParseBytes,
 };
 
 /// # Text encoding (4 Bytes)

@@ -1,11 +1,9 @@
 use std::ops::Deref;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::{
-    result::SqliteResult,
-    traits::{ParseBytes, TypeName},
-};
+use crate::{result::SqliteResult, traits::ParseBytes};
 
 /// Incremental vacuum settings (8 Bytes)
 ///

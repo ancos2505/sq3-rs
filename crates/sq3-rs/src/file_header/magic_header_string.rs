@@ -1,12 +1,9 @@
 use std::fmt::Debug;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::{
-    field_parsing_error,
-    result::SqliteResult,
-    traits::{ParseBytes, TypeName},
-};
+use crate::{field_parsing_error, result::SqliteResult, traits::ParseBytes};
 
 const SQLITE3_FILE_FORMAT_MAGIC_STRING: [u8; 16] = [
     0x53, 0x51, 0x4c, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6f, 0x72, 0x6d, 0x61, 0x74, 0x20, 0x33, 0x00,

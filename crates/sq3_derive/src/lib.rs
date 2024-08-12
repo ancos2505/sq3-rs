@@ -39,15 +39,15 @@ pub fn derive_parse_char(input: TokenStream) -> TokenStream {
 
     let output = format!(
         r#"impl std::str::FromStr for {0} {{
-            type Err = SqliteError;
+            type Err = Sq3ParserError;
 
             fn from_str(s: &str) -> Result<Self, Self::Err> {{
                 match s {{
                     "{1}" => Ok(Self),
-                    _ => Err(SqliteError::SqlParser(SqlParserError(format!(
+                    _ => Err(Sq3ParserError(format!(
                         "Error on parsing {{}}",
                         Self::NAME,
-                    )))),
+                    ))),
                 }}
             }}
         }}"#,

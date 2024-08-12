@@ -38,11 +38,9 @@
 use std::ops::Deref;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::{
-    result::SqliteResult,
-    traits::{ParseBytes, TypeName},
-};
+use crate::{result::SqliteResult, traits::ParseBytes};
 
 /// # Free page list (8 Bytes) => First(4 Bytes) + TotalPages (4 Bytes)
 ///  Unused pages in the database file are stored on a freelist.

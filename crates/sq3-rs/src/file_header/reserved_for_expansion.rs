@@ -1,12 +1,9 @@
 use std::fmt::Debug;
 
 use sq3_derive::Name;
+use sq3_parser::TypeName;
 
-use crate::{
-    field_parsing_error,
-    result::SqliteResult,
-    traits::{ParseBytes, TypeName},
-};
+use crate::{field_parsing_error, result::SqliteResult, traits::ParseBytes};
 
 /// Reserved for expansion. Must be zero. (20 Bytes)
 #[derive(Default, Name)]
