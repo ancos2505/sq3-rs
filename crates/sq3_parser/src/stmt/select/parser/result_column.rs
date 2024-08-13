@@ -5,7 +5,7 @@ use crate::{
 };
 
 #[derive(Debug, PartialEq, Eq)]
-pub(super) enum ResultColumns<'a> {
+pub(crate) enum ResultColumns<'a> {
     AllColumns,
     AllColumnsDotTable(TableName<'a>),
     Expr(SqliteExpression),

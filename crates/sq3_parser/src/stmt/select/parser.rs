@@ -5,9 +5,11 @@ mod result_column;
 
 use std::marker::PhantomData;
 
-use crate::{result::Sq3ParserError, ParserResult};
+use crate::{result::Sq3ParserError, stmt::select::TableName, ParserResult};
 
 use super::SelectStmt;
+
+pub(crate) use self::result_column::ResultColumns;
 
 pub(crate) trait SelectParserState {}
 
@@ -17,6 +19,7 @@ impl SelectParserState for AfterSelect {}
 impl SelectParserState for AfterDistinct {}
 impl SelectParserState for AfterResultColumns {}
 impl SelectParserState for AfterFrom {}
+impl SelectParserState for AfterTableName {}
 impl SelectParserState for AfterWhere {}
 impl SelectParserState for Complete {}
 
@@ -31,6 +34,8 @@ pub(crate) struct AfterDistinct;
 pub(crate) struct AfterResultColumns;
 
 pub(crate) struct AfterFrom;
+
+pub(crate) struct AfterTableName;
 pub(crate) struct AfterWhere;
 pub(crate) struct Complete;
 
@@ -52,7 +57,7 @@ impl<'a, S: SelectParserState> SelectParser<'a, S> {
 
     fn consume_whitespace(&mut self) -> ParserResult<()> {
         use crate::WhiteSpace;
-        if self.remaining()?.starts_with(WhiteSpace::as_str()) {
+        if Self::get_remaining(self.input, self.position)?.starts_with(WhiteSpace::as_str()) {
             self.advance(WhiteSpace::len());
             Ok(())
         } else {
@@ -60,9 +65,9 @@ impl<'a, S: SelectParserState> SelectParser<'a, S> {
         }
     }
 
-    fn remaining(&'a self) -> ParserResult<&'a str> {
-        self.input
-            .split_at_checked(self.position)
+    fn get_remaining(input: &str, pos: usize) -> ParserResult<&str> {
+        input
+            .split_at_checked(pos)
             .map(|(_, remaining)| remaining)
             .ok_or(Sq3ParserError("Unexpected empty".to_string()))
     }
@@ -82,9 +87,10 @@ impl<'a> SelectParser<'a, Initial> {
 impl<'a> SelectParser<'a, BeforeSelect> {
     pub(crate) fn select(mut self) -> ParserResult<SelectParser<'a, AfterSelect>> {
         use crate::keyword::KeywordSelect;
-        dbg!(self.remaining()?);
 
-        if self.remaining()?.starts_with(KeywordSelect::as_str()) {
+        let remaining = Self::get_remaining(self.input, self.position)?;
+
+        if remaining.starts_with(KeywordSelect::as_str()) {
             self.advance(KeywordSelect::len());
 
             self.consume_whitespace()?;
@@ -115,10 +121,10 @@ impl<'a> SelectParser<'a, AfterSelect> {
             stmt::select::KeywordFrom,
         };
 
-        dbg!(self.remaining()?);
+        let remaining = Self::get_remaining(self.input, self.position)?;
 
-        if self.remaining()?.find(KeywordFrom::as_str()).is_some() {
-            if self.remaining()?.starts_with(KeywordDistinct::as_str()) {
+        if remaining.find(KeywordFrom::as_str()).is_some() {
+            if remaining.starts_with(KeywordDistinct::as_str()) {
                 self.advance(KeywordDistinct::len());
                 self.consume_whitespace()?;
                 let Self {
@@ -136,7 +142,7 @@ impl<'a> SelectParser<'a, AfterSelect> {
                     _state: PhantomData,
                     stmt,
                 })
-            } else if self.remaining()?.starts_with(KeywordAll::as_str()) {
+            } else if remaining.starts_with(KeywordAll::as_str()) {
                 self.advance(KeywordAll::len());
                 self.consume_whitespace()?;
                 let Self {
@@ -158,9 +164,11 @@ impl<'a> SelectParser<'a, AfterSelect> {
                 let Self {
                     input,
                     position,
-                    stmt,
+                    mut stmt,
                     ..
                 } = self;
+                stmt.distinct = Some(Box::new(KeywordAll));
+
                 Ok(SelectParser {
                     input,
                     position,
@@ -175,26 +183,51 @@ impl<'a> SelectParser<'a, AfterSelect> {
 }
 
 impl<'a> SelectParser<'a, AfterDistinct> {
-    pub(crate) fn result_columns(mut self) -> ParserResult<SelectParser<'a, AfterFrom>> {
+    pub(crate) fn result_columns(mut self) -> ParserResult<SelectParser<'a, AfterResultColumns>> {
         use self::result_column::ResultColumns;
         use crate::stmt::select::KeywordFrom;
-        dbg!(self.remaining()?);
 
-        if let Some(pos) = self.remaining()?.find(KeywordFrom::as_str()) {
-            let (s, _) = self.remaining()?.split_at(pos);
-            dbg!(s);
-            let parsed_result_columns = ResultColumns::parse(s)?;
-            dbg!(&parsed_result_columns);
+        let remaining = Self::get_remaining(self.input, self.position)?;
+
+        if let Some(pos) = remaining.find(KeywordFrom::as_str()) {
+            let maybe_result_columns = remaining
+                .split_at_checked(pos)
+                .map(|(s, _)| ResultColumns::parse(s).ok())
+                .flatten();
+
             self.advance(pos);
 
-            // self.consume_whitespace()?;
+            self.stmt.result_columns = maybe_result_columns;
+            Ok(SelectParser {
+                input: self.input,
+                position: self.position,
+                _state: PhantomData,
+                stmt: self.stmt,
+            })
+        } else {
+            Err(Sq3ParserError(format!("Expected `{}`", KeywordFrom)))
+        }
+    }
+}
 
+impl<'a> SelectParser<'a, AfterResultColumns> {
+    pub(crate) fn from(mut self) -> ParserResult<SelectParser<'a, AfterFrom>> {
+        use crate::keyword::KeywordFrom;
+
+        let remaining = Self::get_remaining(self.input, self.position)?;
+
+        if remaining.starts_with(KeywordFrom::as_str()) {
+            self.advance(KeywordFrom::len());
+            self.consume_whitespace()?;
             let Self {
                 input,
                 position,
-                stmt,
+                mut stmt,
                 ..
             } = self;
+
+            stmt.from = Some(KeywordFrom);
+
             Ok(SelectParser {
                 input,
                 position,
@@ -208,21 +241,30 @@ impl<'a> SelectParser<'a, AfterDistinct> {
 }
 
 impl<'a> SelectParser<'a, AfterFrom> {
-    pub(crate) fn table(mut self) -> ParserResult<SelectParser<'a, AfterWhere>> {
+    pub(crate) fn table(mut self) -> ParserResult<SelectParser<'a, AfterTableName>> {
         use crate::stmt::select::KeywordWhere;
-        dbg!(self.remaining()?);
+        let remaining = Self::get_remaining(self.input, self.position)?;
 
-        if let Some(pos) = self.remaining()?.find(KeywordWhere::as_str()) {
-            self.advance(KeywordWhere::len());
+        dbg!(remaining, &self.stmt);
 
-            self.consume_whitespace()?;
+        if let Some(pos) = remaining.find(KeywordWhere::as_str()) {
+            let maybe_table_name = remaining
+                .split_at_checked(pos)
+                .map(|(s, _)| {
+                    let res = TableName::parse(s);
+                    dbg!(&res);
+                    res.ok()
+                })
+                .flatten();
+            self.advance(pos);
 
             let Self {
                 input,
                 position,
-                stmt,
+                mut stmt,
                 ..
             } = self;
+            stmt.origin = maybe_table_name;
             Ok(SelectParser {
                 input,
                 position,
@@ -235,10 +277,41 @@ impl<'a> SelectParser<'a, AfterFrom> {
     }
 }
 
+impl<'a> SelectParser<'a, AfterTableName> {
+    pub(crate) fn r#where(mut self) -> ParserResult<SelectParser<'a, AfterWhere>> {
+        use crate::keyword::KeywordWhere;
+
+        let remaining = Self::get_remaining(self.input, self.position)?;
+
+        if remaining.starts_with(KeywordWhere::as_str()) {
+            self.advance(KeywordWhere::len());
+            self.consume_whitespace()?;
+            let Self {
+                input,
+                position,
+                mut stmt,
+                ..
+            } = self;
+
+            stmt.r#where = Some(KeywordWhere);
+
+            Ok(SelectParser {
+                input,
+                position,
+                _state: PhantomData,
+                stmt,
+            })
+        } else {
+            Err(Sq3ParserError(format!("Expected `{}`", KeywordWhere)))
+        }
+    }
+}
+
 impl<'a> SelectParser<'a, AfterWhere> {
     pub(crate) fn condition(mut self) -> ParserResult<SelectParser<'a, Complete>> {
-        let remaining = self.remaining()?;
-        dbg!(&remaining);
+        let remaining = Self::get_remaining(self.input, self.position)?;
+
+        dbg!(remaining, &self.stmt);
 
         self.advance(remaining.len());
 

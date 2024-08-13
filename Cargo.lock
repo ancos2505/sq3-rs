@@ -8,7 +8,7 @@ version = "0.1.0"
 
 [[package]]
 name = "sq3-rs"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "sq3_derive",
  "sq3_parser",
@@ -16,11 +16,11 @@ dependencies = [
 
 [[package]]
 name = "sq3_derive"
-version = "0.3.0"
+version = "0.3.1"
 
 [[package]]
 name = "sq3_parser"
-version = "0.3.0"
+version = "0.3.1"
 dependencies = [
  "sq3_derive",
 ]

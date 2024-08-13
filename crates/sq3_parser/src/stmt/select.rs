@@ -20,6 +20,8 @@ mod parser;
 // #[cfg(test)]
 // mod tests;
 
+use parser::ResultColumns;
+
 use crate::{
     expression::SqliteExpression,
     keyword::{
@@ -27,8 +29,9 @@ use crate::{
         KeywordFrom,
         KeywordWhere,
     },
-    // result::{ParserResult, Sq3ParserError},
-    // SqliteDatabaseError,
+    result::ParserResult,
+    Sq3ParserError, // result::{ParserResult, Sq3ParserError},
+                    // SqliteDatabaseError,
 };
 
 use crate::{
@@ -203,11 +206,11 @@ pub(crate) struct SelectStmt<'a> {
 // }
 
 // TODO
-#[derive(Debug, PartialEq, Eq)]
-enum ResultColumns<'a> {
-    Asterisk,
-    Filter(Vec<ColumnName<'a>>),
-}
+// #[derive(Debug, PartialEq, Eq)]
+// enum ResultColumns<'a> {
+//     Asterisk,
+//     Filter(Vec<ColumnName<'a>>),
+// }
 // impl<'a> ResultColumns<'a> {
 //     pub fn parse(s: &'a str) -> ParserResult<Self> {
 //         if s.len() == 0 {
@@ -250,19 +253,20 @@ struct ColumnName<'a>(&'a str);
 
 #[derive(Debug, PartialEq, Eq)]
 struct TableName<'a>(&'a str);
-// impl<'a> TableName<'a> {
-//     pub fn parse(s: &'a str) -> ParserResult<Self> {
-//         let error = Err(SqliteError::SqlParser(SqlParserError(
-//             "Invalid TableName".into(),
-//         )));
-//         for (idx, c) in s.trim().chars().enumerate() {
-//             if (idx == 0) && !c.is_ascii_lowercase() {
-//                 return error;
-//             }
-//             if c.is_ascii_digit() || c.is_ascii_lowercase() || c == '_' {
-//                 return Ok(Self(s));
-//             }
-//         }
-//         error
-//     }
-// }
+impl<'a> TableName<'a> {
+    pub fn parse(s: &'a str) -> ParserResult<Self> {
+        let error = Err(Sq3ParserError("Invalid TableName".into()));
+        let input = s.trim();
+        for (idx, c) in input.chars().enumerate() {
+            if (idx == 0) && !c.is_ascii() {
+                return error;
+            }
+            if c.is_ascii_digit() || c.is_ascii_lowercase() || c == '_' {
+                continue;
+            } else {
+                return error;
+            }
+        }
+        return Ok(Self(input));
+    }
+}

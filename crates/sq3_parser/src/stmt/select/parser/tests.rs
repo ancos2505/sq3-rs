@@ -51,7 +51,9 @@ fn ok_on_test_select_parser() {
         .select()
         .and_then(|p| p.distinct())
         .and_then(|p| p.result_columns())
+        .and_then(|p| p.from())
         .and_then(|p| p.table())
+        .and_then(|p| p.r#where())
         .and_then(|p| p.condition());
 
     match result {
