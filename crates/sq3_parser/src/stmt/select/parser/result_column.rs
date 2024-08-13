@@ -18,16 +18,18 @@ impl<'a> ResultColumns<'a> {
 
         if parser.all_columns()?.is_some() {
             let result_column = parser.finish()?;
-
-            dbg!(result_column);
+            // TODO
+            
             Ok(ResultColumns::AllColumns)
         } else if parser.table()?.is_some() {
             let result_column = parser.finish()?;
-            dbg!(result_column);
+            // TODO
+            
             Ok(ResultColumns::AllColumns)
         } else if parser.expr()?.is_some() {
             let result_column = parser.finish()?;
-            dbg!(result_column);
+            // TODO
+            
             Ok(ResultColumns::AllColumns)
         } else {
             // TODO: Insert Err(..)
@@ -95,7 +97,7 @@ impl<'a, S: ResultColumnParserState> ResultColumnParser<'a, S> {
 
 impl<'a> ResultColumnParser<'a, Parsing> {
     pub(crate) fn all_columns(&mut self) -> ParserResult<Option<()>> {
-        dbg!(self.remaining()?);
+        
         if self.remaining()? == "*" {
             self.result_column = Some(ResultColumns::AllColumns);
             Ok(Some(()))
@@ -104,15 +106,15 @@ impl<'a> ResultColumnParser<'a, Parsing> {
         }
     }
     pub(crate) fn table(&mut self) -> ParserResult<Option<()>> {
-        dbg!(self.remaining()?);
+        
         Err(Sq3ParserError(format!("Not Implemented!")))
     }
     pub(crate) fn expr(&mut self) -> ParserResult<Option<()>> {
-        dbg!(self.remaining()?);
+        
         Err(Sq3ParserError(format!("Not Implemented!")))
     }
     pub(crate) fn finish(mut self) -> ParserResult<ResultColumns<'a>> {
-        dbg!(self.remaining()?);
+        
         self.result_column.ok_or(Sq3ParserError(format!(
             "Impossible State in {} at line {}",
             file!(),

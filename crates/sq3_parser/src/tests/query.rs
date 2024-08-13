@@ -37,11 +37,11 @@ fn invalid_queries() -> Vec<&'static str> {
 
 #[test]
 #[ignore = "Todo"]
-fn ok_on_run_blind_valid_queries() {
+fn ok_on_parse_blind_valid_queries() {
     for query in valid_queries() {
         println!("Query: {}", query);
 
-        let res = SqliteQuery::run(&query);
+        let res = SqliteQuery::parse(&query);
         println!("{res:?}");
         assert!(res.is_ok());
     }
@@ -52,7 +52,7 @@ fn ok_on_run_blind_valid_queries() {
 fn err_on_run_blind_invalid_queries() {
     for query in invalid_queries() {
         println!("Query: {}", query);
-        let res = SqliteQuery::run(&query);
+        let res = SqliteQuery::parse(&query);
         println!("{res:?}");
         assert!(res.is_err());
     }

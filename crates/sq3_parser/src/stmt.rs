@@ -26,6 +26,21 @@ mod update;
 mod update_limited;
 mod vacuum;
 
-pub(super) use self::{
-    delete::DeleteStmt, insert::InsertStmt, select::SelectStmt, update::UpdateStmt,
+use std::fmt::Debug;
+
+use crate::explain::ExplainStmt;
+
+pub(crate) use self::{
+    delete::{DeleteParser, DeleteStmt},
+    insert::{InsertParser, InsertStmt},
+    select::{SelectParser, SelectStmt},
+    update::{UpdateParser, UpdateStmt},
 };
+
+pub trait SqliteStmt: Debug {}
+
+impl<'a> SqliteStmt for DeleteStmt<'a> {}
+impl<'a> SqliteStmt for InsertStmt<'a> {}
+impl<'a> SqliteStmt for SelectStmt<'a> {}
+impl<'a> SqliteStmt for UpdateStmt<'a> {}
+impl<'a> SqliteStmt for ExplainStmt<'a> {}

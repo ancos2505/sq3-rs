@@ -2,9 +2,7 @@ use std::any::Any;
 use std::fmt::Debug;
 use std::fmt::Display;
 
-use crate::ParserResult;
 
-use super::SqliteQueryOutcome;
 
 pub trait TypeName {
     const NAME: &'static str;
@@ -17,10 +15,6 @@ pub(super) trait SqliteClause: SqliteKeyword {}
 pub(super) trait SqliteKeyword: Display + Debug {
     fn as_any(&self) -> &dyn Any;
     fn to_any(self) -> Box<dyn Any>;
-}
-
-pub(super) trait SqliteStatement<'a> {
-    fn run(stmt_content: &'a str) -> ParserResult<SqliteQueryOutcome>;
 }
 
 /// ## DistictProcessing

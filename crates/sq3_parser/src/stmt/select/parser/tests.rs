@@ -40,14 +40,15 @@ fn ok_on_test_result_column_parser_all_columns() -> ParserResult<()> {
 }
 
 #[test]
-fn ok_on_test_select_parser() {
+fn ok_on_test_select_parser() -> ParserResult<()> {
     use super::SelectParser;
-    let input = "SELECT * FROM users WHERE id = 1";
+    let input = "SELECT * FROM users;";
+    // let input = "SELECT * FROM users WHERE id = 1";
     // let input = "SELECT id, name FROM users WHERE id = 1";
     // let input = "SELECT DISTINCT id, name FROM users WHERE id = 1";
     // let input = "SELECT ALL id, name FROM users WHERE id = 1";
     dbg!(&input);
-    let result = SelectParser::new(input)
+    let parser = SelectParser::new(input)
         .select()
         .and_then(|p| p.distinct())
         .and_then(|p| p.result_columns())
@@ -55,9 +56,14 @@ fn ok_on_test_select_parser() {
         .and_then(|p| p.table())
         .and_then(|p| p.r#where())
         .and_then(|p| p.condition());
-
-    match result {
-        Ok(_) => println!("Parsing completed successfully"),
+    assert!(parser.is_ok());
+    match parser?.finish() {
+        Ok(stmt) => {
+            dbg!(stmt);
+            println!("Parsing completed successfully")
+        },
         Err(e) => println!("Parsing error: {}", e),
     }
+
+    Ok(())
 }

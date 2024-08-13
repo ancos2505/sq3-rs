@@ -1,4 +1,5 @@
 mod file_header;
+mod helpers;
 mod io;
 mod macros;
 mod result;
@@ -7,9 +8,7 @@ mod traits;
 
 use std::sync::OnceLock;
 
-use sq3_parser::SqliteRecord;
-
-use crate::runtime::SqliteRuntime;
+use crate::{helpers::SqliteRecord, runtime::SqliteRuntime};
 
 pub use crate::result::SqliteResult;
 

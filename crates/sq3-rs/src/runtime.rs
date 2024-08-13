@@ -2,9 +2,9 @@ mod pager;
 
 use std::num::NonZeroU32;
 
-use sq3_parser::{SqliteQuery, SqliteRecord};
+use sq3_parser::SqliteQuery;
 
-use crate::result::SqliteResult;
+use crate::{helpers::SqliteRecord, result::SqliteResult};
 
 use self::pager::Pager;
 
@@ -37,8 +37,9 @@ impl SqliteRuntime {
         Ok(Default::default())
     }
     pub fn run_query(&mut self, query_str: &str) -> SqliteResult<SqliteRecord> {
-        let sqlite_outcome = SqliteQuery::run(query_str)?;
-
-        Ok(sqlite_outcome.into())
+        let sqlite_query = SqliteQuery::parse(query_str)?;
+        dbg!(sqlite_query);
+        todo!();
+        Ok(SqliteRecord::default())
     }
 }
