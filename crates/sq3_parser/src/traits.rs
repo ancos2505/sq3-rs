@@ -2,8 +2,6 @@ use std::any::Any;
 use std::fmt::Debug;
 use std::fmt::Display;
 
-
-
 pub trait TypeName {
     const NAME: &'static str;
 }

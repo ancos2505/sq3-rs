@@ -112,6 +112,7 @@ impl ParseBytes for PageSize {
     }
 }
 
+#[derive(Debug)]
 pub struct PageSizeIterator {
     current: Option<PageSize>,
 }

@@ -234,445 +234,592 @@ impl FromStr for Keyword {
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         if KeywordAbort == input {
-            return Ok(Self(Box::new(KeywordAbort) as Box<dyn Any>));
+            let binding = Box::new(KeywordAbort);
+            return Ok(Self(binding));
         }
         if KeywordAction == input {
-            return Ok(Self(Box::new(KeywordAction) as Box<dyn Any>));
+            let binding = Box::new(KeywordAction);
+            return Ok(Self(binding));
         }
         if KeywordAdd == input {
-            return Ok(Self(Box::new(KeywordAdd) as Box<dyn Any>));
+            let binding = Box::new(KeywordAdd);
+            return Ok(Self(binding));
         }
         if KeywordAfter == input {
-            return Ok(Self(Box::new(KeywordAfter) as Box<dyn Any>));
+            let binding = Box::new(KeywordAfter);
+            return Ok(Self(binding));
         }
         if KeywordAll == input {
-            return Ok(Self(Box::new(KeywordAll) as Box<dyn Any>));
+            let binding = Box::new(KeywordAll);
+            return Ok(Self(binding));
         }
         if KeywordAlter == input {
-            return Ok(Self(Box::new(KeywordAlter) as Box<dyn Any>));
+            let binding = Box::new(KeywordAlter);
+            return Ok(Self(binding));
         }
         if KeywordAlways == input {
-            return Ok(Self(Box::new(KeywordAlways) as Box<dyn Any>));
+            let binding = Box::new(KeywordAlways);
+            return Ok(Self(binding));
         }
         if KeywordAnalyze == input {
-            return Ok(Self(Box::new(KeywordAnalyze) as Box<dyn Any>));
+            let binding = Box::new(KeywordAnalyze);
+            return Ok(Self(binding));
         }
         if KeywordAnd == input {
-            return Ok(Self(Box::new(KeywordAnd) as Box<dyn Any>));
+            let binding = Box::new(KeywordAnd);
+            return Ok(Self(binding));
         }
         if KeywordAs == input {
-            return Ok(Self(Box::new(KeywordAs) as Box<dyn Any>));
+            let binding = Box::new(KeywordAs);
+            return Ok(Self(binding));
         }
         if KeywordAsc == input {
-            return Ok(Self(Box::new(KeywordAsc) as Box<dyn Any>));
+            let binding = Box::new(KeywordAsc);
+            return Ok(Self(binding));
         }
         if KeywordAttach == input {
-            return Ok(Self(Box::new(KeywordAttach) as Box<dyn Any>));
+            let binding = Box::new(KeywordAttach);
+            return Ok(Self(binding));
         }
         if KeywordAutoincrement == input {
-            return Ok(Self(Box::new(KeywordAutoincrement) as Box<dyn Any>));
+            let binding = Box::new(KeywordAutoincrement);
+            return Ok(Self(binding));
         }
         if KeywordBefore == input {
-            return Ok(Self(Box::new(KeywordBefore) as Box<dyn Any>));
+            let binding = Box::new(KeywordBefore);
+            return Ok(Self(binding));
         }
         if KeywordBegin == input {
-            return Ok(Self(Box::new(KeywordBegin) as Box<dyn Any>));
+            let binding = Box::new(KeywordBegin);
+            return Ok(Self(binding));
         }
         if KeywordBetween == input {
-            return Ok(Self(Box::new(KeywordBetween) as Box<dyn Any>));
+            let binding = Box::new(KeywordBetween);
+            return Ok(Self(binding));
         }
         if KeywordBy == input {
-            return Ok(Self(Box::new(KeywordBy) as Box<dyn Any>));
+            let binding = Box::new(KeywordBy);
+            return Ok(Self(binding));
         }
         if KeywordCascade == input {
-            return Ok(Self(Box::new(KeywordCascade) as Box<dyn Any>));
+            let binding = Box::new(KeywordCascade);
+            return Ok(Self(binding));
         }
         if KeywordCase == input {
-            return Ok(Self(Box::new(KeywordCase) as Box<dyn Any>));
+            let binding = Box::new(KeywordCase);
+            return Ok(Self(binding));
         }
         if KeywordCast == input {
-            return Ok(Self(Box::new(KeywordCast) as Box<dyn Any>));
+            let binding = Box::new(KeywordCast);
+            return Ok(Self(binding));
         }
         if KeywordCheck == input {
-            return Ok(Self(Box::new(KeywordCheck) as Box<dyn Any>));
+            let binding = Box::new(KeywordCheck);
+            return Ok(Self(binding));
         }
         if KeywordCollate == input {
-            return Ok(Self(Box::new(KeywordCollate) as Box<dyn Any>));
+            let binding = Box::new(KeywordCollate);
+            return Ok(Self(binding));
         }
         if KeywordColumn == input {
-            return Ok(Self(Box::new(KeywordColumn) as Box<dyn Any>));
+            let binding = Box::new(KeywordColumn);
+            return Ok(Self(binding));
         }
         if KeywordCommit == input {
-            return Ok(Self(Box::new(KeywordCommit) as Box<dyn Any>));
+            let binding = Box::new(KeywordCommit);
+            return Ok(Self(binding));
         }
         if KeywordConflict == input {
-            return Ok(Self(Box::new(KeywordConflict) as Box<dyn Any>));
+            let binding = Box::new(KeywordConflict);
+            return Ok(Self(binding));
         }
         if KeywordConstraint == input {
-            return Ok(Self(Box::new(KeywordConstraint) as Box<dyn Any>));
+            let binding = Box::new(KeywordConstraint);
+            return Ok(Self(binding));
         }
         if KeywordCreate == input {
-            return Ok(Self(Box::new(KeywordCreate) as Box<dyn Any>));
+            let binding = Box::new(KeywordCreate);
+            return Ok(Self(binding));
         }
         if KeywordCross == input {
-            return Ok(Self(Box::new(KeywordCross) as Box<dyn Any>));
+            let binding = Box::new(KeywordCross);
+            return Ok(Self(binding));
         }
         if KeywordCurrent == input {
-            return Ok(Self(Box::new(KeywordCurrent) as Box<dyn Any>));
+            let binding = Box::new(KeywordCurrent);
+            return Ok(Self(binding));
         }
         if KeywordCurrent_date == input {
-            return Ok(Self(Box::new(KeywordCurrent_date) as Box<dyn Any>));
+            let binding = Box::new(KeywordCurrent_date);
+            return Ok(Self(binding));
         }
         if KeywordCurrent_time == input {
-            return Ok(Self(Box::new(KeywordCurrent_time) as Box<dyn Any>));
+            let binding = Box::new(KeywordCurrent_time);
+            return Ok(Self(binding));
         }
         if KeywordCurrent_timestamp == input {
-            return Ok(Self(Box::new(KeywordCurrent_timestamp) as Box<dyn Any>));
+            let binding = Box::new(KeywordCurrent_timestamp);
+            return Ok(Self(binding));
         }
         if KeywordDatabase == input {
-            return Ok(Self(Box::new(KeywordDatabase) as Box<dyn Any>));
+            let binding = Box::new(KeywordDatabase);
+            return Ok(Self(binding));
         }
         if KeywordDefault == input {
-            return Ok(Self(Box::new(KeywordDefault) as Box<dyn Any>));
+            let binding = Box::new(KeywordDefault);
+            return Ok(Self(binding));
         }
         if KeywordDeferrable == input {
-            return Ok(Self(Box::new(KeywordDeferrable) as Box<dyn Any>));
+            let binding = Box::new(KeywordDeferrable);
+            return Ok(Self(binding));
         }
         if KeywordDeferred == input {
-            return Ok(Self(Box::new(KeywordDeferred) as Box<dyn Any>));
+            let binding = Box::new(KeywordDeferred);
+            return Ok(Self(binding));
         }
         if KeywordDelete == input {
-            return Ok(Self(Box::new(KeywordDelete) as Box<dyn Any>));
+            let binding = Box::new(KeywordDelete);
+            return Ok(Self(binding));
         }
         if KeywordDesc == input {
-            return Ok(Self(Box::new(KeywordDesc) as Box<dyn Any>));
+            let binding = Box::new(KeywordDesc);
+            return Ok(Self(binding));
         }
         if KeywordDetach == input {
-            return Ok(Self(Box::new(KeywordDetach) as Box<dyn Any>));
+            let binding = Box::new(KeywordDetach);
+            return Ok(Self(binding));
         }
         if KeywordDistinct == input {
-            return Ok(Self(Box::new(KeywordDistinct) as Box<dyn Any>));
+            let binding = Box::new(KeywordDistinct);
+            return Ok(Self(binding));
         }
         if KeywordDo == input {
-            return Ok(Self(Box::new(KeywordDo) as Box<dyn Any>));
+            let binding = Box::new(KeywordDo);
+            return Ok(Self(binding));
         }
         if KeywordDrop == input {
-            return Ok(Self(Box::new(KeywordDrop) as Box<dyn Any>));
+            let binding = Box::new(KeywordDrop);
+            return Ok(Self(binding));
         }
         if KeywordEach == input {
-            return Ok(Self(Box::new(KeywordEach) as Box<dyn Any>));
+            let binding = Box::new(KeywordEach);
+            return Ok(Self(binding));
         }
         if KeywordElse == input {
-            return Ok(Self(Box::new(KeywordElse) as Box<dyn Any>));
+            let binding = Box::new(KeywordElse);
+            return Ok(Self(binding));
         }
         if KeywordEnd == input {
-            return Ok(Self(Box::new(KeywordEnd) as Box<dyn Any>));
+            let binding = Box::new(KeywordEnd);
+            return Ok(Self(binding));
         }
         if KeywordEscape == input {
-            return Ok(Self(Box::new(KeywordEscape) as Box<dyn Any>));
+            let binding = Box::new(KeywordEscape);
+            return Ok(Self(binding));
         }
         if KeywordExcept == input {
-            return Ok(Self(Box::new(KeywordExcept) as Box<dyn Any>));
+            let binding = Box::new(KeywordExcept);
+            return Ok(Self(binding));
         }
         if KeywordExclude == input {
-            return Ok(Self(Box::new(KeywordExclude) as Box<dyn Any>));
+            let binding = Box::new(KeywordExclude);
+            return Ok(Self(binding));
         }
         if KeywordExclusive == input {
-            return Ok(Self(Box::new(KeywordExclusive) as Box<dyn Any>));
+            let binding = Box::new(KeywordExclusive);
+            return Ok(Self(binding));
         }
         if KeywordExists == input {
-            return Ok(Self(Box::new(KeywordExists) as Box<dyn Any>));
+            let binding = Box::new(KeywordExists);
+            return Ok(Self(binding));
         }
         if KeywordExplain == input {
-            return Ok(Self(Box::new(KeywordExplain) as Box<dyn Any>));
+            let binding = Box::new(KeywordExplain);
+            return Ok(Self(binding));
         }
         if KeywordFail == input {
-            return Ok(Self(Box::new(KeywordFail) as Box<dyn Any>));
+            let binding = Box::new(KeywordFail);
+            return Ok(Self(binding));
         }
         if KeywordFilter == input {
-            return Ok(Self(Box::new(KeywordFilter) as Box<dyn Any>));
+            let binding = Box::new(KeywordFilter);
+            return Ok(Self(binding));
         }
         if KeywordFirst == input {
-            return Ok(Self(Box::new(KeywordFirst) as Box<dyn Any>));
+            let binding = Box::new(KeywordFirst);
+            return Ok(Self(binding));
         }
         if KeywordFollowing == input {
-            return Ok(Self(Box::new(KeywordFollowing) as Box<dyn Any>));
+            let binding = Box::new(KeywordFollowing);
+            return Ok(Self(binding));
         }
         if KeywordFor == input {
-            return Ok(Self(Box::new(KeywordFor) as Box<dyn Any>));
+            let binding = Box::new(KeywordFor);
+            return Ok(Self(binding));
         }
         if KeywordForeign == input {
-            return Ok(Self(Box::new(KeywordForeign) as Box<dyn Any>));
+            let binding = Box::new(KeywordForeign);
+            return Ok(Self(binding));
         }
         if KeywordFrom == input {
-            return Ok(Self(Box::new(KeywordFrom) as Box<dyn Any>));
+            let binding = Box::new(KeywordFrom);
+            return Ok(Self(binding));
         }
         if KeywordFull == input {
-            return Ok(Self(Box::new(KeywordFull) as Box<dyn Any>));
+            let binding = Box::new(KeywordFull);
+            return Ok(Self(binding));
         }
         if KeywordGenerated == input {
-            return Ok(Self(Box::new(KeywordGenerated) as Box<dyn Any>));
+            let binding = Box::new(KeywordGenerated);
+            return Ok(Self(binding));
         }
         if KeywordGlob == input {
-            return Ok(Self(Box::new(KeywordGlob) as Box<dyn Any>));
+            let binding = Box::new(KeywordGlob);
+            return Ok(Self(binding));
         }
         if KeywordGroup == input {
-            return Ok(Self(Box::new(KeywordGroup) as Box<dyn Any>));
+            let binding = Box::new(KeywordGroup);
+            return Ok(Self(binding));
         }
         if KeywordGroups == input {
-            return Ok(Self(Box::new(KeywordGroups) as Box<dyn Any>));
+            let binding = Box::new(KeywordGroups);
+            return Ok(Self(binding));
         }
         if KeywordHaving == input {
-            return Ok(Self(Box::new(KeywordHaving) as Box<dyn Any>));
+            let binding = Box::new(KeywordHaving);
+            return Ok(Self(binding));
         }
         if KeywordIf == input {
-            return Ok(Self(Box::new(KeywordIf) as Box<dyn Any>));
+            let binding = Box::new(KeywordIf);
+            return Ok(Self(binding));
         }
         if KeywordIgnore == input {
-            return Ok(Self(Box::new(KeywordIgnore) as Box<dyn Any>));
+            let binding = Box::new(KeywordIgnore);
+            return Ok(Self(binding));
         }
         if KeywordImmediate == input {
-            return Ok(Self(Box::new(KeywordImmediate) as Box<dyn Any>));
+            let binding = Box::new(KeywordImmediate);
+            return Ok(Self(binding));
         }
         if KeywordIn == input {
-            return Ok(Self(Box::new(KeywordIn) as Box<dyn Any>));
+            let binding = Box::new(KeywordIn);
+            return Ok(Self(binding));
         }
         if KeywordIndex == input {
-            return Ok(Self(Box::new(KeywordIndex) as Box<dyn Any>));
+            let binding = Box::new(KeywordIndex);
+            return Ok(Self(binding));
         }
         if KeywordIndexed == input {
-            return Ok(Self(Box::new(KeywordIndexed) as Box<dyn Any>));
+            let binding = Box::new(KeywordIndexed);
+            return Ok(Self(binding));
         }
         if KeywordInitially == input {
-            return Ok(Self(Box::new(KeywordInitially) as Box<dyn Any>));
+            let binding = Box::new(KeywordInitially);
+            return Ok(Self(binding));
         }
         if KeywordInner == input {
-            return Ok(Self(Box::new(KeywordInner) as Box<dyn Any>));
+            let binding = Box::new(KeywordInner);
+            return Ok(Self(binding));
         }
         if KeywordInsert == input {
-            return Ok(Self(Box::new(KeywordInsert) as Box<dyn Any>));
+            let binding = Box::new(KeywordInsert);
+            return Ok(Self(binding));
         }
         if KeywordInstead == input {
-            return Ok(Self(Box::new(KeywordInstead) as Box<dyn Any>));
+            let binding = Box::new(KeywordInstead);
+            return Ok(Self(binding));
         }
         if KeywordIntersect == input {
-            return Ok(Self(Box::new(KeywordIntersect) as Box<dyn Any>));
+            let binding = Box::new(KeywordIntersect);
+            return Ok(Self(binding));
         }
         if KeywordInto == input {
-            return Ok(Self(Box::new(KeywordInto) as Box<dyn Any>));
+            let binding = Box::new(KeywordInto);
+            return Ok(Self(binding));
         }
         if KeywordIs == input {
-            return Ok(Self(Box::new(KeywordIs) as Box<dyn Any>));
+            let binding = Box::new(KeywordIs);
+            return Ok(Self(binding));
         }
         if KeywordIsnull == input {
-            return Ok(Self(Box::new(KeywordIsnull) as Box<dyn Any>));
+            let binding = Box::new(KeywordIsnull);
+            return Ok(Self(binding));
         }
         if KeywordJoin == input {
-            return Ok(Self(Box::new(KeywordJoin) as Box<dyn Any>));
+            let binding = Box::new(KeywordJoin);
+            return Ok(Self(binding));
         }
         if KeywordKey == input {
-            return Ok(Self(Box::new(KeywordKey) as Box<dyn Any>));
+            let binding = Box::new(KeywordKey);
+            return Ok(Self(binding));
         }
         if KeywordLast == input {
-            return Ok(Self(Box::new(KeywordLast) as Box<dyn Any>));
+            let binding = Box::new(KeywordLast);
+            return Ok(Self(binding));
         }
         if KeywordLeft == input {
-            return Ok(Self(Box::new(KeywordLeft) as Box<dyn Any>));
+            let binding = Box::new(KeywordLeft);
+            return Ok(Self(binding));
         }
         if KeywordLike == input {
-            return Ok(Self(Box::new(KeywordLike) as Box<dyn Any>));
+            let binding = Box::new(KeywordLike);
+            return Ok(Self(binding));
         }
         if KeywordLimit == input {
-            return Ok(Self(Box::new(KeywordLimit) as Box<dyn Any>));
+            let binding = Box::new(KeywordLimit);
+            return Ok(Self(binding));
         }
         if KeywordMatch == input {
-            return Ok(Self(Box::new(KeywordMatch) as Box<dyn Any>));
+            let binding = Box::new(KeywordMatch);
+            return Ok(Self(binding));
         }
         if KeywordMaterialized == input {
-            return Ok(Self(Box::new(KeywordMaterialized) as Box<dyn Any>));
+            let binding = Box::new(KeywordMaterialized);
+            return Ok(Self(binding));
         }
         if KeywordNatural == input {
-            return Ok(Self(Box::new(KeywordNatural) as Box<dyn Any>));
+            let binding = Box::new(KeywordNatural);
+            return Ok(Self(binding));
         }
         if KeywordNo == input {
-            return Ok(Self(Box::new(KeywordNo) as Box<dyn Any>));
+            let binding = Box::new(KeywordNo);
+            return Ok(Self(binding));
         }
         if KeywordNot == input {
-            return Ok(Self(Box::new(KeywordNot) as Box<dyn Any>));
+            let binding = Box::new(KeywordNot);
+            return Ok(Self(binding));
         }
         if KeywordNothing == input {
-            return Ok(Self(Box::new(KeywordNothing) as Box<dyn Any>));
+            let binding = Box::new(KeywordNothing);
+            return Ok(Self(binding));
         }
         if KeywordNotnull == input {
-            return Ok(Self(Box::new(KeywordNotnull) as Box<dyn Any>));
+            let binding = Box::new(KeywordNotnull);
+            return Ok(Self(binding));
         }
         if KeywordNull == input {
-            return Ok(Self(Box::new(KeywordNull) as Box<dyn Any>));
+            let binding = Box::new(KeywordNull);
+            return Ok(Self(binding));
         }
         if KeywordNulls == input {
-            return Ok(Self(Box::new(KeywordNulls) as Box<dyn Any>));
+            let binding = Box::new(KeywordNulls);
+            return Ok(Self(binding));
         }
         if KeywordOf == input {
-            return Ok(Self(Box::new(KeywordOf) as Box<dyn Any>));
+            let binding = Box::new(KeywordOf);
+            return Ok(Self(binding));
         }
         if KeywordOffset == input {
-            return Ok(Self(Box::new(KeywordOffset) as Box<dyn Any>));
+            let binding = Box::new(KeywordOffset);
+            return Ok(Self(binding));
         }
         if KeywordOn == input {
-            return Ok(Self(Box::new(KeywordOn) as Box<dyn Any>));
+            let binding = Box::new(KeywordOn);
+            return Ok(Self(binding));
         }
         if KeywordOr == input {
-            return Ok(Self(Box::new(KeywordOr) as Box<dyn Any>));
+            let binding = Box::new(KeywordOr);
+            return Ok(Self(binding));
         }
         if KeywordOrder == input {
-            return Ok(Self(Box::new(KeywordOrder) as Box<dyn Any>));
+            let binding = Box::new(KeywordOrder);
+            return Ok(Self(binding));
         }
         if KeywordOthers == input {
-            return Ok(Self(Box::new(KeywordOthers) as Box<dyn Any>));
+            let binding = Box::new(KeywordOthers);
+            return Ok(Self(binding));
         }
         if KeywordOuter == input {
-            return Ok(Self(Box::new(KeywordOuter) as Box<dyn Any>));
+            let binding = Box::new(KeywordOuter);
+            return Ok(Self(binding));
         }
         if KeywordOver == input {
-            return Ok(Self(Box::new(KeywordOver) as Box<dyn Any>));
+            let binding = Box::new(KeywordOver);
+            return Ok(Self(binding));
         }
         if KeywordPartition == input {
-            return Ok(Self(Box::new(KeywordPartition) as Box<dyn Any>));
+            let binding = Box::new(KeywordPartition);
+            return Ok(Self(binding));
         }
         if KeywordPlan == input {
-            return Ok(Self(Box::new(KeywordPlan) as Box<dyn Any>));
+            let binding = Box::new(KeywordPlan);
+            return Ok(Self(binding));
         }
         if KeywordPragma == input {
-            return Ok(Self(Box::new(KeywordPragma) as Box<dyn Any>));
+            let binding = Box::new(KeywordPragma);
+            return Ok(Self(binding));
         }
         if KeywordPreceding == input {
-            return Ok(Self(Box::new(KeywordPreceding) as Box<dyn Any>));
+            let binding = Box::new(KeywordPreceding);
+            return Ok(Self(binding));
         }
         if KeywordPrimary == input {
-            return Ok(Self(Box::new(KeywordPrimary) as Box<dyn Any>));
+            let binding = Box::new(KeywordPrimary);
+            return Ok(Self(binding));
         }
         if KeywordQuery == input {
-            return Ok(Self(Box::new(KeywordQuery) as Box<dyn Any>));
+            let binding = Box::new(KeywordQuery);
+            return Ok(Self(binding));
         }
         if KeywordRaise == input {
-            return Ok(Self(Box::new(KeywordRaise) as Box<dyn Any>));
+            let binding = Box::new(KeywordRaise);
+            return Ok(Self(binding));
         }
         if KeywordRange == input {
-            return Ok(Self(Box::new(KeywordRange) as Box<dyn Any>));
+            let binding = Box::new(KeywordRange);
+            return Ok(Self(binding));
         }
         if KeywordRecursive == input {
-            return Ok(Self(Box::new(KeywordRecursive) as Box<dyn Any>));
+            let binding = Box::new(KeywordRecursive);
+            return Ok(Self(binding));
         }
         if KeywordReferences == input {
-            return Ok(Self(Box::new(KeywordReferences) as Box<dyn Any>));
+            let binding = Box::new(KeywordReferences);
+            return Ok(Self(binding));
         }
         if KeywordRegexp == input {
-            return Ok(Self(Box::new(KeywordRegexp) as Box<dyn Any>));
+            let binding = Box::new(KeywordRegexp);
+            return Ok(Self(binding));
         }
         if KeywordReindex == input {
-            return Ok(Self(Box::new(KeywordReindex) as Box<dyn Any>));
+            let binding = Box::new(KeywordReindex);
+            return Ok(Self(binding));
         }
         if KeywordRelease == input {
-            return Ok(Self(Box::new(KeywordRelease) as Box<dyn Any>));
+            let binding = Box::new(KeywordRelease);
+            return Ok(Self(binding));
         }
         if KeywordRename == input {
-            return Ok(Self(Box::new(KeywordRename) as Box<dyn Any>));
+            let binding = Box::new(KeywordRename);
+            return Ok(Self(binding));
         }
         if KeywordReplace == input {
-            return Ok(Self(Box::new(KeywordReplace) as Box<dyn Any>));
+            let binding = Box::new(KeywordReplace);
+            return Ok(Self(binding));
         }
         if KeywordRestrict == input {
-            return Ok(Self(Box::new(KeywordRestrict) as Box<dyn Any>));
+            let binding = Box::new(KeywordRestrict);
+            return Ok(Self(binding));
         }
         if KeywordReturning == input {
-            return Ok(Self(Box::new(KeywordReturning) as Box<dyn Any>));
+            let binding = Box::new(KeywordReturning);
+            return Ok(Self(binding));
         }
         if KeywordRight == input {
-            return Ok(Self(Box::new(KeywordRight) as Box<dyn Any>));
+            let binding = Box::new(KeywordRight);
+            return Ok(Self(binding));
         }
         if KeywordRollback == input {
-            return Ok(Self(Box::new(KeywordRollback) as Box<dyn Any>));
+            let binding = Box::new(KeywordRollback);
+            return Ok(Self(binding));
         }
         if KeywordRow == input {
-            return Ok(Self(Box::new(KeywordRow) as Box<dyn Any>));
+            let binding = Box::new(KeywordRow);
+            return Ok(Self(binding));
         }
         if KeywordRows == input {
-            return Ok(Self(Box::new(KeywordRows) as Box<dyn Any>));
+            let binding = Box::new(KeywordRows);
+            return Ok(Self(binding));
         }
         if KeywordSavepoint == input {
-            return Ok(Self(Box::new(KeywordSavepoint) as Box<dyn Any>));
+            let binding = Box::new(KeywordSavepoint);
+            return Ok(Self(binding));
         }
         if KeywordSelect == input {
-            return Ok(Self(Box::new(KeywordSelect) as Box<dyn Any>));
+            let binding = Box::new(KeywordSelect);
+            return Ok(Self(binding));
         }
         if KeywordSet == input {
-            return Ok(Self(Box::new(KeywordSet) as Box<dyn Any>));
+            let binding = Box::new(KeywordSet);
+            return Ok(Self(binding));
         }
         if KeywordTable == input {
-            return Ok(Self(Box::new(KeywordTable) as Box<dyn Any>));
+            let binding = Box::new(KeywordTable);
+            return Ok(Self(binding));
         }
         if KeywordTemp == input {
-            return Ok(Self(Box::new(KeywordTemp) as Box<dyn Any>));
+            let binding = Box::new(KeywordTemp);
+            return Ok(Self(binding));
         }
         if KeywordTemporary == input {
-            return Ok(Self(Box::new(KeywordTemporary) as Box<dyn Any>));
+            let binding = Box::new(KeywordTemporary);
+            return Ok(Self(binding));
         }
         if KeywordThen == input {
-            return Ok(Self(Box::new(KeywordThen) as Box<dyn Any>));
+            let binding = Box::new(KeywordThen);
+            return Ok(Self(binding));
         }
         if KeywordTies == input {
-            return Ok(Self(Box::new(KeywordTies) as Box<dyn Any>));
+            let binding = Box::new(KeywordTies);
+            return Ok(Self(binding));
         }
         if KeywordTo == input {
-            return Ok(Self(Box::new(KeywordTo) as Box<dyn Any>));
+            let binding = Box::new(KeywordTo);
+            return Ok(Self(binding));
         }
         if KeywordTransaction == input {
-            return Ok(Self(Box::new(KeywordTransaction) as Box<dyn Any>));
+            let binding = Box::new(KeywordTransaction);
+            return Ok(Self(binding));
         }
         if KeywordTrigger == input {
-            return Ok(Self(Box::new(KeywordTrigger) as Box<dyn Any>));
+            let binding = Box::new(KeywordTrigger);
+            return Ok(Self(binding));
         }
         if KeywordUnbounded == input {
-            return Ok(Self(Box::new(KeywordUnbounded) as Box<dyn Any>));
+            let binding = Box::new(KeywordUnbounded);
+            return Ok(Self(binding));
         }
         if KeywordUnion == input {
-            return Ok(Self(Box::new(KeywordUnion) as Box<dyn Any>));
+            let binding = Box::new(KeywordUnion);
+            return Ok(Self(binding));
         }
         if KeywordUnique == input {
-            return Ok(Self(Box::new(KeywordUnique) as Box<dyn Any>));
+            let binding = Box::new(KeywordUnique);
+            return Ok(Self(binding));
         }
         if KeywordUpdate == input {
-            return Ok(Self(Box::new(KeywordUpdate) as Box<dyn Any>));
+            let binding = Box::new(KeywordUpdate);
+            return Ok(Self(binding));
         }
         if KeywordUsing == input {
-            return Ok(Self(Box::new(KeywordUsing) as Box<dyn Any>));
+            let binding = Box::new(KeywordUsing);
+            return Ok(Self(binding));
         }
         if KeywordVacuum == input {
-            return Ok(Self(Box::new(KeywordVacuum) as Box<dyn Any>));
+            let binding = Box::new(KeywordVacuum);
+            return Ok(Self(binding));
         }
         if KeywordValues == input {
-            return Ok(Self(Box::new(KeywordValues) as Box<dyn Any>));
+            let binding = Box::new(KeywordValues);
+            return Ok(Self(binding));
         }
         if KeywordView == input {
-            return Ok(Self(Box::new(KeywordView) as Box<dyn Any>));
+            let binding = Box::new(KeywordView);
+            return Ok(Self(binding));
         }
         if KeywordVirtual == input {
-            return Ok(Self(Box::new(KeywordVirtual) as Box<dyn Any>));
+            let binding = Box::new(KeywordVirtual);
+            return Ok(Self(binding));
         }
         if KeywordWhen == input {
-            return Ok(Self(Box::new(KeywordWhen) as Box<dyn Any>));
+            let binding = Box::new(KeywordWhen);
+            return Ok(Self(binding));
         }
         if KeywordWhere == input {
-            return Ok(Self(Box::new(KeywordWhere) as Box<dyn Any>));
+            let binding = Box::new(KeywordWhere);
+            return Ok(Self(binding));
         }
         if KeywordWindow == input {
-            return Ok(Self(Box::new(KeywordWindow) as Box<dyn Any>));
+            let binding = Box::new(KeywordWindow);
+            return Ok(Self(binding));
         }
         if KeywordWith == input {
-            return Ok(Self(Box::new(KeywordWith) as Box<dyn Any>));
+            let binding = Box::new(KeywordWith);
+            return Ok(Self(binding));
         }
         if KeywordWithout == input {
-            return Ok(Self(Box::new(KeywordWithout) as Box<dyn Any>));
+            let binding = Box::new(KeywordWithout);
+            return Ok(Self(binding));
         }
 
         Err(Sq3ParserError("Not a valid SQLite keyword.".into()))

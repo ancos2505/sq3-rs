@@ -8,7 +8,7 @@ impl From<SqliteQueryOutcome> for SqliteRecord {
 }
 
 #[derive(Debug, PartialEq, Eq)]
-pub enum SqliteQueryOutcome {
+pub(crate) enum SqliteQueryOutcome {
     Success,
     Failure(SqliteDatabaseError),
 }
@@ -20,7 +20,7 @@ impl Default for SqliteQueryOutcome {
 }
 
 #[derive(Debug, Default, PartialEq, Eq)]
-pub enum SqliteDatabaseError {
+pub(crate) enum SqliteDatabaseError {
     #[default]
     _Todo,
 }

@@ -4,8 +4,12 @@ use std::fmt::Debug;
 use std::fmt::Display;
 use std::io::Error as StdioError;
 use std::num::{ParseFloatError, ParseIntError};
+use std::sync::MutexGuard;
+use std::sync::PoisonError;
 
 use sq3_parser::Sq3ParserError;
+
+use crate::io::SqliteRawIo;
 
 pub type SqliteResult<T> = Result<T, SqliteError>;
 
@@ -22,6 +26,7 @@ pub enum SqliteError {
     ParsingField(FieldParsingError),
     InvalidPayloadSize(InvalidPayloadSizeError),
     SqlParser(Sq3ParserError),
+    SqliteIoMutexPoisonError,
 }
 
 impl From<Sq3ParserError> for SqliteError {
@@ -30,6 +35,11 @@ impl From<Sq3ParserError> for SqliteError {
     }
 }
 
+impl From<PoisonError<MutexGuard<'_, (dyn SqliteRawIo + 'static)>>> for SqliteError {
+    fn from(_: PoisonError<MutexGuard<'_, (dyn SqliteRawIo + 'static)>>) -> Self {
+        Self::SqliteIoMutexPoisonError
+    }
+}
 #[derive(Debug)]
 pub struct FieldParsingError(pub String);
 

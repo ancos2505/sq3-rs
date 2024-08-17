@@ -61,7 +61,7 @@ fn ok_on_test_select_parser() -> ParserResult<()> {
         Ok(stmt) => {
             dbg!(stmt);
             println!("Parsing completed successfully")
-        },
+        }
         Err(e) => println!("Parsing error: {}", e),
     }
 

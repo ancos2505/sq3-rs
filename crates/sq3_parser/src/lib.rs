@@ -17,7 +17,7 @@ use keyword::{
 };
 use stmt::{DeleteParser, InsertParser, SelectParser, UpdateParser};
 
-use crate::{helpers::ASCII_WHITESPACE_CHAR, keyword::Keyword, stmt::SqliteStmt};
+use crate::{helpers::ASCII_WHITESPACE_CHAR, keyword::Keyword};
 
 use crate::result::ParserResult;
 

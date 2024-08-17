@@ -1,16 +1,16 @@
-mod file_header;
+pub mod file_header;
 mod helpers;
 mod io;
 mod macros;
-mod result;
+pub mod result;
 mod runtime;
 mod traits;
 
 use std::sync::OnceLock;
 
-use crate::{helpers::SqliteRecord, runtime::SqliteRuntime};
+use crate::{result::SqliteResult, runtime::SqliteRuntime};
 
-pub use crate::result::SqliteResult;
+pub use crate::helpers::SqliteRecord;
 
 static VERSION_NUMBER: OnceLock<u32> = OnceLock::new();
 

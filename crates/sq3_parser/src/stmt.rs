@@ -39,8 +39,8 @@ pub(crate) use self::{
 
 pub trait SqliteStmt: Debug {}
 
-impl<'a> SqliteStmt for DeleteStmt<'a> {}
-impl<'a> SqliteStmt for InsertStmt<'a> {}
-impl<'a> SqliteStmt for SelectStmt<'a> {}
-impl<'a> SqliteStmt for UpdateStmt<'a> {}
-impl<'a> SqliteStmt for ExplainStmt<'a> {}
+impl SqliteStmt for DeleteStmt<'_> {}
+impl SqliteStmt for InsertStmt<'_> {}
+impl SqliteStmt for SelectStmt<'_> {}
+impl SqliteStmt for UpdateStmt<'_> {}
+impl SqliteStmt for ExplainStmt<'_> {}

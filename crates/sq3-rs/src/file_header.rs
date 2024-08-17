@@ -38,10 +38,12 @@ pub use self::{
     file_format_version_numbers::{
         FileFormatReadVersion, FileFormatVersionNumbers, FileFormatWriteVersion,
     },
-    freelist_pages::FreeListPages,
-    incremental_vacuum_settings::IncrementalVacuumSettings,
+    freelist_pages::{FreeListPages, FreeListPagesFirstTrunkPage, FreeListPagesTotalPages},
+    incremental_vacuum_settings::{
+        IncrementalVacuumMode, IncrementalVacuumSettings, LargestRootBtreePage,
+    },
     magic_header_string::MagicHeaderString,
-    page_size::PageSize,
+    page_size::{PageSize, PageSizeIterator},
     payload_fractions::{
         LeafPayloadFraction, MaximumEmbeddedPayloadFraction, MinimumEmbeddedPayloadFraction,
         PayloadFractions,
@@ -223,7 +225,7 @@ impl SqliteHeader {
 impl ParseBytes for SqliteHeader {
     const LENGTH_BYTES: usize = Self::LENGTH_BYTES;
 
-    fn parsing_handler(bytes: &[u8]) -> crate::result::SqliteResult<Self> {
+    fn parsing_handler(bytes: &[u8]) -> SqliteResult<Self> {
         let magic_header_string = MagicHeaderString::parse_bytes(&bytes[0..=15])?;
         let page_size = PageSize::parse_bytes(&bytes[16..=17])?;
         let file_format_version_numbers = FileFormatVersionNumbers::parse_bytes(&bytes[18..=19])?;
@@ -241,15 +243,13 @@ impl ParseBytes for SqliteHeader {
 
         let suggested_cache_size = SuggestedCacheSize::parse_bytes(&bytes[48..=51])?;
 
-        let largest_root_btree_page =
-            incremental_vacuum_settings::LargestRootBtreePage::parse_bytes(&bytes[52..=55])?;
+        let largest_root_btree_page = LargestRootBtreePage::parse_bytes(&bytes[52..=55])?;
 
         let database_text_encoding = DatabaseTextEncoding::parse_bytes(&bytes[56..=59])?;
 
         let user_version = UserVersion::parse_bytes(&bytes[60..=63])?;
 
-        let incremental_vacuum_mode =
-            incremental_vacuum_settings::IncrementalVacuumMode::parse_bytes(&bytes[64..=67])?;
+        let incremental_vacuum_mode = IncrementalVacuumMode::parse_bytes(&bytes[64..=67])?;
 
         let application_id = ApplicationId::parse_bytes(&bytes[68..=71])?;
 

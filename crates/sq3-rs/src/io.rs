@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 use std::io::SeekFrom;
+use std::sync::{Arc, Mutex};
 use std::{
     fs::{File, Metadata},
     io::{Cursor, Read, Seek},
@@ -7,9 +8,10 @@ use std::{
 
 use crate::result::SqliteResult;
 
+#[allow(box_pointers)]
 pub(super) struct SqliteIo {
     mode: SqliteIoMode,
-    raw_io: Box<dyn SqliteRawIo>,
+    raw_io: Arc<Mutex<dyn SqliteRawIo>>,
     file_metadata: Option<Metadata>,
 }
 
@@ -24,7 +26,11 @@ impl Debug for SqliteIo {
 
 impl Read for SqliteIo {
     fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
-        self.raw_io.read(buf)
+        Ok(self
+            .raw_io
+            .lock()
+            .or_else(|error| Err(std::io::Error::other(format!("SqliteIoMutex: {error}"))))?
+            .read(buf)?)
     }
 }
 
@@ -54,21 +60,21 @@ impl SqliteIo {
 
         let mut file_metadata = Option::<Metadata>::None;
         let mode: SqliteIoMode;
-        let raw_io = match iter.next() {
+        let raw_io: Arc<Mutex<dyn SqliteRawIo>> = match iter.next() {
             Some(path) => {
                 if path.contains(":") {
                     mode = SqliteIoMode::InMemory;
-                    Box::new(Cursor::new(Vec::<u8>::new())) as Box<dyn SqliteRawIo>
+                    Arc::new(Mutex::new(Cursor::new(Vec::<u8>::new())))
                 } else {
                     let file = File::open(path)?;
                     mode = SqliteIoMode::File;
                     file_metadata = Some(file.metadata()?);
-                    Box::new(file) as Box<dyn SqliteRawIo>
+                    Arc::new(Mutex::new(file))
                 }
             }
             None => {
                 mode = SqliteIoMode::InMemory;
-                Box::new(Cursor::new(Vec::<u8>::new())) as Box<dyn SqliteRawIo>
+                Arc::new(Mutex::new(Cursor::new(Vec::<u8>::new())))
             }
         };
         let io = Self {
@@ -80,11 +86,11 @@ impl SqliteIo {
         Ok(io)
     }
     pub fn rewind(&mut self) -> SqliteResult<()> {
-        self.raw_io.rewind()?;
+        self.raw_io.lock()?.rewind()?;
         Ok(())
     }
     pub fn seek(&mut self, pos: u32) -> SqliteResult<()> {
-        self.raw_io.seek(SeekFrom::Start(pos.into()))?;
+        self.raw_io.lock()?.seek(SeekFrom::Start(pos.into()))?;
         Ok(())
     }
 }

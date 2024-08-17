@@ -5,11 +5,7 @@ mod result_column;
 
 use std::marker::PhantomData;
 
-use crate::{
-    result::Sq3ParserError,
-    stmt::{select::TableName, SqliteStmt},
-    ParserResult, SqliteQuery,
-};
+use crate::{result::Sq3ParserError, stmt::select::TableName, ParserResult};
 
 use super::SelectStmt;
 
@@ -53,7 +49,7 @@ where
     _state: PhantomData<State>,
 }
 
-impl<'a, S: SelectParserState> SelectParser<'a, S> {
+impl<S: SelectParserState> SelectParser<'_, S> {
     fn advance(&mut self, n: usize) {
         self.position += n;
     }
@@ -227,8 +223,6 @@ impl<'a> SelectParser<'a, AfterFrom> {
         use crate::stmt::select::KeywordWhere;
         let remaining = Self::get_remaining(self.stmt.input, self.position)?;
 
-        
-
         if let Some(pos) = remaining.find(KeywordWhere::as_str()) {
             let maybe_table_name = remaining
                 .split_at_checked(pos)
@@ -250,7 +244,7 @@ impl<'a> SelectParser<'a, AfterFrom> {
                 .split_at_checked(pos)
                 .map(|(s, _)| {
                     let res = TableName::parse(s);
-                    
+
                     res.ok()
                 })
                 .flatten();
@@ -314,7 +308,6 @@ impl<'a> SelectParser<'a, AfterWhere> {
     pub(crate) fn condition(mut self) -> ParserResult<SelectParser<'a, Complete>> {
         let remaining = Self::get_remaining(self.stmt.input, self.position)?;
 
-        
         // TODO
         self.advance(remaining.len());
 
@@ -328,7 +321,7 @@ impl<'a> SelectParser<'a, AfterWhere> {
 }
 
 impl<'a> SelectParser<'a, Complete> {
-    pub(crate) fn finish(&self) -> ParserResult<&Box<SelectStmt>> {
+    pub(crate) fn finish(&self) -> ParserResult<&Box<SelectStmt<'a>>> {
         Ok(&self.stmt)
     }
 }
